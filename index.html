@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIR Form Assistant - Premium</title>
+<title>Election Commission of India - SIR Form</title>
 <meta name="description" content="Official SIR Form Online — Auto Fill, Photo Editor, PDF Generator">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Outfit:wght@300;400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -17,182 +17,199 @@
 
 <style>
 :root {
-  --primary: #4F46E5;
-  --primary-hover: #4338CA;
-  --bg-gradient: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(255, 255, 255, 0.4);
-  --text-dark: #1f2937;
-  --text-muted: #6b7280;
-  --success: #10B981;
-  --danger: #EF4444;
-  --paper: #ffffff;
+  --gov-blue: #0A3D91;
+  --gov-orange: #FF9933;
+  --gov-green: #138808;
+  --text-dark: #333333;
+  --text-muted: #666666;
+  --bg-color: #F4F5F7;
+  --card-border: #D1D5DB;
+  --danger: #D32F2F;
+  --success: #388E3C;
   --ink: #1B3FA0;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: "Outfit", "Noto Sans Devanagari", sans-serif;
-  background: var(--bg-gradient);
-  background-attachment: fixed;
+  font-family: 'Roboto', 'Noto Sans Devanagari', sans-serif;
+  background-color: var(--bg-color);
   color: var(--text-dark);
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
-/* Glass Cards */
-.glass-card {
-  background: var(--glass-bg); backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border); border-radius: 16px; padding: 25px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+/* ---------------- GOVT HEADER ---------------- */
+.gov-header {
+  background: #ffffff;
+  border-bottom: 4px solid var(--gov-orange);
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.gov-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.emblem-placeholder {
+  width: 50px;
+  height: 50px;
+  background: url('https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg') no-repeat center center;
+  background-size: contain;
+}
+.gov-titles h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gov-blue);
+  margin-bottom: 2px;
+}
+.gov-titles h2 {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+.lang-selector select {
+  padding: 6px 10px;
+  border: 1px solid var(--gov-blue);
+  background: #fff;
+  color: var(--gov-blue);
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* ---------------- GOVT CARDS ---------------- */
+.card {
+  background: #ffffff;
+  border: 1px solid var(--card-border);
+  border-top: 3px solid var(--gov-blue);
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.card-header {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gov-blue);
 }
 
 /* ---------------- INITIAL GATE SCREEN ---------------- */
 #gateScreen {
-  max-width: 550px;
-  margin: 80px auto;
+  max-width: 600px;
+  margin: 40px auto;
   text-align: center;
-  padding: 40px 30px;
-}
-.big-lang-selector {
-  margin: 20px 0 40px 0;
 }
 .big-lang-selector select {
-  padding: 15px 25px;
-  font-size: 18px;
-  border-radius: 12px;
-  border: 2px solid var(--primary);
-  background: #fff;
-  font-family: inherit;
-  font-weight: 700;
-  cursor: pointer;
-  outline: none;
-  width: 100%;
-  color: var(--primary);
+  padding: 12px 20px;
+  font-size: 16px;
+  border: 2px solid var(--gov-blue);
+  border-radius: 4px;
+  width: 80%;
+  margin: 20px 0 30px 0;
+  font-weight: bold;
 }
 .gate-btn {
-  background: var(--primary); color: #fff; border: none; padding: 15px 30px;
-  border-radius: 12px; font-weight: 700; font-size: 18px; cursor: pointer;
-  transition: transform 0.2s; width: 100%; margin-bottom: 15px;
+  background: var(--gov-blue); color: #fff; border: none; padding: 12px 25px;
+  border-radius: 4px; font-weight: 700; font-size: 16px; cursor: pointer;
+  width: 80%; margin-bottom: 12px;
 }
-.gate-btn:hover { transform: translateY(-2px); }
-.gate-btn-secondary { background: #e5e7eb; color: #374151; }
-.gate-btn-secondary:hover { background: #d1d5db; }
+.gate-btn:hover { background: #083075; }
+.gate-btn-secondary { background: #e0e0e0; color: #333; }
+.gate-btn-secondary:hover { background: #cccccc; }
 
 /* ---------------- MAIN APP ---------------- */
 #mainApp { display: none; }
-
-.navbar {
-  background: var(--glass-bg); backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--glass-border); padding: 15px 30px;
-  display: flex; justify-content: space-between; align-items: center;
-  position: sticky; top: 0; z-index: 100;
-}
-.nav-brand { font-weight: 700; font-size: 22px; color: var(--primary); }
-
 .layout {
-  display: grid; grid-template-columns: 3fr 1fr; gap: 30px;
-  max-width: 1200px; margin: 30px auto; padding: 0 20px;
+  display: grid; grid-template-columns: 3fr 1fr; gap: 20px;
+  max-width: 1200px; margin: 20px auto; padding: 0 15px;
 }
 @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
-.form-container { display: flex; flex-direction: column; gap: 25px; }
-
-.card-header {
-  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
-  padding-bottom: 15px; border-bottom: 1px solid #e5e7eb;
-}
-.step-number {
-  background: var(--primary); color: white; width: 30px; height: 30px;
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 14px;
-}
-.card-title { font-size: 18px; font-weight: 700; }
 
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
-.field { display: flex; flex-direction: column; gap: 6px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
 .field.full { grid-column: 1 / -1; }
-.field label { font-size: 14px; font-weight: 600; color: #374151; }
+.field label { font-size: 13px; font-weight: 600; color: #444; }
 .field input, .field select {
-  font: inherit; font-size: 15px; padding: 12px 14px;
-  border: 1px solid #d1d5db; border-radius: 8px; background: #f9fafb;
+  font: inherit; font-size: 14px; padding: 10px;
+  border: 1px solid #ccc; border-radius: 4px;
 }
 .field input:focus, .field select:focus {
-  outline: none; border-color: var(--primary); background: #fff;
+  outline: none; border-color: var(--gov-blue);
 }
-.hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-.toggle { display: flex; gap: 10px; align-items: center; font-size: 14px; cursor: pointer; }
-.toggle input { width: 18px; height: 18px; accent-color: var(--primary); }
+.hint { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.toggle { display: flex; gap: 8px; align-items: center; font-size: 14px; cursor: pointer; }
+.toggle input { width: 16px; height: 16px; }
 
 .btn {
-  background: var(--primary); color: #fff; border: none; padding: 12px 24px;
-  border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer;
-  transition: background 0.2s; font-family: inherit;
+  background: var(--gov-blue); color: #fff; border: none; padding: 10px 20px;
+  border-radius: 4px; font-weight: 600; font-size: 14px; cursor: pointer;
 }
-.btn:hover:not(:disabled) { background: var(--primary-hover); }
+.btn:hover:not(:disabled) { background: #083075; }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-/* Photo */
-.photo-wrap { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
-.photo-preview {
-  width: 130px; height: 165px; border: 2px dashed #cbd5e1; border-radius: 12px;
-  background: #f8fafc; display: flex; align-items: center; justify-content: center; overflow: hidden;
-}
-.photo-preview img { width: 100%; height: 100%; object-fit: cover; }
-.photo-status { font-size: 13px; margin-top: 10px; font-weight: 600; }
-.text-danger { color: var(--danger); }
-.text-success { color: var(--success); }
-.text-primary { color: var(--primary); }
-
-/* Sidebar */
-.sidebar { display: flex; flex-direction: column; gap: 20px; }
-.banner {
-  background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white;
-  padding: 20px; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-}
-.banner h3 { margin-bottom: 10px; font-size: 18px; }
-.banner ul { padding-left: 20px; font-size: 13px; line-height: 1.8; opacity: 0.95; }
 
 /* OCR Upload Box */
 .ocr-box {
-  background: #f0fdf4; border: 2px dashed #10B981; padding: 20px;
-  border-radius: 12px; text-align: center; margin-bottom: 20px;
+  background: #f9fdfa; border: 1px dashed var(--gov-green); padding: 15px;
+  border-radius: 4px; text-align: center; margin-bottom: 20px;
 }
+.alert-warning {
+  background: #fff3cd; color: #856404; border: 1px solid #ffeeba;
+  padding: 10px; border-radius: 4px; font-size: 13px; font-weight: 600;
+  margin-top: 10px; display: none; text-align: left;
+}
+
+/* Photo */
+.photo-wrap { display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap; }
+.photo-preview {
+  width: 120px; height: 150px; border: 1px solid #ccc; background: #eee;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.photo-preview img { width: 100%; height: 100%; object-fit: cover; }
+.photo-status { font-size: 12px; margin-top: 8px; font-weight: bold; }
+.text-danger { color: var(--danger); }
+.text-success { color: var(--success); }
+
+/* Sidebar */
+.sidebar { display: flex; flex-direction: column; gap: 15px; }
+.banner {
+  background: #fff; border: 1px solid #ccc; border-top: 3px solid var(--gov-orange);
+  padding: 15px; border-radius: 4px;
+}
+.banner h3 { margin-bottom: 8px; font-size: 15px; color: var(--text-dark); }
+.banner ul { padding-left: 18px; font-size: 13px; line-height: 1.6; color: #444; }
 
 /* Preview Area */
 .preview-container {
-  position: relative;
-  border: 1px solid #cbd5e1;
-  border-radius: 12px;
-  background: #fff;
-  margin-top: 25px;
-  overflow: auto;
+  position: relative; border: 1px solid #ccc; background: #fff;
+  margin-top: 20px; overflow: auto;
 }
-/* IMPORTANT: We wrap the formsheet in a scaling container for desktop view, but remove it during PDF gen */
-.scale-wrapper {
-  transform-origin: top left;
-}
+.scale-wrapper { transform-origin: top left; }
 @media (max-width: 850px) { .scale-wrapper { transform: scale(0.8); margin-bottom:-20%; } }
 @media (max-width: 600px) { .scale-wrapper { transform: scale(0.45); margin-bottom:-50%; } }
-
 .watermark {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg);
-  font-size: 70px; color: rgba(239, 68, 68, 0.15); font-weight: 800; white-space: nowrap;
-  pointer-events: none; z-index: 10; text-transform: uppercase;
+  font-size: 60px; color: rgba(211, 47, 47, 0.15); font-weight: 700; white-space: nowrap;
+  pointer-events: none; z-index: 10;
 }
 .hidden { display: none !important; }
 
-/* The Actual PDF Sheet Styling */
+/* PDF Sheet Styling (Strict A4 Layout) */
 #formsheet {
-  width: 794px; /* A4 width */
-  margin: 0 auto;
-  background: #fff; color: #000;
+  width: 794px; margin: 0 auto; background: #fff; color: #000;
   font-family: "Noto Sans Devanagari", sans-serif; font-size: 11.5px; line-height: 1.4;
   padding: 25px;
 }
-
 #formsheet .v { color: var(--ink); font-weight: 700; font-size: 12.5px; }
-#formsheet .blank { color: #dc2626; font-size: 10.5px; font-weight: 700; }
+#formsheet .blank { color: #d32f2f; font-size: 10.5px; font-weight: 700; }
 #formsheet h2 { font-size: 20px; text-align: center; margin-bottom: 2px; font-weight: 700; }
 #formsheet h3 { font-size: 16px; text-align: center; margin-bottom: 2px; font-weight: 600; }
 #formsheet .blo-header { text-align: center; font-size: 11px; margin-bottom: 12px; }
@@ -219,9 +236,27 @@ body {
 </head>
 <body>
 
+<!-- GOVT HEADER -->
+<header class="gov-header">
+  <div class="gov-title-wrapper">
+    <div class="emblem-placeholder"></div>
+    <div class="gov-titles">
+      <h1 data-t="gov_title_main">Election Commission of India</h1>
+      <h2 data-t="gov_title_sub">Special Intensive Revision (SIR) Form Portal</h2>
+    </div>
+  </div>
+  <div class="lang-selector" style="display:none;" id="navLangContainer">
+    <select id="lang">
+      <option value="mr">मराठी (Marathi)</option>
+      <option value="en">English</option>
+      <option value="ur">اردو (Urdu)</option>
+    </select>
+  </div>
+</header>
+
 <!-- GATE SCREEN -->
-<div id="gateScreen" class="glass-card">
-  <h2>🌍 Select Language / भाषा निवडा</h2>
+<div id="gateScreen" class="card">
+  <h2 style="color:var(--gov-blue); margin-bottom: 10px;">भाषा निवडा / Select Language</h2>
   <div class="big-lang-selector">
     <select id="langGate">
       <option value="mr" selected>मराठी (Marathi)</option>
@@ -230,44 +265,37 @@ body {
     </select>
   </div>
 
-  <h3 data-t="gate_q">Do you have the original BLO form with you?</h3>
-  <p style="margin-bottom:20px; color:#475569;" data-t="gate_sub">You must have the physical QR-coded form given by your BLO.</p>
+  <h3 data-t="gate_q" style="margin-bottom: 10px;">Do you have the original BLO form with you?</h3>
+  <p style="margin-bottom:20px; color:#666;" data-t="gate_sub">You must have the physical QR-coded form given by your BLO.</p>
   
-  <button id="btnHaveForm" class="gate-btn" data-t="gate_yes">✅ Yes, I have it</button>
-  <button id="btnNoForm" class="gate-btn gate-btn-secondary" data-t="gate_no">❌ No, I don't</button>
+  <button id="btnHaveForm" class="gate-btn" data-t="gate_yes">Yes, I have it</button>
+  <button id="btnNoForm" class="gate-btn gate-btn-secondary" data-t="gate_no">No, I don't</button>
   
-  <div id="noFormMsg" style="display:none; color:var(--danger); font-weight:600; margin-top:15px; padding:15px; background:#fef2f2; border-radius:8px;" data-t="gate_err">
-    ⚠️ Please contact your local BLO and collect the QR-coded form first. You cannot proceed without it!
+  <div id="noFormMsg" style="display:none; color:var(--danger); font-weight:600; margin-top:15px; padding:15px; background:#fde3e3; border: 1px solid #ffcdd2; border-radius:4px;" data-t="gate_err">
+    Please contact your local BLO and collect the QR-coded form first. You cannot proceed without it!
   </div>
 </div>
 
 <!-- MAIN APP -->
 <div id="mainApp">
-  <nav class="navbar">
-    <div class="nav-brand" data-t="title">SIR Form Assistant</div>
-    <div class="lang-selector">
-      <select id="lang" style="display:none;"></select> <!-- Hidden, mirrors gate -->
-    </div>
-  </nav>
-
   <div class="layout">
     <!-- Left Side: Form -->
     <div class="form-container">
       
       <!-- OCR UPLOAD BOX -->
-      <div class="glass-card ocr-box">
-        <h3 style="color:#065f46; margin-bottom:10px;" data-t="ocr_title">⚡ Auto-Fill from BLO Form</h3>
-        <p style="font-size:14px; margin-bottom:15px; color:#064e3b;" data-t="ocr_sub">Take a clear photo of your blank/filled BLO form. Our AI will extract your EPIC number.</p>
+      <div class="card ocr-box">
+        <h3 style="color:var(--gov-green); margin-bottom:5px;" data-t="ocr_title">Auto-Fill Form Data (Scanner)</h3>
+        <p style="font-size:13px; margin-bottom:15px; color:#444;" data-t="ocr_sub">Upload a sharp photo of your physical BLO form. The system will attempt to extract your EPIC and ID details automatically.</p>
         <input type="file" id="ocrInput" accept="image/*" style="display:none">
-        <button class="btn" style="background:#10B981;" onclick="document.getElementById('ocrInput').click()" data-t="ocr_btn">📄 Upload Form Photo</button>
+        <button class="btn" style="background:var(--gov-green);" onclick="document.getElementById('ocrInput').click()" data-t="ocr_btn">Upload Form Photo</button>
         <div id="ocrStatus" style="margin-top:10px; font-size:13px; font-weight:600;"></div>
+        <div id="ocrWarning" class="alert-warning" data-t="ocr_warning">⚠️ Please manually verify the auto-filled details below. The scanner may make mistakes reading handwriting or printed text.</div>
       </div>
 
       <!-- STEP 1 -->
-      <div class="glass-card">
+      <div class="card">
         <div class="card-header">
-          <div class="step-number">1</div>
-          <div class="card-title" data-t="step1">Voter Information</div>
+          <div class="card-title" data-t="step1">1. Voter Information</div>
         </div>
         <div class="grid">
           <div class="field full"><label data-t="voter_name">Voter Name</label><input id="f_name" data-v="p_name" placeholder="As per BLO slip"></div>
@@ -281,18 +309,17 @@ body {
       </div>
 
       <!-- STEP 2 -->
-      <div class="glass-card">
+      <div class="card">
         <div class="card-header">
-          <div class="step-number">2</div>
-          <div class="card-title" data-t="step2">Previous SIR (2002) Details</div>
+          <div class="card-title" data-t="step2">2. Previous SIR (2002) Details</div>
         </div>
         <label class="toggle" style="margin-bottom:20px;">
           <input type="checkbox" id="selfIn2002">
           <span style="font-weight:600" data-t="self_2002">My own name is in the 2002 list</span>
         </label>
 
-        <div id="selfBlock" style="display:none; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed #cbd5e1;">
-          <p class="hint" style="margin-bottom:15px; color:var(--primary); font-weight:600;" data-t="self_2002_hint">Your 2002 Details:</p>
+        <div id="selfBlock" style="display:none; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed #ccc;">
+          <p class="hint" style="margin-bottom:15px; color:var(--gov-blue); font-weight:600;" data-t="self_2002_hint">Your 2002 Details:</p>
           <div class="grid">
             <div class="field"><label data-t="voter_name">Name</label><input id="s_name" data-v="l_name"></div>
             <div class="field"><label data-t="epic">EPIC</label><input id="s_epic" data-v="l_epic" style="text-transform:uppercase"></div>
@@ -307,7 +334,7 @@ body {
           </div>
         </div>
 
-        <p class="hint" style="margin-bottom:15px; font-weight:600;" data-t="rel_2002_hint">Family Member's 2002 Details (Mother/Father/Grandparent):</p>
+        <p class="hint" style="margin-bottom:15px; font-weight:600; color:var(--text-dark);" data-t="rel_2002_hint">Family Member's 2002 Details (Mother/Father/Grandparent):</p>
         <div class="grid">
           <div class="field"><label data-t="rel_name">Relative's Name (2002)</label><input id="r_name" data-v="r_name"></div>
           <div class="field"><label data-t="epic">Their EPIC</label><input id="r_epic" data-v="r_epic" style="text-transform:uppercase"></div>
@@ -327,10 +354,9 @@ body {
       </div>
 
       <!-- STEP 3 -->
-      <div class="glass-card">
+      <div class="card">
         <div class="card-header">
-          <div class="step-number">3</div>
-          <div class="card-title" data-t="step3">Personal & Family Details</div>
+          <div class="card-title" data-t="step3">3. Personal & Family Details</div>
         </div>
         <div class="grid">
           <div class="field"><label data-t="dob">Date of Birth</label><input id="f_dob" type="date"></div>
@@ -346,54 +372,47 @@ body {
       </div>
 
       <!-- STEP 4 -->
-      <div class="glass-card">
+      <div class="card">
         <div class="card-header">
-          <div class="step-number">4</div>
-          <div class="card-title" data-t="step4">Photo Processing</div>
+          <div class="card-title" data-t="step4">4. Photo Processing</div>
         </div>
         <div class="photo-wrap">
           <div class="photo-preview" id="photoPreview">
-            <span style="font-size:12px; color:#9ca3af;" data-t="preview_here">Preview</span>
+            <span style="font-size:11px; color:#888;" data-t="preview_here">Preview Here</span>
           </div>
           <div style="flex:1;">
-            <label class="toggle" style="margin-bottom:12px;">
+            <label class="toggle" style="margin-bottom:10px;">
               <input type="checkbox" id="useAI" checked>
               <span style="font-weight:600" data-t="ai_toggle">Auto-remove background with AI</span>
             </label>
             <input type="file" id="photoInput" accept="image/*" style="display:none">
-            <button class="btn" id="photoBtn" type="button" data-t="photo_btn">📷 Capture / Select Photo</button>
-            <p class="hint" style="margin-top:12px" data-t="photo_hint">Uncheck the AI option if you already have a plain white background.</p>
+            <button class="btn" id="photoBtn" type="button" data-t="photo_btn">Upload / Capture Photo</button>
+            <p class="hint" data-t="photo_hint">Ensure good lighting. Uncheck the AI option if you already have a plain white background.</p>
             <div class="photo-status" id="photoStatus"></div>
           </div>
         </div>
       </div>
 
       <!-- STEP 5 -->
-      <div class="glass-card">
+      <div class="card">
         <div class="card-header">
-          <div class="step-number">5</div>
-          <div class="card-title" data-t="step5">Payment & Download</div>
+          <div class="card-title" data-t="step5">5. Payment & Download</div>
         </div>
-        
-        <div style="display:flex; gap: 25px; flex-wrap: wrap; align-items: flex-start;">
-          <div style="background:#fff; padding:15px; border-radius:12px; border:1px solid #e5e7eb;">
+        <div style="display:flex; gap: 20px; flex-wrap: wrap; align-items: flex-start;">
+          <div style="background:#fff; padding:10px; border:1px solid #ccc; border-radius:4px;">
             <div id="qrbox"></div>
           </div>
-          
           <div style="flex:1;">
-            <p style="margin-bottom:15px; font-weight:600;">Scan QR or <a href="#" id="upiLink" style="color:var(--primary)">Click Here to Pay ₹10</a>.</p>
-            
+            <p style="margin-bottom:15px; font-weight:600;">Scan QR or <a href="#" id="upiLink" style="color:var(--gov-blue)">Click Here to Pay ₹10</a>.</p>
             <div class="field" style="margin-bottom:15px;">
               <label data-t="pay_ref">Last 4 digits of UPI Ref/UTR</label>
               <input id="payRef" inputmode="numeric" maxlength="4" placeholder="e.g. 4821">
             </div>
-            
-            <label class="toggle" style="margin-bottom:25px;">
+            <label class="toggle" style="margin-bottom:20px;">
               <input type="checkbox" id="payConfirm">
               <span data-t="pay_conf" style="font-weight:600;">I confirm I have paid ₹10</span>
             </label>
-            
-            <button class="btn" id="genBtn" disabled style="width:100%;">
+            <button class="btn" id="genBtn" disabled style="width:100%; font-size:15px;">
               <span data-t="gen_btn">🔒 Unlock & Generate PDF</span>
             </button>
             <div class="photo-status" id="genStatus" style="margin-top:10px;"></div>
@@ -500,27 +519,24 @@ body {
           <!-- /ACTUAL PDF SHEET -->
         </div>
       </div>
-
-    </div> <!-- End Form Container -->
+    </div>
 
     <!-- Right Side: Sidebar -->
     <div class="sidebar">
-      <div class="banner">
-        <h3>🏛️ Official ECI Guidelines</h3>
-        <p>How to fill the SIR (Special Intensive Revision) Form based on Govt rules:</p>
-        <ul>
-          <li><strong>Original Form is Mandatory:</strong> This PDF is a <em>Reference Copy</em> to make your life easier. You MUST write these exact details onto the physical QR-coded form given by your BLO using a blue pen.</li>
-          <li><strong>EPIC Mismatch:</strong> Copy the exact EPIC number printed on your BLO slip.</li>
-          <li><strong>Photo Rules:</strong> The photo must have a plain white background.</li>
+      <div class="card" style="padding:15px;">
+        <h3 style="color:var(--gov-blue); font-size:15px; margin-bottom:8px;">🏛️ Official Guidelines</h3>
+        <ul style="padding-left:18px; font-size:13px; color:#444; line-height:1.6;">
+          <li><strong>Original Form is Mandatory:</strong> This is a Reference Copy. You must write these details on the original QR-coded BLO form.</li>
+          <li><strong>EPIC Mismatch:</strong> Copy the exact EPIC number printed on your BLO slip, even if it has a typo.</li>
+          <li><strong>Photo Rules:</strong> Passport size photo with plain white background required.</li>
         </ul>
       </div>
       
-      <div class="glass-card" style="padding:20px; font-size:13px; text-align:center; color:var(--text-muted);">
-        🔒 <b>100% Secure & Private</b><br>
-        No data is sent to any server. Your Aadhaar, EPIC, and Photo never leave your phone. The PDF is generated entirely in your browser.
+      <div class="card" style="padding:15px; font-size:13px; text-align:center; color:#555;">
+        🔒 <b>Data Privacy Notice</b><br>
+        This portal runs entirely in your browser. No personal data (Aadhaar, EPIC, Photo) is transmitted to or stored on any server.
       </div>
     </div>
-
   </div> <!-- End Layout -->
 </div>
 
@@ -534,33 +550,22 @@ const CONFIG = {
 
 const $ = id => document.getElementById(id);
 
-/* ---------- Gate Logic ---------- */
-$("btnHaveForm").addEventListener("click", () => {
-  $("gateScreen").style.display = "none";
-  $("mainApp").style.display = "block";
-});
-$("btnNoForm").addEventListener("click", () => {
-  $("noFormMsg").style.display = "block";
-});
-$("langGate").addEventListener("change", (e) => {
-  $("lang").value = e.target.value;
-  $("lang").dispatchEvent(new Event("change"));
-});
-
-/* ---------- Multi-language Support ---------- */
+/* ---------- Multi-language Dictionary ---------- */
 const dict = {
-  "title": {"en": "SIR Form Assistant", "mr": "SIR गणना प्रपत्र सहाय्यक", "ur": "ایس آئی آر فارم اسسٹنٹ"},
+  "gov_title_main": {"en": "Election Commission of India", "mr": "भारत निवडणूक आयोग", "ur": "الیکشن کمیشن آف انڈیا"},
+  "gov_title_sub": {"en": "Special Intensive Revision (SIR) Form", "mr": "विशेष संक्षिप्त पुनरीक्षण (SIR) गणना प्रपत्र", "ur": "خصوصی انتہائی نظرثانی (SIR) فارم"},
   "gate_q": {"en": "Do you have the original BLO form with you?", "mr": "तुमच्याकडे BLO ने दिलेला मूळ फॉर्म आहे का?", "ur": "کیا آپ کے پاس اصل بی ایل او فارم ہے؟"},
   "gate_sub": {"en": "You must have the physical QR-coded form given by your BLO.", "mr": "BLO कडून मिळालेला QR-कोड असलेला फॉर्म असणे आवश्यक आहे.", "ur": "آپ کے پاس بی ایل او کی طرف سے دیا گیا کیو آر کوڈ والا فارم ہونا ضروری ہے۔"},
-  "gate_yes": {"en": "✅ Yes, I have it", "mr": "✅ होय, माझ्याकडे आहे", "ur": "✅ جی ہاں، میرے پاس ہے"},
-  "gate_no": {"en": "❌ No, I don't", "mr": "❌ नाही, माझ्याकडे नाही", "ur": "❌ نہیں، میرے پاس نہیں ہے"},
-  "gate_err": {"en": "⚠️ Please contact your local BLO and collect the QR-coded form first.", "mr": "⚠️ कृपया तुमच्या BLO शी संपर्क साधा आणि आधी फॉर्म मिळवा.", "ur": "⚠️ براہ کرم اپنے بی ایل او سے رابطہ کریں اور پہلے فارم حاصل کریں۔"},
+  "gate_yes": {"en": "Yes, I have it", "mr": "होय, माझ्याकडे आहे", "ur": "جی ہاں، میرے پاس ہے"},
+  "gate_no": {"en": "No, I don't", "mr": "नाही, माझ्याकडे नाही", "ur": "نہیں، میرے پاس نہیں ہے"},
+  "gate_err": {"en": "Please contact your local BLO and collect the QR-coded form first.", "mr": "कृपया तुमच्या BLO शी संपर्क साधा आणि आधी फॉर्म मिळवा.", "ur": "براہ کرم اپنے بی ایل او سے رابطہ کریں اور پہلے فارم حاصل کریں۔"},
   
-  "ocr_title": {"en": "⚡ Auto-Fill from BLO Form", "mr": "⚡ BLO फॉर्मवरून ऑटो-फील करा", "ur": "⚡ بی ایل او فارم سے آٹو فل کریں"},
-  "ocr_sub": {"en": "Take a photo of your BLO form. Our AI will extract your EPIC number.", "mr": "BLO फॉर्मचा फोटो काढा. आमचे AI तुमचा EPIC क्रमांक शोधून काढेल.", "ur": "اپنے بی ایل او فارم کی تصویر لیں۔ ہمارا اے آئی آپ کا ای پی آئی سی نمبر نکالے گا۔"},
-  "ocr_btn": {"en": "📄 Upload Form Photo", "mr": "📄 फॉर्मचा फोटो अपलोड करा", "ur": "📄 فارم کی تصویر اپ لوڈ کریں"},
+  "ocr_title": {"en": "Auto-Fill Form Data (Scanner)", "mr": "ऑटो-फील फॉर्म डेटा (स्कॅनर)", "ur": "آٹو فل فارم ڈیٹا (سکینر)"},
+  "ocr_sub": {"en": "Upload a sharp photo of your BLO form. The system will attempt to extract your EPIC and details.", "mr": "तुमच्या BLO फॉर्मचा स्पष्ट फोटो अपलोड करा. सिस्टीम तुमचा EPIC क्रमांक शोधेल.", "ur": "اپنے بی ایل او فارم کی واضح تصویر اپ لوڈ کریں۔ سسٹم آپ کی تفصیلات نکالے گا۔"},
+  "ocr_btn": {"en": "Upload Form Photo", "mr": "फॉर्मचा फोटो अपलोड करा", "ur": "فارم کی تصویر اپ لوڈ کریں"},
+  "ocr_warning": {"en": "⚠️ Please manually verify the auto-filled details below. The scanner may make mistakes reading handwriting or printed text.", "mr": "⚠️ कृपया खालील माहिती तपासा. स्कॅनरकडून अक्षरे वाचण्यात चुका होऊ शकतात.", "ur": "⚠️ براہ کرم نیچے دی گئی تفصیلات کی تصدیق کریں۔ سکینر غلطیاں کر سکتا ہے۔"},
   
-  "step1": {"en": "Voter Information", "mr": "मतदाराची माहिती", "ur": "ووٹر کی معلومات"},
+  "step1": {"en": "1. Voter Information", "mr": "१. मतदाराची माहिती", "ur": "1. ووٹر کی معلومات"},
   "voter_name": {"en": "Voter Name", "mr": "मतदाराचे नाव", "ur": "ووٹر کا نام"},
   "epic": {"en": "EPIC Number", "mr": "मतदार ओळखपत्र (EPIC)", "ur": "ووٹر شناختی کارڈ نمبر"},
   "address": {"en": "Address", "mr": "पत्ता", "ur": "پتہ"},
@@ -568,7 +573,7 @@ const dict = {
   "part": {"en": "Part No. & Name", "mr": "भाग क्रमांक आणि नाव", "ur": "حصہ نمبر اور نام"},
   "ac": {"en": "Assembly Constituency", "mr": "विधानसभा मतदार संघ", "ur": "اسمبلی حلقہ"},
   "state": {"en": "State", "mr": "राज्य", "ur": "ریاست"},
-  "step2": {"en": "Previous SIR (2002) Details", "mr": "मागील SIR (2002) तपशील", "ur": "پچھلی ایس آئی آر تفصیلات"},
+  "step2": {"en": "2. Previous SIR (2002) Details", "mr": "२. मागील SIR (2002) तपशील", "ur": "2. پچھلی ایس آئی آر تفصیلات"},
   "self_2002": {"en": "My own name is in the 2002 list", "mr": "माझे स्वतःचे नाव 2002 च्या यादीत आहे", "ur": "میرا اپنا نام 2002 کی فہرست میں ہے"},
   "self_2002_hint": {"en": "Your 2002 Details:", "mr": "तुमचा 2002 तपशील:", "ur": "آپ کی 2002 تفصیلات:"},
   "rel_2002_hint": {"en": "Family Member's 2002 Details:", "mr": "नातेवाईकाचा 2002 तपशील:", "ur": "رشتہ دار کی 2002 تفصیلات:"},
@@ -576,59 +581,125 @@ const dict = {
   "relation": {"en": "Relation", "mr": "नाते", "ur": "رشتہ"},
   "district": {"en": "District", "mr": "जिल्हा", "ur": "ضلع"},
   "ac_no": {"en": "AC Number", "mr": "मतदार संघ क्रमांक", "ur": "حلقہ نمبر"},
-  "step3": {"en": "Personal & Family Details", "mr": "वैयक्तिक व कुटुंब तपशील", "ur": "ذاتی اور خاندانی تفصیلات"},
+  "step3": {"en": "3. Personal & Family Details", "mr": "३. वैयक्तिक व कुटुंब तपशील", "ur": "3. ذاتی اور خاندانی تفصیلات"},
   "dob": {"en": "Date of Birth", "mr": "जन्म तारीख", "ur": "تاریخ پیدائش"},
   "aadhaar": {"en": "Aadhaar No.", "mr": "आधार क्रमांक", "ur": "آدھار نمبر"},
   "mobile": {"en": "Mobile Number", "mr": "मोबाइल क्रमांक", "ur": "موبائل نمبر"},
   "father": {"en": "Father's Name", "mr": "वडिलांचे नाव", "ur": "والد کا نام"},
   "mother": {"en": "Mother's Name", "mr": "आईचे नाव", "ur": "والدہ کا نام"},
   "spouse": {"en": "Spouse's Name", "mr": "पती/पत्नीचे नाव", "ur": "شریک حیات کا نام"},
-  "step4": {"en": "Photo Processing", "mr": "फोटो (पांढरा बॅकग्राउंड)", "ur": "تصویر (سفید پس منظر)"},
+  "step4": {"en": "4. Photo Processing", "mr": "४. फोटो (पांढरा बॅकग्राउंड)", "ur": "4. تصویر (سفید پس منظر)"},
   "ai_toggle": {"en": "Auto-remove background with AI", "mr": "AI ने बॅकग्राउंड काढा", "ur": "اے آئی کے ساتھ پس منظر ہٹائیں"},
   "preview_here": {"en": "Preview Here", "mr": "फोटो येथे दिसेल", "ur": "یہاں پیش نظارہ"},
-  "photo_btn": {"en": "📷 Capture / Select Photo", "mr": "📷 फोटो काढा / निवडा", "ur": "📷 تصویر لیں / منتخب کریں"},
-  "photo_hint": {"en": "Ensure good lighting.", "mr": "समोरून, चांगल्या उजेडात फोटो काढा.", "ur": "اچھی روشنی کو یقینی بنائیں۔"},
-  "step5": {"en": "Payment & Download", "mr": "पेमेंट आणि डाउनलोड", "ur": "ادائیگی اور ڈاؤن لوڈ"},
+  "photo_btn": {"en": "Upload / Capture Photo", "mr": "फोटो काढा / निवडा", "ur": "تصویر لیں / منتخب کریں"},
+  "photo_hint": {"en": "Ensure good lighting. Uncheck AI if photo already has white background.", "mr": "समोरून, चांगल्या उजेडात फोटो काढा.", "ur": "اچھی روشنی کو یقینی بنائیں۔"},
+  "step5": {"en": "5. Payment & Download", "mr": "५. पेमेंट आणि डाउनलोड", "ur": "5. ادائیگی اور ڈاؤن لوڈ"},
   "pay_ref": {"en": "Last 4 digits of UPI Ref/UTR", "mr": "UPI UTR शेवटचे 4 अंक", "ur": "یو پی آئی کے آخری 4 ہندسے"},
   "pay_conf": {"en": "I confirm I have paid ₹10", "mr": "मी ₹10 चे पेमेंट पूर्ण केले आहे", "ur": "میں نے 10 روپے کی ادائیگی کر دی ہے"},
   "gen_btn": {"en": "🔒 Unlock & Generate PDF", "mr": "🔒 PDF अनलॉक आणि तयार करा", "ur": "🔒 پی ڈی ایف غیر مقفل کریں"}
 };
 
-$("lang").addEventListener("change", e => {
-  const l = e.target.value;
+/* Apply Language Globally */
+function applyLanguage(l) {
   document.dir = (l === "ur") ? "rtl" : "ltr"; 
   document.querySelectorAll("[data-t]").forEach(el => {
     if(dict[el.dataset.t] && dict[el.dataset.t][l]) {
       el.textContent = dict[el.dataset.t][l];
     }
   });
-});
-$("langGate").dispatchEvent(new Event("change"));
+}
 
-/* ---------- OCR Auto Fill Logic ---------- */
-$("ocrInput").addEventListener("change", (e) => {
+// Initial Sync from Gate
+$("langGate").addEventListener("change", (e) => { applyLanguage(e.target.value); });
+// Apply immediately on load based on default Gate value
+applyLanguage($("langGate").value);
+
+// Sync from Navbar (if they change it after opening app)
+$("lang").addEventListener("change", (e) => {
+  applyLanguage(e.target.value);
+  $("langGate").value = e.target.value; // keep them in sync
+});
+
+/* ---------- Gate Logic ---------- */
+$("btnHaveForm").addEventListener("click", () => {
+  $("gateScreen").style.display = "none";
+  $("mainApp").style.display = "block";
+  $("navLangContainer").style.display = "block";
+  // Ensure we copy the selected lang from Gate to Navbar
+  $("lang").value = $("langGate").value;
+  applyLanguage($("lang").value);
+});
+$("btnNoForm").addEventListener("click", () => {
+  $("noFormMsg").style.display = "block";
+});
+
+/* ---------- Improved OCR Auto Fill with Pre-processing ---------- */
+$("ocrInput").addEventListener("change", async (e) => {
   const file = e.target.files[0];
   if (!file) return;
   const st = $("ocrStatus");
-  st.style.color = "var(--primary)";
-  st.textContent = "Scanning document for EPIC... Please wait (can take 10-20s)";
+  st.style.color = "var(--gov-blue)";
+  st.textContent = "Scanning document... Enhancing image for OCR (Please wait ~15s).";
   
-  Tesseract.recognize(file, 'eng').then(({ data: { text } }) => {
-    // Look for EPIC pattern (e.g. ABC1234567)
-    const epicMatch = text.match(/[A-Z]{3}\d{7}/i);
-    if(epicMatch) {
-      $("f_epic").value = epicMatch[0].toUpperCase();
-      st.style.color = "var(--success)";
-      st.textContent = "✔ Success! Found EPIC: " + epicMatch[0].toUpperCase();
-      mirror();
-    } else {
-      st.style.color = "var(--danger)";
-      st.textContent = "⚠ Could not find EPIC number automatically. Please enter manually.";
+  try {
+    // 1. Load image and enhance for OCR (Grayscale + Threshold)
+    const img = await loadImage(file);
+    const cvs = document.createElement("canvas");
+    cvs.width = img.width; cvs.height = img.height;
+    const ctx = cvs.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    
+    // Simple binarization to make text pop
+    const imgData = ctx.getImageData(0,0,cvs.width,cvs.height);
+    const d = imgData.data;
+    for(let i=0; i<d.length; i+=4){
+      const brightness = (d[i] + d[i+1] + d[i+2]) / 3;
+      const val = brightness > 120 ? 255 : 0; // threshold
+      d[i] = d[i+1] = d[i+2] = val;
     }
-  }).catch(err => {
+    ctx.putImageData(imgData, 0, 0);
+    const enhancedDataUrl = cvs.toDataURL("image/jpeg", 0.9);
+
+    // 2. Run Tesseract on enhanced image
+    Tesseract.recognize(enhancedDataUrl, 'eng').then(({ data: { text } }) => {
+      // RegEx hunting for typical Govt form patterns
+      const epicMatch = text.match(/[A-Z]{3}[0-9]{7}/i);
+      const aadhaarMatch = text.match(/\d{4}\s?\d{4}\s?\d{4}/);
+      const mobMatch = text.match(/[6789]\d{9}/);
+      const numMatch = text.match(/\d+/g); // to find serials
+      
+      let foundSomething = false;
+
+      if(epicMatch) {
+        $("f_epic").value = epicMatch[0].toUpperCase();
+        foundSomething = true;
+      }
+      if(aadhaarMatch) {
+        $("f_aadhaar").value = aadhaarMatch[0].replace(/\s/g, "");
+        foundSomething = true;
+      }
+      if(mobMatch) {
+        $("f_mobile").value = mobMatch[0];
+        foundSomething = true;
+      }
+      
+      if(foundSomething) {
+        st.style.color = "var(--success)";
+        st.textContent = "✔ Scan complete. Data extracted.";
+        $("ocrWarning").style.display = "block"; // SHOW WARNING TO VERIFY
+        mirror();
+      } else {
+        st.style.color = "var(--danger)";
+        st.textContent = "⚠ Could not detect valid EPIC/Aadhaar clearly. Please type manually.";
+      }
+    }).catch(err => {
+      st.style.color = "var(--danger)";
+      st.textContent = "⚠ OCR Engine Failed. Please enter data manually.";
+    });
+  } catch(err) {
     st.style.color = "var(--danger)";
-    st.textContent = "⚠ OCR Failed. Please enter manually.";
-  });
+    st.textContent = "⚠ Error processing image.";
+  }
 });
 
 
@@ -695,7 +766,7 @@ $("photoInput").addEventListener("change",async e=>{
   const file=e.target.files[0]; if(!file) return;
   const st=$("photoStatus");
   const useAI = $("useAI").checked;
-  st.className="photo-status text-primary"; 
+  st.className="photo-status text-gov-blue"; 
   st.textContent= useAI ? "Processing AI background removal..." : "Processing photo...";
   
   try{
@@ -787,7 +858,7 @@ function gate(){
     isUnlocked = true;
     mirror(); 
   } else {
-    btn.style.background = "var(--primary)";
+    btn.style.background = "var(--gov-blue)";
     btn.innerHTML = "🔒 Unlock & Generate PDF";
     $("previewWatermark").classList.remove("hidden");
     isUnlocked = false;
@@ -799,14 +870,13 @@ $("payRef").addEventListener("input",gate);
 
 /* ---------- FIXED PDF Generation ---------- */
 $("genBtn").addEventListener("click",()=>{
-  const st=$("genStatus"); st.className="photo-status text-primary"; st.textContent="Generating PDF... Please wait.";
+  const st=$("genStatus"); st.className="photo-status text-gov-blue"; st.textContent="Generating PDF... Please wait.";
   const name=($("f_name").value.trim()||"voter").replace(/\s+/g,"_");
   
   const sheet = $("formsheet");
   const scaleWrapper = $("scaleWrapper");
   const previewContainer = $("previewContainer");
   
-  // Strip away scaling and overflow restrictions before rendering
   const oldScaleTransform = scaleWrapper.style.transform;
   const oldPreviewMaxH = previewContainer.style.maxHeight;
   const oldPreviewOverflow = previewContainer.style.overflow;
@@ -823,13 +893,11 @@ $("genBtn").addEventListener("click",()=>{
     jsPDF: {unit: "mm", format: "a4", orientation: "portrait"}
   }).from(sheet).save().then(()=>{
     st.className="photo-status text-success"; st.textContent="✔ PDF Downloaded Successfully!";
-    // Restore styling
     scaleWrapper.style.transform = oldScaleTransform;
     previewContainer.style.maxHeight = oldPreviewMaxH;
     previewContainer.style.overflow = oldPreviewOverflow;
   }).catch(()=>{
     st.className="photo-status text-danger"; st.textContent="Error generating PDF. Please try again.";
-    // Restore styling
     scaleWrapper.style.transform = oldScaleTransform;
     previewContainer.style.maxHeight = oldPreviewMaxH;
     previewContainer.style.overflow = oldPreviewOverflow;
