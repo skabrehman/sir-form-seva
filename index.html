@@ -3,377 +3,552 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIR गणना प्रपत्र सहाय्यक — फॉर्म भरा, PDF मिळवा</title>
-<meta name="description" content="महाराष्ट्र SIR गणना प्रपत्र ऑनलाइन भरा — फोटो पांढऱ्या बॅकग्राउंडसह, तयार PDF एका क्लिकमध्ये. सर्व माहिती तुमच्या फोनवरच राहते.">
+<title>SIR Form Assistant - Premium</title>
+<meta name="description" content="Maharashtra SIR Form Online — AI Photo Editor, PDF Generator">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Outfit:wght@300;400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
 
 <style>
-:root{
-  --paper:#FBFAF4;        /* form paper */
-  --desk:#EDEAE0;         /* page background, like a clerk's desk */
-  --ink:#1B3FA0;          /* ballpoint blue — every user-entered value */
-  --navy:#16254E;         /* ECI navy — headings, chrome */
-  --rule:#C9C4B4;         /* printed hairlines */
-  --stamp:#6D28D9;        /* election-ink purple, tiny accents only */
-  --warn:#B42318;
-  --ok:#0E7A3D;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:"Noto Sans Devanagari","Noto Sans",sans-serif;
-  background:var(--desk);
-  color:var(--navy);
-  font-size:16px;line-height:1.55;
-}
-.wrap{max-width:760px;margin:0 auto;padding:16px 14px 80px}
-
-header.site{
-  text-align:center;padding:26px 10px 18px;
-  border-bottom:3px double var(--rule);margin-bottom:20px;
-}
-header.site .eyebrow{
-  font-size:12px;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--stamp);font-weight:700;
-}
-header.site h1{
-  font-family:"Tiro Devanagari Marathi",serif;
-  font-size:clamp(28px,6vw,40px);font-weight:400;line-height:1.2;margin:6px 0 4px;
-}
-header.site p{font-size:14px;color:#4b5568;max-width:520px;margin:0 auto}
-
-.privacy{
-  background:#fff;border:1px solid var(--rule);border-left:4px solid var(--ok);
-  padding:10px 14px;font-size:13.5px;margin-bottom:22px;border-radius:2px;
+:root {
+  --primary: #4F46E5;
+  --primary-hover: #4338CA;
+  --bg-gradient: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --text-dark: #1f2937;
+  --text-muted: #6b7280;
+  --success: #10B981;
+  --danger: #EF4444;
+  
+  /* PDF internal variables */
+  --paper: #ffffff;
+  --ink: #1B3FA0;
 }
 
-.step{
-  background:var(--paper);border:1px solid var(--rule);border-radius:2px;
-  margin-bottom:22px;box-shadow:0 1px 0 rgba(22,37,78,.08);
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Outfit", "Noto Sans Devanagari", sans-serif;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-dark);
+  font-size: 16px;
+  line-height: 1.6;
 }
-.step>legend,.step .steptitle{
-  display:flex;align-items:baseline;gap:10px;
-  padding:12px 16px;border-bottom:1px solid var(--rule);
-  font-family:"Tiro Devanagari Marathi",serif;font-size:20px;
-}
-.step .steptitle .no{
-  font-family:"Noto Sans Devanagari";font-size:12px;font-weight:700;
-  color:var(--paper);background:var(--navy);border-radius:50%;
-  width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;flex:none;
-}
-.step .body{padding:16px}
 
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
-@media(max-width:560px){.grid{grid-template-columns:1fr}}
-.field{display:flex;flex-direction:column;gap:4px}
-.field.full{grid-column:1/-1}
-.field label{font-size:13px;font-weight:600;color:#3d4660}
-.field label .en{font-weight:400;color:#8a8f9e;font-size:11.5px}
-.field input,.field select{
-  font:inherit;font-size:16px;color:var(--ink);font-weight:600;
-  padding:9px 10px;border:1px solid var(--rule);border-radius:2px;background:#fff;
+/* Navbar */
+.navbar {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
-.field input:focus,.field select:focus{outline:2px solid var(--ink);outline-offset:1px}
-.hint{font-size:12px;color:#6b7280}
-.toggle{display:flex;gap:8px;align-items:flex-start;font-size:14px;margin-bottom:12px}
-.toggle input{width:18px;height:18px;accent-color:var(--ink);margin-top:2px}
+.nav-brand { font-weight: 700; font-size: 22px; color: var(--primary); }
+.lang-selector select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
 
-/* photo */
-.photorow{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
-.photobox{
-  width:120px;height:150px;border:1px dashed #9aa;background:#fff;
-  display:flex;align-items:center;justify-content:center;overflow:hidden;flex:none;
+/* Layout Grid */
+.layout {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
 }
-.photobox img{width:100%;height:100%;object-fit:cover}
-.photobox span{font-size:11px;color:#889;text-align:center;padding:6px}
-.btn{
-  font:inherit;font-weight:700;font-size:15px;cursor:pointer;
-  padding:11px 18px;border-radius:2px;border:1px solid var(--navy);
-  background:var(--navy);color:#fff;
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
 }
-.btn.secondary{background:#fff;color:var(--navy)}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.status{font-size:13px;margin-top:8px}
-.status.ok{color:var(--ok)} .status.err{color:var(--warn)} .status.busy{color:var(--stamp)}
 
-/* payment */
-#qrbox{background:#fff;border:1px solid var(--rule);padding:14px;display:inline-block;margin:8px 0}
-.honest{font-size:12.5px;color:#6b7280;margin-top:8px}
-
-/* live preview: the signature element — the paper form filling itself in */
-.previewshell{overflow:auto;border:1px solid var(--rule);background:#fff;padding:8px}
-#formsheet{
-  width:794px; /* A4 @96dpi */
-  background:#fff;color:#111;
-  font-family:"Noto Sans Devanagari",sans-serif;font-size:12px;line-height:1.45;
-  padding:26px 30px;
+/* Form Container */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
-#formsheet .v{color:var(--ink);font-weight:700}
-#formsheet .blank{color:#9aa0ad;font-size:10.5px}
-#formsheet h2{font-size:19px;text-align:center;margin-bottom:2px;font-weight:700}
-#formsheet h3{font-size:15px;text-align:center;margin-bottom:2px;font-weight:600}
-#formsheet .blo{text-align:center;font-size:12px;margin-bottom:8px}
-#formsheet table{border-collapse:collapse;width:100%}
-#formsheet td{border:1px solid #444;padding:5px 7px;vertical-align:top}
-#formsheet .ch{font-weight:700;text-align:center;background:#f1f0ea;font-size:11px}
-#formsheet .refbar{
-  border:1.5px solid var(--warn);color:var(--warn);font-weight:700;text-align:center;
-  font-size:10.5px;padding:4px;margin-bottom:8px;
-}
-#formsheet .dob{display:inline-block;width:22px;height:24px;border:1px solid #444;
-  text-align:center;line-height:24px;font-weight:700;color:var(--ink);margin-right:2px;font-size:13px}
-#formsheet .decl{font-size:9.5px;margin-top:8px;line-height:1.5}
-#formsheet .sig{margin-top:14px;font-size:11px}
-#formsheet .pv{width:96px;height:120px;border:1px dashed #777;float:right;object-fit:cover}
-#formsheet .pvempty{width:96px;height:120px;border:1px dashed #777;float:right;
-  font-size:9px;color:#888;display:flex;align-items:center;justify-content:center;text-align:center;padding:4px}
 
-footer{font-size:12px;color:#6b7280;text-align:center;margin-top:30px;line-height:1.7}
+/* Glassmorphism Cards */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e5e7eb;
+}
+.step-number {
+  background: var(--primary);
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+.card-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Form Grid */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+@media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field.full { grid-column: 1 / -1; }
+.field label { font-size: 14px; font-weight: 600; color: #374151; }
+.field input, .field select {
+  font: inherit; font-size: 15px;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #f9fafb;
+  transition: all 0.2s;
+}
+.field input:focus, .field select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+  background: #fff;
+}
+.hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+.toggle { display: flex; gap: 10px; align-items: center; font-size: 14px; cursor: pointer; }
+.toggle input { width: 18px; height: 18px; accent-color: var(--primary); }
+
+/* Buttons */
+.btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  font-family: inherit;
+}
+.btn:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-1px); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Photo Section */
+.photo-wrap { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.photo-preview {
+  width: 130px; height: 165px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.photo-preview img { width: 100%; height: 100%; object-fit: cover; }
+.photo-status { font-size: 13px; margin-top: 10px; font-weight: 600; }
+.text-danger { color: var(--danger); }
+.text-success { color: var(--success); }
+.text-primary { color: var(--primary); }
+
+/* Sidebar */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.banner {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  color: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+.banner h3 { margin-bottom: 10px; font-size: 18px; }
+.banner p { font-size: 14px; opacity: 0.9; margin-bottom: 15px; }
+.banner ul { padding-left: 20px; font-size: 13px; line-height: 1.8; opacity: 0.95; }
+.banner ul li { margin-bottom: 6px; }
+
+/* Hide PDF Sheet off-screen for Anti-Cheat */
+#formsheet-wrapper {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  pointer-events: none;
+}
+
+/* PDF Internal Styles (Kept intact for correct rendering) */
+#formsheet {
+  width: 794px; background: #fff; color: #111;
+  font-family: "Noto Sans Devanagari", sans-serif; font-size: 12px; line-height: 1.45;
+  padding: 26px 30px;
+}
+#formsheet .v { color: var(--ink); font-weight: 700; }
+#formsheet .blank { color: #9aa0ad; font-size: 10.5px; }
+#formsheet h2 { font-size: 19px; text-align: center; margin-bottom: 2px; font-weight: 700; }
+#formsheet h3 { font-size: 15px; text-align: center; margin-bottom: 2px; font-weight: 600; }
+#formsheet .blo { text-align: center; font-size: 12px; margin-bottom: 8px; }
+#formsheet table { border-collapse: collapse; width: 100%; }
+#formsheet td { border: 1px solid #444; padding: 5px 7px; vertical-align: top; }
+#formsheet .ch { font-weight: 700; text-align: center; background: #f1f0ea; font-size: 11px; }
+#formsheet .refbar { border: 1.5px solid var(--danger); color: var(--danger); font-weight: 700; text-align: center; font-size: 10.5px; padding: 4px; margin-bottom: 8px; }
+#formsheet .dob { display: inline-block; width: 22px; height: 24px; border: 1px solid #444; text-align: center; line-height: 24px; font-weight: 700; color: var(--ink); margin-right: 2px; font-size: 13px; }
+#formsheet .decl { font-size: 9.5px; margin-top: 8px; line-height: 1.5; }
+#formsheet .sig { margin-top: 14px; font-size: 11px; }
+#formsheet .pv { width: 96px; height: 120px; border: 1px dashed #777; float: right; object-fit: cover; }
+#formsheet .pvempty { width: 96px; height: 120px; border: 1px dashed #777; float: right; font-size: 9px; color: #888; display: flex; align-items: center; justify-content: center; text-align: center; padding: 4px; }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-<header class="site">
-  <div class="eyebrow">SIR · महाराष्ट्र · 2026</div>
-  <h1>गणना प्रपत्र सहाय्यक</h1>
-  <p>माहिती भरा → फोटो काढा (बॅकग्राउंड आपोआप पांढरा) → तयार संदर्भ-PDF मिळवा. खाली फॉर्म तुम्ही टाइप करता-करता भरत जाताना दिसेल.</p>
-</header>
-
-<div class="privacy">🔒 <b>गोपनीयता:</b> ही साईट कोणतीही माहिती कुठेही पाठवत नाही. आधार, EPIC, फोटो — सर्व काही फक्त तुमच्या फोन/कॉम्प्युटरमध्येच राहते. PDF तुमच्या डिव्हाइसवरच तयार होते.</div>
-
-<!-- STEP 1 -->
-<section class="step">
-  <div class="steptitle"><span class="no">1</span> मतदाराची माहिती <span class="en" style="font-size:12px;color:#8a8f9e">(BLO फॉर्मवर छापलेली माहिती जशीच्या तशी)</span></div>
-  <div class="body">
-    <div class="grid">
-      <div class="field"><label>मतदाराचे नाव <span class="en">Voter name</span></label><input id="f_name" data-t="p_name"></div>
-      <div class="field"><label>मतदार ओळखपत्र (EPIC) क्मांक</label><input id="f_epic" data-t="p_epic" style="text-transform:uppercase"></div>
-      <div class="field full"><label>पत्ता <span class="en">Address</span></label><input id="f_addr" data-t="p_addr"></div>
-      <div class="field"><label>अनुक्रमांक <span class="en">Serial no.</span></label><input id="f_serial" data-t="p_serial" inputmode="numeric"></div>
-      <div class="field"><label>भाग क्रमांक आणि नाव <span class="en">Part no. & name</span></label><input id="f_part" data-t="p_part"></div>
-      <div class="field"><label>विधानसभा मतदार संघाचे नाव</label><input id="f_ac" data-t="p_ac"></div>
-      <div class="field"><label>राज्य</label><input id="f_state" data-t="p_state" value="महाराष्ट्र"></div>
-    </div>
+<nav class="navbar">
+  <div class="nav-brand" data-t="title">SIR Form Assistant</div>
+  <div class="lang-selector">
+    <select id="lang">
+      <option value="en">English</option>
+      <option value="mr" selected>मराठी (Marathi)</option>
+      <option value="ur">اردو (Urdu)</option>
+    </select>
   </div>
-</section>
+</nav>
 
-<!-- STEP 2 -->
-<section class="step">
-  <div class="steptitle"><span class="no">2</span> मागील SIR (2002) यादीील तपशील</div>
-  <div class="body">
-    <label class="toggle"><input type="checkbox" id="selfIn2002">
-      <span>माझे <b>स्वतःचे</b> नाव 2002 च्या यादीत आहे <span class="hint">(नसेल तर टिक करू नका — डावा रकाना रिकामा राहील आणि खाली नातेवाईकाची माहिती भरा)</span></span>
-    </label>
-
-    <div id="selfBlock" style="display:none">
-      <p class="hint" style="margin-bottom:8px"><b>स्वतःचा 2002 तपशील (डावा रकाना):</b></p>
-      <div class="grid" style="margin-bottom:14px">
-        <div class="field"><label>2002 यादीतील नाव</label><input id="s_name" data-t="l_name"></div>
-        <div class="field"><label>EPIC (उपलब्ध असल्यास)</label><input id="s_epic" data-t="l_epic"></div>
-        <div class="field"><label>नातेवाईकाचे नाव</label><input id="s_rel" data-t="l_rel"></div>
-        <div class="field"><label>नाते</label><input id="s_reln" data-t="l_reln"></div>
-        <div class="field"><label>जिल्हा</label><input id="s_dist" data-t="l_dist"></div>
-        <div class="field"><label>राज्य</label><input id="s_state" data-t="l_state" value="महाराष्ट्र"></div>
-        <div class="field"><label>मतदार संघाचे नाव</label><input id="s_ac" data-t="l_ac"></div>
-        <div class="field"><label>मतदार संघ क्रमांक</label><input id="s_acno" data-t="l_acno" inputmode="numeric"></div>
-        <div class="field"><label>यादी भाग क्रमांक</label><input id="s_partno" data-t="l_partno" inputmode="numeric"></div>
-        <div class="field"><label>अनुक्रमांक</label><input id="s_serial" data-t="l_serial" inputmode="numeric"></div>
+<div class="layout">
+  <!-- Left Side: Form -->
+  <div class="form-container">
+    
+    <!-- STEP 1 -->
+    <div class="glass-card">
+      <div class="card-header">
+        <div class="step-number">1</div>
+        <div class="card-title" data-t="step1">Voter Information</div>
+      </div>
+      <div class="grid">
+        <div class="field full"><label data-t="voter_name">Voter Name</label><input id="f_name" data-v="p_name"></div>
+        <div class="field"><label data-t="epic">EPIC Number</label><input id="f_epic" data-v="p_epic" style="text-transform:uppercase"></div>
+        <div class="field"><label data-t="serial">Serial No.</label><input id="f_serial" data-v="p_serial" inputmode="numeric"></div>
+        <div class="field full"><label data-t="address">Address</label><input id="f_addr" data-v="p_addr"></div>
+        <div class="field"><label data-t="part">Part No. & Name</label><input id="f_part" data-v="p_part"></div>
+        <div class="field"><label data-t="ac">Assembly Constituency</label><input id="f_ac" data-v="p_ac"></div>
+        <div class="field"><label data-t="state">State</label><input id="f_state" data-v="p_state" value="Maharashtra"></div>
       </div>
     </div>
 
-    <p class="hint" style="margin-bottom:8px"><b>नातेवाईकाचा 2002 तपशील (उजवा रकाना)</b> — आई/वडील/आजोबा यांचे 2002 यादीतील तपशील:</p>
-    <div class="grid">
-      <div class="field"><label>नातेवाईकाचे नाव (2002 यादीप्रमाणे)</label><input id="r_name" data-t="r_name"></div>
-      <div class="field"><label>त्यांचा EPIC (2002 यादीत असल्यासच)</label><input id="r_epic" data-t="r_epic"></div>
-      <div class="field"><label>त्यांच्या नातेवाईकाचे नाव (यादीत छापलेले)</label><input id="r_rel" data-t="r_rel"></div>
-      <div class="field"><label>तुमचे त्यांच्याशी नाते</label>
-        <select id="r_reln" data-t="r_reln">
-          <option value="">निवडा</option><option>वडील</option><option>आई</option>
-          <option>आजोबा</option><option>आजी</option><option>काका</option><option>इतर</option>
-        </select></div>
-      <div class="field"><label>जिल्हा</label><input id="r_dist" data-t="r_dist"></div>
-      <div class="field"><label>राज्य</label><input id="r_state" data-t="r_state" value="महाराष्ट्र"></div>
-      <div class="field"><label>मतदार संघाचे नाव (2002 चा जुना)</label><input id="r_ac" data-t="r_ac"></div>
-      <div class="field"><label>मतदार संघ क्रमांक (जुना)</label><input id="r_acno" data-t="r_acno" inputmode="numeric"></div>
-      <div class="field"><label>यादी भाग क्रमांक</label><input id="r_partno" data-t="r_partno" inputmode="numeric"></div>
-      <div class="field"><label>अनुक्रमांक</label><input id="r_serial" data-t="r_serial" inputmode="numeric"></div>
-    </div>
-  </div>
-</section>
-
-<!-- STEP 3 -->
-<section class="step">
-  <div class="steptitle"><span class="no">3</span> वैयक्तिक व कुटुंब तपशील</div>
-  <div class="body">
-    <div class="grid">
-      <div class="field"><label>जन्म तारीख <span class="en">DOB</span></label><input id="f_dob" type="date"></div>
-      <div class="field"><label>आधार क्रमांक <span class="en">(ऐच्छिक)</span></label><input id="f_aadhaar" inputmode="numeric" maxlength="14" placeholder="12 अंकी"></div>
-      <div class="field"><label>मोबाइल क्रमांक</label><input id="f_mobile" inputmode="numeric" maxlength="10"></div>
-      <div class="field"><label>वडिलांचे/पालकांचे नाव</label><input id="f_father" data-t="d_father"></div>
-      <div class="field"><label>वडिलांचा EPIC (असल्यास)</label><input id="f_fepic" data-t="d_fepic" style="text-transform:uppercase"></div>
-      <div class="field"><label>आईे नाव</label><input id="f_mother" data-t="d_mother"></div>
-      <div class="field"><label>आईचा EPIC (असल्यास)</label><input id="f_mepic" data-t="d_mepic" style="text-transform:uppercase"></div>
-      <div class="field"><label>पती/पत्नीचे नाव (लागू असल्यास)</label><input id="f_spouse" data-t="d_spouse"></div>
-      <div class="field"><label>पती/पत्नीचा EPIC (असल्यास)</label><input id="f_sepic" data-t="d_sepic" style="text-transform:uppercase"></div>
-    </div>
-  </div>
-</section>
-
-<!-- STEP 4: PHOTO -->
-<section class="step">
-  <div class="steptitle"><span class="no">4</span> फोटो — बॅकग्राउंड आपोआप पांढरा</div>
-  <div class="body">
-    <div class="photorow">
-      <div class="photobox" id="photoPreview"><span>फोटो येथे दिसेल</span></div>
-      <div style="flex:1;min-width:220px">
-        <input type="file" id="photoInput" accept="image/*" capture="user" style="display:none">
-        <button class="btn" id="photoBtn" type="button">📷 फोटो काढा / निवडा</button>
-        <p class="hint" style="margin-top:8px">समोरून, चांगल्या उजेडात फोटो काढा. बॅकग्राउंड आपोआप पांढरा केला जाईल (AI मॉडेल पहिल्यांदा ~2 MB डाउनलोड होते).</p>
-        <div class="status" id="photoStatus"></div>
+    <!-- STEP 2 -->
+    <div class="glass-card">
+      <div class="card-header">
+        <div class="step-number">2</div>
+        <div class="card-title" data-t="step2">Previous SIR (2002) Details</div>
       </div>
-    </div>
-  </div>
-</section>
+      <label class="toggle" style="margin-bottom:20px;">
+        <input type="checkbox" id="selfIn2002">
+        <span style="font-weight:600" data-t="self_2002">My own name is in the 2002 list</span>
+      </label>
 
-<!-- STEP 5: PAYMENT -->
-<section class="step">
-  <div class="steptitle"><span class="no">5</span> ₹10 UPI पेमेंट</div>
-  <div class="body">
-    <p style="font-size:14px">खालील QR कोड कोणत्याही UPI ॲपने स्कॅन करा (₹10 आधीच भरलेले आहे) किंवा <a href="#" id="upiLink">येथे टॅप करून UPI ॲप घडा</a>.</p>
-    <div id="qrbox"></div>
-    <div class="field" style="max-width:340px;margin-top:6px">
-      <label>UPI व्यवहार (UTR/Ref) क्रमांकाचे शेवटचे 4 अंक</label>
-      <input id="payRef" inputmode="numeric" maxlength="4" placeholder="उदा. 4821">
-    </div>
-    <label class="toggle" style="margin-top:10px"><input type="checkbox" id="payConfirm">
-      <span>मी ₹10 चे पेमेंट पूर्ण केले आहे</span></label>
-    <p class="honest">पेमेंट विश्वासावर आधारितInfo आहे — ही साईट पेमेंटची स्वयंचलित पडताळणी करत नाही.</p>
-  </div>
-</section>
-
-<!-- STEP 6: PREVIEW + GENERATE -->
-<section class="step">
-  <div class="steptitle"><span class="no">6</span> फॉर्म पहा आणि PDF मिळवा</div>
-  <div class="body">
-    <div class="previewshell">
-      <!-- ======= THE SHEET (preview + PDF source) ======= -->
-      <div id="formsheet">
-        <div class="refbar">संदर्भ प्रत (REFERENCE COPY) — प्रत्यक्ष सादरीकरण BLO ने दिलेल्या मूळ QR-कोड फॉर्मवरच करा. निळा मजकूर मूळ फॉर्मवर जसाच्या तसा लिहा.</div>
-        <h2>भारत निवडणूक आयोग</h2>
-        <h3>गणना प्रपत्र</h3>
-        <div class="blo">SIR गणना प्रपत्र — संदर्भ प्रत</div>
-
-        <div id="pvwrap" style="overflow:hidden">
-          <span class="pvempty" id="pvempty">सध्याचा फोटो</span>
-          <img class="pv" id="pvimg" style="display:none" alt="">
-          <table style="width:calc(100% - 106px)">
-            <tr><td>
-              मतदाराचे नाव: <span class="v" data-o="p_name"></span><br>
-              मतदार ओळखपत्र क्रमांक: <span class="v" data-o="p_epic"></span><br>
-              पत्ता: <span class="v" data-o="p_addr"></span>
-            </td><td>
-              अनुक्रमांक: <span class="v" data-o="p_serial"></span><br>
-              भाग क्रमांक आणि नाव: <span class="v" data-o="p_part"></span><br>
-              मतदार संघ: <span class="v" data-o="p_ac"></span><br>
-              राज्य: <span class="v" data-o="p_state"></span>
-            </td></tr>
-          </table>
+      <div id="selfBlock" style="display:none; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed #cbd5e1;">
+        <p class="hint" style="margin-bottom:15px; color:var(--primary); font-weight:600;" data-t="self_2002_hint">Your 2002 Details:</p>
+        <div class="grid">
+          <div class="field"><label data-t="voter_name">Name</label><input id="s_name" data-v="l_name"></div>
+          <div class="field"><label data-t="epic">EPIC</label><input id="s_epic" data-v="l_epic"></div>
+          <div class="field"><label data-t="rel_name">Relative's Name</label><input id="s_rel" data-v="l_rel"></div>
+          <div class="field"><label data-t="relation">Relation</label><input id="s_reln" data-v="l_reln"></div>
+          <div class="field"><label data-t="district">District</label><input id="s_dist" data-v="l_dist"></div>
+          <div class="field"><label data-t="state">State</label><input id="s_state" data-v="l_state" value="Maharashtra"></div>
+          <div class="field"><label data-t="ac">AC Name</label><input id="s_ac" data-v="l_ac"></div>
+          <div class="field"><label data-t="ac_no">AC Number</label><input id="s_acno" data-v="l_acno" inputmode="numeric"></div>
+          <div class="field"><label data-t="part">Part No.</label><input id="s_partno" data-v="l_partno" inputmode="numeric"></div>
+          <div class="field"><label data-t="serial">Serial No.</label><input id="s_serial" data-v="l_serial" inputmode="numeric"></div>
         </div>
-
-        <table style="margin-top:8px">
-          <tr><td class="ch" width="50%">मागील एसआयआरच्या मतदार यादीतील मतदाराचा तपशील</td>
-              <td class="ch" width="50%">वरील रकान्यात ज्याचे नाव नमूद आहे, त्याच्या नातेवाईकाचा मागील एसआयआर मधील तपशील</td></tr>
-          <tr><td>मतदाराचे नाव: <span class="v" data-o="l_name"></span><span class="blank" data-b="l_name">(रिक्त ठेवा)</span></td>
-              <td>नाव: <span class="v" data-o="r_name"></span></td></tr>
-          <tr><td>मतदार ओळखपत्र क्रमांक: <span class="v" data-o="l_epic"></span><span class="blank" data-b="l_epic">(रिक्त)</span></td>
-              <td>मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास): <span class="v" data-o="r_epic"></span><span class="blank" data-b="r_epic">— (रिक्त)</span></td></tr>
-          <tr><td>नातेवाईकाचे नाव: <span class="v" data-o="l_rel"></span><span class="blank" data-b="l_rel">(रिक्त)</span></td>
-              <td>नातेवाईकाचे नाव: <span class="v" data-o="r_rel"></span></td></tr>
-          <tr><td>नाते: <span class="v" data-o="l_reln"></span><span class="blank" data-b="l_reln">(रिक्त)</span></td>
-              <td>नाते: <span class="v" data-o="r_reln"></span></td></tr>
-          <tr><td>जिल्हा: <span class="v" data-o="l_dist"></span><span class="blank" data-b="l_dist">(रिक्त)</span></td>
-              <td>जिल्हा: <span class="v" data-o="r_dist"></span></td></tr>
-          <tr><td>राज्य: <span class="v" data-o="l_state"></span><span class="blank" data-b="l_state">(रिक्त)</span></td>
-              <td>राज्य: <span class="v" data-o="r_state"></span></td></tr>
-          <tr><td>मतदार संघाचे नाव: <span class="v" data-o="l_ac"></span><span class="blank" data-b="l_ac">(रिक्त)</span></td>
-              <td>मतदार संघाचे नाव: <span class="v" data-o="r_ac"></span></td></tr>
-        </table>
-        <table style="margin-top:-1px">
-          <tr><td class="ch">मतदार संघ क्र.</td><td class="ch">यादी भाग क्र.</td><td class="ch">अनुक्रमांक</td>
-              <td class="ch">मतदार संघ क्र.</td><td class="ch">यादी भाग क्र.</td><td class="ch">अनुक्रमांक</td></tr>
-          <tr>
-            <td style="text-align:center"><span class="v" data-o="l_acno"></span><span class="blank" data-b="l_acno">रिक्त</span></td>
-            <td style="text-align:center"><span class="v" data-o="l_partno"></span><span class="blank" data-b="l_partno">रिक्त</span></td>
-            <td style="text-align:center"><span class="v" data-o="l_serial"></span><span class="blank" data-b="l_serial">रिक्त</span></td>
-            <td style="text-align:center"><span class="v" data-o="r_acno"></span></td>
-            <td style="text-align:center"><span class="v" data-o="r_partno"></span></td>
-            <td style="text-align:center"><span class="v" data-o="r_serial"></span></td>
-          </tr>
-        </table>
-
-        <table style="margin-top:8px">
-          <tr><td width="52%">जन्म तारीख (DD/MM/YYYY)</td><td id="dobCells"></td></tr>
-          <tr><td>आधार क्रमांक (ऐच्छिक)</td><td><span class="v" id="o_aadhaar"></span></td></tr>
-          <tr><td>मोबाइल क्रमांक</td><td><span class="v" id="o_mobile"></span></td></tr>
-          <tr><td>वडिलांचे/पालकांचे नाव</td><td><span class="v" data-o="d_father"></span></td></tr>
-          <tr><td>वडिलांचा मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" data-o="d_fepic"></span></td></tr>
-          <tr><td>आईचे नाव</td><td><span class="v" data-o="d_mother"></span></td></tr>
-          <tr><td>आईचा मतदार ओळखपत्र क्रमांक (उपलब्ध असलयास)</td><td><span class="v" data-o="d_mepic"></span></td></tr>
-          <tr><td>पती किंवा पत्नीचे नाव (लागू असल्यास)</td><td><span class="v" data-o="d_spouse"></span><span class="blank" data-b="d_spouse">रिक्त (अविवाहित)</span></td></tr>
-          <tr><td>पती किंवा पत्नीचा मतदार ओळखपत्र क्रमांक</td><td><span class="v" data-o="d_sepic"></span><span class="blank" data-b="d_sepic">रिक्त</span></td></tr>
-        </table>
-
-        <div class="decl">
-          (i) वर उल्लेखित मतदार, म्हणजेच मी स्वतः/माझे कुटुंबीय, यांनी इतर कोणत्याही देशाचे नागरिकत्व प्राप्त केलेले नाही.<br>
-          (ii) मी मतदार यादीत समावेशासाठी अर्ज करत आहे, आणि वर नमूद केलेले नाव इतर कोणत्याही विधानसभा/लोकसभा मतदारसंघात समाविष्ट नाही.<br>
-          (iii) खोटे विधान/घोषणा करणे हे लोकप्रतिनिधित्व अधिनियम, १९५० च्या कलम ३१ अन्वये शिक्षेस पात्र आहे.
-        </div>
-        <div class="sig">मतदाराची सही/अंगठा (तारखेसह): <b style="color:#1B3FA0">____________________</b> &nbsp;&nbsp; <span class="blank">BLO चे रकाने रिक्त ठेवा</span></div>
       </div>
-      <!-- ======= /SHEET ======= -->
+
+      <p class="hint" style="margin-bottom:15px; font-weight:600;" data-t="rel_2002_hint">Family Member's 2002 Details (Mother/Father/Grandparent):</p>
+      <div class="grid">
+        <div class="field"><label data-t="rel_name">Relative's Name (2002)</label><input id="r_name" data-v="r_name"></div>
+        <div class="field"><label data-t="epic">Their EPIC</label><input id="r_epic" data-v="r_epic"></div>
+        <div class="field"><label data-t="rel_name">Their Relative's Name</label><input id="r_rel" data-v="r_rel"></div>
+        <div class="field"><label data-t="relation">Your Relation to them</label>
+          <select id="r_reln" data-v="r_reln">
+            <option value="">Select</option><option>Father</option><option>Mother</option>
+            <option>Grandfather</option><option>Grandmother</option><option>Other</option>
+          </select></div>
+        <div class="field"><label data-t="district">District</label><input id="r_dist" data-v="r_dist"></div>
+        <div class="field"><label data-t="state">State</label><input id="r_state" data-v="r_state" value="Maharashtra"></div>
+        <div class="field"><label data-t="ac">AC Name</label><input id="r_ac" data-v="r_ac"></div>
+        <div class="field"><label data-t="ac_no">AC Number</label><input id="r_acno" data-v="r_acno" inputmode="numeric"></div>
+        <div class="field"><label data-t="part">Part No.</label><input id="r_partno" data-v="r_partno" inputmode="numeric"></div>
+        <div class="field"><label data-t="serial">Serial No.</label><input id="r_serial" data-v="r_serial" inputmode="numeric"></div>
+      </div>
     </div>
 
-    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-      <button class="btn" id="genBtn" disabled>⬇️ PDF तयार करा</button>
-      <span class="status" id="genStatus">आधी स्टेप 5 मध्ये पेमेंट पूर्ण करा.</span>
+    <!-- STEP 3 -->
+    <div class="glass-card">
+      <div class="card-header">
+        <div class="step-number">3</div>
+        <div class="card-title" data-t="step3">Personal & Family Details</div>
+      </div>
+      <div class="grid">
+        <div class="field"><label data-t="dob">Date of Birth</label><input id="f_dob" type="date"></div>
+        <div class="field"><label data-t="aadhaar">Aadhaar No. (Optional)</label><input id="f_aadhaar" inputmode="numeric" maxlength="14"></div>
+        <div class="field"><label data-t="mobile">Mobile Number</label><input id="f_mobile" inputmode="numeric" maxlength="10"></div>
+        <div class="field"><label data-t="father">Father's Name</label><input id="f_father" data-v="d_father"></div>
+        <div class="field"><label data-t="epic">Father's EPIC</label><input id="f_fepic" data-v="d_fepic" style="text-transform:uppercase"></div>
+        <div class="field"><label data-t="mother">Mother's Name</label><input id="f_mother" data-v="d_mother"></div>
+        <div class="field"><label data-t="epic">Mother's EPIC</label><input id="f_mepic" data-v="d_mepic" style="text-transform:uppercase"></div>
+        <div class="field"><label data-t="spouse">Spouse's Name (If applicable)</label><input id="f_spouse" data-v="d_spouse"></div>
+        <div class="field"><label data-t="epic">Spouse's EPIC</label><input id="f_sepic" data-v="d_sepic" style="text-transform:uppercase"></div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="glass-card">
+      <div class="card-header">
+        <div class="step-number">4</div>
+        <div class="card-title" data-t="step4">Photo (Auto White Background)</div>
+      </div>
+      <div class="photo-wrap">
+        <div class="photo-preview" id="photoPreview">
+          <span style="font-size:12px; color:#9ca3af;" data-t="preview_here">Preview Here</span>
+        </div>
+        <div style="flex:1;">
+          <input type="file" id="photoInput" accept="image/*" capture="user" style="display:none">
+          <button class="btn" id="photoBtn" type="button" data-t="photo_btn">📷 Capture / Select Photo</button>
+          <p class="hint" style="margin-top:12px" data-t="photo_hint">Ensure good lighting. The background will automatically be made white.</p>
+          <div class="photo-status" id="photoStatus"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="glass-card">
+      <div class="card-header">
+        <div class="step-number">5</div>
+        <div class="card-title" data-t="step5">Payment & Download</div>
+      </div>
+      
+      <div style="display:flex; gap: 25px; flex-wrap: wrap; align-items: flex-start;">
+        <div style="background:#fff; padding:15px; border-radius:12px; border:1px solid #e5e7eb;">
+          <div id="qrbox"></div>
+        </div>
+        
+        <div style="flex:1;">
+          <p style="margin-bottom:15px; font-weight:600;">Scan QR or <a href="#" id="upiLink" style="color:var(--primary)">Click Here to Pay ₹10</a>.</p>
+          
+          <div class="field" style="margin-bottom:15px;">
+            <label data-t="pay_ref">Last 4 digits of UPI Ref/UTR</label>
+            <input id="payRef" inputmode="numeric" maxlength="4" placeholder="e.g. 4821">
+          </div>
+          
+          <label class="toggle" style="margin-bottom:25px;">
+            <input type="checkbox" id="payConfirm">
+            <span data-t="pay_conf" style="font-weight:600;">I confirm I have paid ₹10</span>
+          </label>
+          
+          <button class="btn" id="genBtn" disabled style="width:100%;">
+            <span data-t="gen_btn">🔒 Unlock & Generate PDF</span>
+          </button>
+          <div class="photo-status" id="genStatus" style="margin-top:10px;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- End Form Container -->
+
+  <!-- Right Side: Sidebar -->
+  <div class="sidebar">
+    <div class="banner">
+      <h3>🏛️ ECI Official Guidelines</h3>
+      <p>How to fill the Special Intensive Revision (SIR) Form:</p>
+      <ul>
+        <li><strong>EPIC Mismatch:</strong> Copy the exact EPIC number printed on your BLO slip, even if it has a typo.</li>
+        <li><strong>2002 Data:</strong> This is critical for verification. If your family migrated after 2002, provide the oldest registered member's details.</li>
+        <li><strong>Photo Rules:</strong> The photo must have a plain white background, facing forward, with no sunglasses or hats. Our AI handles the background for you!</li>
+        <li><strong>Original Form:</strong> This PDF is a <em>Reference Copy</em>. You MUST write these exact details using a blue ballpoint pen onto the physical QR-coded form given by your BLO.</li>
+      </ul>
+    </div>
+    
+    <div class="glass-card" style="padding:20px; font-size:13px; text-align:center; color:var(--text-muted);">
+      🔒 <b>100% Secure & Private</b><br>
+      No data is sent to any server. Your Aadhaar, EPIC, and Photo never leave your phone. The PDF is generated entirely in your browser.
     </div>
   </div>
-</section>
 
-<footer>
-  ही सेवा फॉर्म भरण्यास मदत करते; ती भारत निवडणूक आयोगाशी संलग्न नाही.<br>
-  तयार PDF ही <b>संदर्भ प्रत</b> आहे — अधिकृत सादरीकरण BLO कडील मूळ QR-कोड फॉर्मवरच करावे.
-</footer>
+</div> <!-- End Layout -->
+
+
+<!-- HIDDEN PDF SHEET (ANTI-CHEAT) -->
+<div id="formsheet-wrapper">
+  <div id="formsheet">
+    <div class="refbar">REFERENCE COPY ONLY — Submit original BLO form.</div>
+    <h2>भारत निवडणूक आयोग</h2>
+    <h3>गणना प्रपत्र</h3>
+    <div class="blo">SIR गणना प्रपत्र — संदर्भ प्रत</div>
+
+    <div id="pvwrap" style="overflow:hidden">
+      <span class="pvempty" id="pvempty">Photo</span>
+      <img class="pv" id="pvimg" style="display:none" alt="">
+      <table style="width:calc(100% - 106px)">
+        <tr><td>
+          मतदाराचे नाव: <span class="v" data-o="p_name"></span><br>
+          मतदार ओळखपत्र क्रमांक: <span class="v" data-o="p_epic"></span><br>
+          पत्ता: <span class="v" data-o="p_addr"></span>
+        </td><td>
+          अनुक्रमांक: <span class="v" data-o="p_serial"></span><br>
+          भाग क्रमांक आणि नाव: <span class="v" data-o="p_part"></span><br>
+          मतदार संघ: <span class="v" data-o="p_ac"></span><br>
+          राज्य: <span class="v" data-o="p_state"></span>
+        </td></tr>
+      </table>
+    </div>
+
+    <table style="margin-top:8px">
+      <tr><td class="ch" width="50%">मागील एसआयआरच्या मतदार यादीतील मतदाराचा तपशील</td>
+          <td class="ch" width="50%">वरील रकान्यात ज्याचे नाव नमूद आहे, त्याच्या नातेवाईकाचा मागील एसआयआर मधील तपशील</td></tr>
+      <tr><td>मतदाराचे नाव: <span class="v" data-o="l_name"></span><span class="blank" data-b="l_name">(रिक्त ठेवा)</span></td>
+          <td>नाव: <span class="v" data-o="r_name"></span></td></tr>
+      <tr><td>मतदार ओळखपत्र क्रमांक: <span class="v" data-o="l_epic"></span><span class="blank" data-b="l_epic">(रिक्त)</span></td>
+          <td>मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास): <span class="v" data-o="r_epic"></span><span class="blank" data-b="r_epic">— (रिक्त)</span></td></tr>
+      <tr><td>नातेवाईकाचे नाव: <span class="v" data-o="l_rel"></span><span class="blank" data-b="l_rel">(रिक्त)</span></td>
+          <td>नातेवाईकाचे नाव: <span class="v" data-o="r_rel"></span></td></tr>
+      <tr><td>नाते: <span class="v" data-o="l_reln"></span><span class="blank" data-b="l_reln">(रिक्त)</span></td>
+          <td>नाते: <span class="v" data-o="r_reln"></span></td></tr>
+      <tr><td>जिल्हा: <span class="v" data-o="l_dist"></span><span class="blank" data-b="l_dist">(रिक्त)</span></td>
+          <td>जिल्हा: <span class="v" data-o="r_dist"></span></td></tr>
+      <tr><td>राज्य: <span class="v" data-o="l_state"></span><span class="blank" data-b="l_state">(रिक्त)</span></td>
+          <td>राज्य: <span class="v" data-o="r_state"></span></td></tr>
+      <tr><td>मतदार संघाचे नाव: <span class="v" data-o="l_ac"></span><span class="blank" data-b="l_ac">(रिक्त)</span></td>
+          <td>मतदार संघाचे नाव: <span class="v" data-o="r_ac"></span></td></tr>
+    </table>
+    <table style="margin-top:-1px">
+      <tr><td class="ch">मतदार संघ क्र.</td><td class="ch">यादी भाग क्र.</td><td class="ch">अनुक्रमांक</td>
+          <td class="ch">मतदार संघ क्र.</td><td class="ch">यादी भाग क्र.</td><td class="ch">अनुक्रमांक</td></tr>
+      <tr>
+        <td style="text-align:center"><span class="v" data-o="l_acno"></span><span class="blank" data-b="l_acno">रिक्त</span></td>
+        <td style="text-align:center"><span class="v" data-o="l_partno"></span><span class="blank" data-b="l_partno">रिक्त</span></td>
+        <td style="text-align:center"><span class="v" data-o="l_serial"></span><span class="blank" data-b="l_serial">रिक्त</span></td>
+        <td style="text-align:center"><span class="v" data-o="r_acno"></span></td>
+        <td style="text-align:center"><span class="v" data-o="r_partno"></span></td>
+        <td style="text-align:center"><span class="v" data-o="r_serial"></span></td>
+      </tr>
+    </table>
+
+    <table style="margin-top:8px">
+      <tr><td width="52%">जन्म तारीख (DD/MM/YYYY)</td><td id="dobCells"></td></tr>
+      <tr><td>आधार क्रमांक (ऐच्छिक)</td><td><span class="v" id="o_aadhaar"></span></td></tr>
+      <tr><td>मोबाइल क्रमांक</td><td><span class="v" id="o_mobile"></span></td></tr>
+      <tr><td>वडिलांचे/पालकांचे नाव</td><td><span class="v" data-o="d_father"></span></td></tr>
+      <tr><td>वडिलांचा मतदार ओळखपत्र क्रमांक</td><td><span class="v" data-o="d_fepic"></span></td></tr>
+      <tr><td>आईचे नाव</td><td><span class="v" data-o="d_mother"></span></td></tr>
+      <tr><td>आईचा मतदार ओळखपत्र क्रमांक</td><td><span class="v" data-o="d_mepic"></span></td></tr>
+      <tr><td>पती किंवा पत्नीचे नाव</td><td><span class="v" data-o="d_spouse"></span><span class="blank" data-b="d_spouse">रिक्त (अविवाहित)</span></td></tr>
+      <tr><td>पती/पत्नीचा मतदार ओळखपत्र क्रमांक</td><td><span class="v" data-o="d_sepic"></span><span class="blank" data-b="d_sepic">रिक्त</span></td></tr>
+    </table>
+
+    <div class="decl">
+      (i) I/We have not acquired citizenship of any other country.<br>
+      (ii) Making false declarations is punishable under section 31 of RPA 1950.
+    </div>
+    <div class="sig">Signature: <b style="color:#1B3FA0">____________________</b> &nbsp;&nbsp; <span class="blank">Leave BLO fields empty</span></div>
+  </div>
 </div>
 
 <script>
-/* ================= CONFIG — साईट मालकाने बदलावे ================= */
+/* ================= CONFIG ================= */
 const CONFIG = {
-  UPI_VPA : "yourname@upi",     // ← तुमचा UPI ID येथे टाका
-  UPI_NAME: "SIR Form Seva",    // ← पेमेंट स्क्रीनवर दिसणारे नाव
-  AMOUNT  : "10",
-  REQUIRE_PAYMENT: true          // false केल्यास पेमेंट ्टेप ऐच्छिक होते
+  UPI_VPA : "yourname@upi",     // ← CHANGE THIS
+  UPI_NAME: "SIR Form Seva",
+  AMOUNT  : "10"
 };
-/* ================================================================ */
 
 const $ = id => document.getElementById(id);
 
-/* ---------- live mirroring: inputs → sheet ---------- */
+/* ---------- Multi-language Support ---------- */
+const dict = {
+  "title": {"en": "SIR Form Assistant", "mr": "SIR गणना प्रपत्र सहाय्यक", "ur": "ایس آئی آر فارم اسسٹنٹ"},
+  "step1": {"en": "Voter Information", "mr": "मतदाराची माहिती", "ur": "ووٹر کی معلومات"},
+  "voter_name": {"en": "Voter Name", "mr": "मतदाराचे नाव", "ur": "ووٹر کا نام"},
+  "epic": {"en": "EPIC Number", "mr": "मतदार ओळखपत्र (EPIC)", "ur": "ووٹر شناختی کارڈ نمبر"},
+  "address": {"en": "Address", "mr": "पत्ता", "ur": "پتہ"},
+  "serial": {"en": "Serial No.", "mr": "अनुक्रमांक", "ur": "سیریل نمبر"},
+  "part": {"en": "Part No. & Name", "mr": "भाग क्रमांक आणि नाव", "ur": "حصہ نمبر اور نام"},
+  "ac": {"en": "Assembly Constituency", "mr": "विधानसभा मतदार संघ", "ur": "اسمبلی حلقہ"},
+  "state": {"en": "State", "mr": "राज्य", "ur": "ریاست"},
+  "step2": {"en": "Previous SIR (2002) Details", "mr": "मागील SIR (2002) तपशील", "ur": "پچھلی ایس آئی آر تفصیلات"},
+  "self_2002": {"en": "My own name is in the 2002 list", "mr": "माझे स्वतःचे नाव 2002 च्या यादीत आहे", "ur": "میرا اپنا نام 2002 کی فہرست میں ہے"},
+  "self_2002_hint": {"en": "Your 2002 Details:", "mr": "तुमचा 2002 तपशील:", "ur": "آپ کی 2002 تفصیلات:"},
+  "rel_2002_hint": {"en": "Family Member's 2002 Details:", "mr": "नातेवाईकाचा 2002 तपशील:", "ur": "رشتہ دار کی 2002 تفصیلات:"},
+  "rel_name": {"en": "Relative's Name", "mr": "नातेवाईकाचे नाव", "ur": "رشتہ دار کا نام"},
+  "relation": {"en": "Relation", "mr": "नाते", "ur": "رشتہ"},
+  "district": {"en": "District", "mr": "जिल्हा", "ur": "ضلع"},
+  "ac_no": {"en": "AC Number", "mr": "मतदार संघ क्रमांक", "ur": "حلقہ نمبر"},
+  "step3": {"en": "Personal & Family Details", "mr": "वैयक्तिक व कुटुंब तपशील", "ur": "ذاتی اور خاندانی تفصیلات"},
+  "dob": {"en": "Date of Birth", "mr": "जन्म तारीख", "ur": "تاریخ پیدائش"},
+  "aadhaar": {"en": "Aadhaar No. (Optional)", "mr": "आधार क्रमांक", "ur": "آدھار نمبر"},
+  "mobile": {"en": "Mobile Number", "mr": "मोबाइल क्रमांक", "ur": "موبائل نمبر"},
+  "father": {"en": "Father's Name", "mr": "वडिलांचे नाव", "ur": "والد کا نام"},
+  "mother": {"en": "Mother's Name", "mr": "आईचे नाव", "ur": "والدہ کا نام"},
+  "spouse": {"en": "Spouse's Name", "mr": "पती/पत्नीचे नाव", "ur": "شریک حیات کا نام"},
+  "step4": {"en": "Photo (Auto White Background)", "mr": "फोटो (पांढरा बॅकग्राउंड)", "ur": "تصویر (سفید پس منظر)"},
+  "preview_here": {"en": "Preview Here", "mr": "फोटो येथे दिसेल", "ur": "یہاں پیش نظارہ"},
+  "photo_btn": {"en": "📷 Capture / Select Photo", "mr": "📷 फोटो काढा / निवडा", "ur": "📷 تصویر لیں / منتخب کریں"},
+  "photo_hint": {"en": "Ensure good lighting. The background will automatically be made white.", "mr": "समोरून, चांगल्या उजेडात फोटो काढा.", "ur": "اچھی روشنی کو یقینی بنائیں۔ پس منظر خود بخود سفید ہو جائے گا۔"},
+  "step5": {"en": "Payment & Download", "mr": "पेमेंट आणि डाउनलोड", "ur": "ادائیگی اور ڈاؤن لوڈ"},
+  "pay_ref": {"en": "Last 4 digits of UPI Ref/UTR", "mr": "UPI UTR शेवटचे 4 अंक", "ur": "یو پی آئی کے آخری 4 ہندسے"},
+  "pay_conf": {"en": "I confirm I have paid ₹10", "mr": "मी ₹10 चे पेमेंट पूर्ण केले आहे", "ur": "میں نے 10 روپے کی ادائیگی کر دی ہے"},
+  "gen_btn": {"en": "🔒 Unlock & Generate PDF", "mr": "🔒 PDF अनलॉक आणि तयार करा", "ur": "🔒 پی ڈی ایف غیر مقفل کریں"}
+};
+
+$("lang").addEventListener("change", e => {
+  const l = e.target.value;
+  document.dir = (l === "ur") ? "rtl" : "ltr"; // RTL for Urdu
+  document.querySelectorAll("[data-t]").forEach(el => {
+    if(dict[el.dataset.t] && dict[el.dataset.t][l]) {
+      el.textContent = dict[el.dataset.t][l];
+    }
+  });
+});
+// Trigger initial translation
+$("lang").dispatchEvent(new Event("change"));
+
+
+/* ---------- live mirroring ---------- */
 function mirror(){
-  document.querySelectorAll("[data-t]").forEach(inp=>{
-    const key = inp.dataset.t, val = (inp.value||"").trim();
+  document.querySelectorAll("[data-v]").forEach(inp=>{
+    const key = inp.dataset.v, val = (inp.value||"").trim();
     document.querySelectorAll(`[data-o="${key}"]`).forEach(o=>o.textContent = val ? " "+val : "");
     document.querySelectorAll(`[data-b="${key}"]`).forEach(b=>b.style.display = val ? "none" : "");
   });
-  /* DOB boxes */
-  const d = $("f_dob").value; // yyyy-mm-dd
+  /* DOB */
+  const d = $("f_dob").value; 
   const cells = $("dobCells"); cells.innerHTML = "";
   const digits = d ? (d.slice(8,10)+d.slice(5,7)+d.slice(0,4)) : "";
   for(let i=0;i<8;i++){
@@ -385,72 +560,79 @@ function mirror(){
 document.querySelectorAll("input,select").forEach(el=>el.addEventListener("input",mirror));
 $("selfIn2002").addEventListener("change",e=>{
   $("selfBlock").style.display = e.target.checked ? "" : "none";
-  if(!e.target.checked) $("selfBlock").querySelectorAll("input").forEach(i=>{ if(i.id!=="s_state") i.value=""; });
   mirror();
 });
-mirror();
 
-/* ---------- photo: capture → background to white ---------- */
-let seg=null, segReady=false;
-function getSeg(){
-  if(seg) return seg;
-  seg = new SelfieSegmentation({locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`});
-  seg.setOptions({modelSelection:1});
-  return seg;
-}
+
+/* ---------- Robust Photo Processing ---------- */
 $("photoBtn").addEventListener("click",()=>$("photoInput").click());
 $("photoInput").addEventListener("change",async e=>{
   const file=e.target.files[0]; if(!file) return;
-  const st=$("photoStatus"); st.className="status busy"; st.textContent="फोटो प्रोसेस होत आहे…";
+  const st=$("photoStatus"); st.className="photo-status text-primary"; st.textContent="Processing photo... Please wait.";
+  
   try{
     const img=await loadImage(file);
-    const white=await removeBackground(img).catch(err=>{
-      console.warn("segmentation failed",err);
-      st.className="status err";
-      st.textContent="⚠ बॅकग्राउंड बदलता आला नाही (नेटवर्क?) — मूळ फोटो वापरला आहे.";
-      return cropTo34(img);
-    });
-    const url=white.toDataURL("image/jpeg",0.92);
-    $("photoPreview").innerHTML=`<img src="${url}" alt="फोटो">`;
+    let finalImg = img;
+    
+    // Attempt AI background removal
+    try {
+      finalImg = await removeBackgroundWithTimeout(img, 15000); // 15s timeout
+      st.className="photo-status text-success"; st.textContent="✔ Photo ready! Background removed.";
+    } catch(err) {
+      console.warn("AI Model failed or timed out. Falling back to original image cropping.", err);
+      st.className="photo-status text-danger"; st.textContent="⚠ Network too slow for AI. Using original photo.";
+      finalImg = cropTo34(img);
+    }
+    
+    const url = finalImg.toDataURL("image/jpeg", 0.92);
+    $("photoPreview").innerHTML=`<img src="${url}" alt="Photo">`;
     $("pvimg").src=url; $("pvimg").style.display=""; $("pvempty").style.display="none";
-    if(st.className!=="status err"){ st.className="status ok"; st.textContent="✔ फोटो तयार — बॅकग्राउंड पांढरा."; }
   }catch(err){
-    st.className="status err"; st.textContent="फोटो वाचता आला नाही. दुसरा फोटो वापरून पहा.";
+    st.className="photo-status text-danger"; st.textContent="Error reading photo. Try a different one.";
   }
   e.target.value="";
 });
+
 function loadImage(file){return new Promise((res,rej)=>{
   const img=new Image(); img.onload=()=>res(img); img.onerror=rej;
   img.src=URL.createObjectURL(file);
 });}
-function removeBackground(img){
+
+function removeBackgroundWithTimeout(img, timeoutMs){
   return new Promise((resolve,reject)=>{
-    const s=getSeg();
-    const timer=setTimeout(()=>reject(new Error("timeout")),30000);
-    s.onResults(res=>{
-      clearTimeout(timer);
-      try{
-        /* person cut-out */
-        const t=document.createElement("canvas");
-        t.width=img.naturalWidth; t.height=img.naturalHeight;
-        const tc=t.getContext("2d");
-        tc.drawImage(res.segmentationMask,0,0,t.width,t.height);
-        tc.globalCompositeOperation="source-in";
-        tc.drawImage(img,0,0,t.width,t.height);
-        /* paste on white, crop 3:4 */
-        resolve(cropTo34FromCanvas(t));
-      }catch(e){reject(e);}
-    });
-    s.send({image:img}).catch(e=>{clearTimeout(timer);reject(e);});
+    const timer = setTimeout(()=>reject(new Error("Timeout")), timeoutMs);
+    
+    try {
+      // Use unpkg as a backup CDN if jsdelivr is slow
+      const seg = new SelfieSegmentation({locateFile:f=>`https://unpkg.com/@mediapipe/selfie_segmentation/${f}`});
+      seg.setOptions({modelSelection:1});
+      
+      seg.onResults(res=>{
+        clearTimeout(timer);
+        try {
+          const t=document.createElement("canvas");
+          t.width=img.naturalWidth; t.height=img.naturalHeight;
+          const tc=t.getContext("2d");
+          tc.drawImage(res.segmentationMask,0,0,t.width,t.height);
+          tc.globalCompositeOperation="source-in";
+          tc.drawImage(img,0,0,t.width,t.height);
+          resolve(cropTo34FromCanvas(t));
+        }catch(e){ reject(e); }
+      });
+      seg.send({image:img}).catch(e=>{ clearTimeout(timer); reject(e); });
+    } catch(e) {
+      clearTimeout(timer); reject(e);
+    }
   });
 }
+
 function cropTo34FromCanvas(src){
-  const out=document.createElement("canvas"); out.width=413; out.height=531; // 35x45mm @300dpi
+  const out=document.createElement("canvas"); out.width=413; out.height=531; 
   const oc=out.getContext("2d");
   oc.fillStyle="#fff"; oc.fillRect(0,0,out.width,out.height);
   const ratio=Math.min(out.width/src.width, out.height/src.height)*1.0;
   const w=src.width*ratio, h=src.height*ratio;
-  oc.drawImage(src,(out.width-w)/2, out.height-h, w, h); // bottom-anchored like a passport photo
+  oc.drawImage(src,(out.width-w)/2, out.height-h, w, h);
   return out;
 }
 function cropTo34(img){
@@ -459,35 +641,49 @@ function cropTo34(img){
   return cropTo34FromCanvas(c);
 }
 
-/* ---------- UPI QR + gate ---------- */
-const upiUrl=`upi://pay?pa=${encodeURIComponent(CONFIG.UPI_VPA)}&pn=${encodeURIComponent(CONFIG.UPI_NAME)}&am=${CONFIG.AMOUNT}&cu=INR&tn=${encodeURIComponent("SIR Form PDF")}`;
-new QRCode($("qrbox"),{text:upiUrl,width:180,height:180,correctLevel:QRCode.CorrectLevel.M});
+/* ---------- UPI QR + Gate ---------- */
+const upiUrl=`upi://pay?pa=${encodeURIComponent(CONFIG.UPI_VPA)}&pn=${encodeURIComponent(CONFIG.UPI_NAME)}&am=${CONFIG.AMOUNT}&cu=INR`;
+new QRCode($("qrbox"),{text:upiUrl,width:160,height:160,correctLevel:QRCode.CorrectLevel.M});
 $("upiLink").href=upiUrl;
+
 function gate(){
-  const ok = !CONFIG.REQUIRE_PAYMENT ||
-    ($("payConfirm").checked && $("payRef").value.replace(/\D/g,"").length===4);
-  $("genBtn").disabled=!ok;
-  $("genStatus").textContent = ok ? "तयार! खालील बटण दाबा." : "आधी स्टेप 5 मध्ये पेमेंट पूर्ण करा (शेवटचे 4 अंक + टिक).";
+  const ok = ($("payConfirm").checked && $("payRef").value.replace(/\D/g,"").length===4);
+  const btn = $("genBtn");
+  btn.disabled=!ok;
+  if (ok) {
+    btn.style.background = "var(--success)";
+    btn.innerHTML = "⬇️ Download PDF Now";
+    $("genStatus").innerHTML = "";
+  } else {
+    btn.style.background = "var(--primary)";
+    btn.innerHTML = "🔒 Unlock & Generate PDF";
+  }
 }
 $("payConfirm").addEventListener("change",gate);
 $("payRef").addEventListener("input",gate);
-gate();
 
-/* ---------- PDF ---------- */
+/* ---------- PDF Generation (Hidden Sheet) ---------- */
 $("genBtn").addEventListener("click",()=>{
-  const st=$("genStatus"); st.className="status busy"; st.textContent="PDF तयार होत आहे…";
+  const st=$("genStatus"); st.className="photo-status text-primary"; st.textContent="Generating PDF... Please wait.";
   const name=($("f_name").value.trim()||"voter").replace(/\s+/g,"_");
+  
+  // Make temporarily visible to html2pdf, but still offscreen
+  $("formsheet-wrapper").style.left = "0px";
+  $("formsheet-wrapper").style.zIndex = "-999";
+  
   html2pdf().set({
     margin:5,
-    filename:`SIR_Ganana_Prapatra_${name}.pdf`,
+    filename:`SIR_Form_${name}.pdf`,
     image:{type:"jpeg",quality:0.95},
     html2canvas:{scale:2,useCORS:true,backgroundColor:"#ffffff"},
     jsPDF:{unit:"mm",format:"a4",orientation:"portrait"},
     pagebreak:{mode:["avoid-all","css"]}
   }).from($("formsheet")).save().then(()=>{
-    st.className="status ok"; st.textContent="✔ PDF डाउनलोड झाली.";
+    st.className="photo-status text-success"; st.textContent="✔ PDF Downloaded Successfully!";
+    $("formsheet-wrapper").style.left = "-9999px"; // hide again
   }).catch(()=>{
-    st.className="status err"; st.textContent="PDF तयार करता आली नाही — पुन्हा प्रयत्न करा.";
+    st.className="photo-status text-danger"; st.textContent="Error generating PDF. Please try again.";
+    $("formsheet-wrapper").style.left = "-9999px"; // hide again
   });
 });
 </script>
