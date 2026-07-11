@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SIR Form Assistant - Premium</title>
-<meta name="description" content="Maharashtra SIR Form Online — AI Photo Editor, PDF Generator">
+<meta name="description" content="Official SIR Form Online — AI Photo Editor, PDF Generator">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,8 +25,6 @@
   --text-muted: #6b7280;
   --success: #10B981;
   --danger: #EF4444;
-  
-  /* PDF internal variables */
   --paper: #ffffff;
   --ink: #1B3FA0;
 }
@@ -80,14 +78,9 @@ body {
   .layout { grid-template-columns: 1fr; }
 }
 
-/* Form Container */
-.form-container {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-}
+.form-container { display: flex; flex-direction: column; gap: 25px; }
 
-/* Glassmorphism Cards */
+/* Glass Cards */
 .glass-card {
   background: var(--glass-bg);
   backdrop-filter: blur(16px);
@@ -95,86 +88,48 @@ body {
   border-radius: 16px;
   padding: 25px;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.glass-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 }
 .card-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #e5e7eb;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e5e7eb;
 }
 .step-number {
-  background: var(--primary);
-  color: white;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 14px;
+  background: var(--primary); color: white; width: 30px; height: 30px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px;
 }
-.card-title {
-  font-size: 18px;
-  font-weight: 700;
-}
+.card-title { font-size: 18px; font-weight: 700; }
 
-/* Form Grid */
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
 .field { display: flex; flex-direction: column; gap: 6px; }
 .field.full { grid-column: 1 / -1; }
 .field label { font-size: 14px; font-weight: 600; color: #374151; }
 .field input, .field select {
-  font: inherit; font-size: 15px;
-  padding: 12px 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background: #f9fafb;
-  transition: all 0.2s;
+  font: inherit; font-size: 15px; padding: 12px 14px;
+  border: 1px solid #d1d5db; border-radius: 8px; background: #f9fafb;
 }
 .field input:focus, .field select:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
-  background: #fff;
+  outline: none; border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); background: #fff;
 }
 .hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 .toggle { display: flex; gap: 10px; align-items: center; font-size: 14px; cursor: pointer; }
 .toggle input { width: 18px; height: 18px; accent-color: var(--primary); }
 
-/* Buttons */
 .btn {
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
-  font-family: inherit;
+  background: var(--primary); color: #fff; border: none; padding: 12px 24px;
+  border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer;
+  transition: background 0.2s; font-family: inherit;
 }
-.btn:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-1px); }
+.btn:hover:not(:disabled) { background: var(--primary-hover); }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-/* Photo Section */
 .photo-wrap { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
 .photo-preview {
-  width: 130px; height: 165px;
-  border: 2px dashed #cbd5e1;
-  border-radius: 12px;
-  background: #f8fafc;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
+  width: 130px; height: 165px; border: 2px dashed #cbd5e1; border-radius: 12px;
+  background: #f8fafc; display: flex; align-items: center; justify-content: center;
+  overflow: hidden; position: relative;
 }
 .photo-preview img { width: 100%; height: 100%; object-fit: cover; }
 .photo-status { font-size: 13px; margin-top: 10px; font-weight: 600; }
@@ -183,51 +138,84 @@ body {
 .text-primary { color: var(--primary); }
 
 /* Sidebar */
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
+.sidebar { display: flex; flex-direction: column; gap: 20px; }
 .banner {
-  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
-  color: white;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white;
+  padding: 20px; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
 }
 .banner h3 { margin-bottom: 10px; font-size: 18px; }
-.banner p { font-size: 14px; opacity: 0.9; margin-bottom: 15px; }
 .banner ul { padding-left: 20px; font-size: 13px; line-height: 1.8; opacity: 0.95; }
-.banner ul li { margin-bottom: 6px; }
 
-/* Hide PDF Sheet off-screen for Anti-Cheat */
-#formsheet-wrapper {
+/* Anti-Cheat Preview */
+.preview-container {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
+  margin-top: 25px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+.preview-overlay {
   position: absolute;
-  top: -9999px;
-  left: -9999px;
-  pointer-events: none;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  text-align: center;
+  padding: 20px;
+}
+.preview-overlay.hidden { display: none; }
+.lock-icon { font-size: 40px; margin-bottom: 10px; }
+.lock-text { font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 5px; }
+.lock-sub { font-size: 14px; color: #475569; font-weight: 600; background: #fff; padding: 5px 10px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+/* The Actual PDF Sheet Styling */
+#formsheet {
+  width: 794px; /* A4 width in pixels at ~96dpi */
+  margin: 0 auto;
+  background: #fff; color: #000;
+  font-family: "Noto Sans Devanagari", sans-serif; font-size: 11.5px; line-height: 1.4;
+  padding: 25px;
+  transform-origin: top left;
+}
+/* Responsive scale for preview */
+@media (max-width: 850px) {
+  #formsheet { transform: scale(0.8); }
+}
+@media (max-width: 600px) {
+  #formsheet { transform: scale(0.45); }
 }
 
-/* PDF Internal Styles (Kept intact for correct rendering) */
-#formsheet {
-  width: 794px; background: #fff; color: #111;
-  font-family: "Noto Sans Devanagari", sans-serif; font-size: 12px; line-height: 1.45;
-  padding: 26px 30px;
+#formsheet .v { color: var(--ink); font-weight: 700; font-size: 12.5px; }
+#formsheet .blank { color: #dc2626; font-size: 10.5px; font-weight: 700; }
+#formsheet h2 { font-size: 20px; text-align: center; margin-bottom: 2px; font-weight: 700; }
+#formsheet h3 { font-size: 16px; text-align: center; margin-bottom: 2px; font-weight: 600; }
+#formsheet .blo-header { text-align: center; font-size: 11px; margin-bottom: 12px; }
+#formsheet table { border-collapse: collapse; width: 100%; border: 1.5px solid #000; margin-bottom: 8px; }
+#formsheet td { border: 1px solid #000; padding: 4px 6px; vertical-align: middle; }
+#formsheet .ch { font-weight: 700; text-align: center; background: #e5e5e5; font-size: 11px; }
+#formsheet .refbar { 
+  border: 1.5px solid var(--danger); color: var(--danger); font-weight: 700; 
+  text-align: center; font-size: 11px; padding: 6px; margin-bottom: 15px; 
 }
-#formsheet .v { color: var(--ink); font-weight: 700; }
-#formsheet .blank { color: #9aa0ad; font-size: 10.5px; }
-#formsheet h2 { font-size: 19px; text-align: center; margin-bottom: 2px; font-weight: 700; }
-#formsheet h3 { font-size: 15px; text-align: center; margin-bottom: 2px; font-weight: 600; }
-#formsheet .blo { text-align: center; font-size: 12px; margin-bottom: 8px; }
-#formsheet table { border-collapse: collapse; width: 100%; }
-#formsheet td { border: 1px solid #444; padding: 5px 7px; vertical-align: top; }
-#formsheet .ch { font-weight: 700; text-align: center; background: #f1f0ea; font-size: 11px; }
-#formsheet .refbar { border: 1.5px solid var(--danger); color: var(--danger); font-weight: 700; text-align: center; font-size: 10.5px; padding: 4px; margin-bottom: 8px; }
-#formsheet .dob { display: inline-block; width: 22px; height: 24px; border: 1px solid #444; text-align: center; line-height: 24px; font-weight: 700; color: var(--ink); margin-right: 2px; font-size: 13px; }
-#formsheet .decl { font-size: 9.5px; margin-top: 8px; line-height: 1.5; }
-#formsheet .sig { margin-top: 14px; font-size: 11px; }
-#formsheet .pv { width: 96px; height: 120px; border: 1px dashed #777; float: right; object-fit: cover; }
-#formsheet .pvempty { width: 96px; height: 120px; border: 1px dashed #777; float: right; font-size: 9px; color: #888; display: flex; align-items: center; justify-content: center; text-align: center; padding: 4px; }
+#formsheet .dob-box { 
+  display: inline-block; width: 20px; height: 22px; border: 1px solid #000; 
+  text-align: center; line-height: 22px; font-weight: 700; color: var(--ink); 
+  margin-right: 2px; font-size: 13px; 
+}
+#formsheet .decl { font-size: 9.5px; margin-top: 15px; line-height: 1.6; }
+#formsheet .sig-line { margin-top: 25px; font-size: 11px; display: flex; justify-content: space-between; }
+#formsheet .top-block { display: flex; width: 100%; border: 1.5px solid #000; margin-bottom: 8px; }
+#formsheet .top-col { border-right: 1px solid #000; padding: 6px; flex: 1; }
+#formsheet .top-col:last-child { border-right: none; }
+#formsheet .pv { width: 90px; height: 115px; object-fit: cover; }
+#formsheet .pvempty { width: 90px; height: 115px; border: 1px dashed #777; display: flex; align-items: center; justify-content: center; font-size: 10px; text-align: center; color: #555;}
 </style>
 </head>
 <body>
@@ -254,13 +242,13 @@ body {
         <div class="card-title" data-t="step1">Voter Information</div>
       </div>
       <div class="grid">
-        <div class="field full"><label data-t="voter_name">Voter Name</label><input id="f_name" data-v="p_name"></div>
+        <div class="field full"><label data-t="voter_name">Voter Name</label><input id="f_name" data-v="p_name" placeholder="As per BLO slip"></div>
         <div class="field"><label data-t="epic">EPIC Number</label><input id="f_epic" data-v="p_epic" style="text-transform:uppercase"></div>
         <div class="field"><label data-t="serial">Serial No.</label><input id="f_serial" data-v="p_serial" inputmode="numeric"></div>
         <div class="field full"><label data-t="address">Address</label><input id="f_addr" data-v="p_addr"></div>
         <div class="field"><label data-t="part">Part No. & Name</label><input id="f_part" data-v="p_part"></div>
         <div class="field"><label data-t="ac">Assembly Constituency</label><input id="f_ac" data-v="p_ac"></div>
-        <div class="field"><label data-t="state">State</label><input id="f_state" data-v="p_state" value="Maharashtra"></div>
+        <div class="field"><label data-t="state">State</label><input id="f_state" data-v="p_state" value="महाराष्ट्र"></div>
       </div>
     </div>
 
@@ -279,11 +267,11 @@ body {
         <p class="hint" style="margin-bottom:15px; color:var(--primary); font-weight:600;" data-t="self_2002_hint">Your 2002 Details:</p>
         <div class="grid">
           <div class="field"><label data-t="voter_name">Name</label><input id="s_name" data-v="l_name"></div>
-          <div class="field"><label data-t="epic">EPIC</label><input id="s_epic" data-v="l_epic"></div>
+          <div class="field"><label data-t="epic">EPIC</label><input id="s_epic" data-v="l_epic" style="text-transform:uppercase"></div>
           <div class="field"><label data-t="rel_name">Relative's Name</label><input id="s_rel" data-v="l_rel"></div>
           <div class="field"><label data-t="relation">Relation</label><input id="s_reln" data-v="l_reln"></div>
           <div class="field"><label data-t="district">District</label><input id="s_dist" data-v="l_dist"></div>
-          <div class="field"><label data-t="state">State</label><input id="s_state" data-v="l_state" value="Maharashtra"></div>
+          <div class="field"><label data-t="state">State</label><input id="s_state" data-v="l_state" value="महाराष्ट्र"></div>
           <div class="field"><label data-t="ac">AC Name</label><input id="s_ac" data-v="l_ac"></div>
           <div class="field"><label data-t="ac_no">AC Number</label><input id="s_acno" data-v="l_acno" inputmode="numeric"></div>
           <div class="field"><label data-t="part">Part No.</label><input id="s_partno" data-v="l_partno" inputmode="numeric"></div>
@@ -294,7 +282,7 @@ body {
       <p class="hint" style="margin-bottom:15px; font-weight:600;" data-t="rel_2002_hint">Family Member's 2002 Details (Mother/Father/Grandparent):</p>
       <div class="grid">
         <div class="field"><label data-t="rel_name">Relative's Name (2002)</label><input id="r_name" data-v="r_name"></div>
-        <div class="field"><label data-t="epic">Their EPIC</label><input id="r_epic" data-v="r_epic"></div>
+        <div class="field"><label data-t="epic">Their EPIC</label><input id="r_epic" data-v="r_epic" style="text-transform:uppercase"></div>
         <div class="field"><label data-t="rel_name">Their Relative's Name</label><input id="r_rel" data-v="r_rel"></div>
         <div class="field"><label data-t="relation">Your Relation to them</label>
           <select id="r_reln" data-v="r_reln">
@@ -302,7 +290,7 @@ body {
             <option>Grandfather</option><option>Grandmother</option><option>Other</option>
           </select></div>
         <div class="field"><label data-t="district">District</label><input id="r_dist" data-v="r_dist"></div>
-        <div class="field"><label data-t="state">State</label><input id="r_state" data-v="r_state" value="Maharashtra"></div>
+        <div class="field"><label data-t="state">State</label><input id="r_state" data-v="r_state" value="महाराष्ट्र"></div>
         <div class="field"><label data-t="ac">AC Name</label><input id="r_ac" data-v="r_ac"></div>
         <div class="field"><label data-t="ac_no">AC Number</label><input id="r_acno" data-v="r_acno" inputmode="numeric"></div>
         <div class="field"><label data-t="part">Part No.</label><input id="r_partno" data-v="r_partno" inputmode="numeric"></div>
@@ -318,9 +306,9 @@ body {
       </div>
       <div class="grid">
         <div class="field"><label data-t="dob">Date of Birth</label><input id="f_dob" type="date"></div>
-        <div class="field"><label data-t="aadhaar">Aadhaar No. (Optional)</label><input id="f_aadhaar" inputmode="numeric" maxlength="14"></div>
+        <div class="field"><label data-t="aadhaar">Aadhaar No. (Optional)</label><input id="f_aadhaar" inputmode="numeric" maxlength="14" placeholder="12 Digits"></div>
         <div class="field"><label data-t="mobile">Mobile Number</label><input id="f_mobile" inputmode="numeric" maxlength="10"></div>
-        <div class="field"><label data-t="father">Father's Name</label><input id="f_father" data-v="d_father"></div>
+        <div class="field"><label data-t="father">Father's / Guardian's Name</label><input id="f_father" data-v="d_father"></div>
         <div class="field"><label data-t="epic">Father's EPIC</label><input id="f_fepic" data-v="d_fepic" style="text-transform:uppercase"></div>
         <div class="field"><label data-t="mother">Mother's Name</label><input id="f_mother" data-v="d_mother"></div>
         <div class="field"><label data-t="epic">Mother's EPIC</label><input id="f_mepic" data-v="d_mepic" style="text-transform:uppercase"></div>
@@ -337,12 +325,12 @@ body {
       </div>
       <div class="photo-wrap">
         <div class="photo-preview" id="photoPreview">
-          <span style="font-size:12px; color:#9ca3af;" data-t="preview_here">Preview Here</span>
+          <span style="font-size:12px; color:#9ca3af;" data-t="preview_here">Preview</span>
         </div>
         <div style="flex:1;">
           <input type="file" id="photoInput" accept="image/*" capture="user" style="display:none">
           <button class="btn" id="photoBtn" type="button" data-t="photo_btn">📷 Capture / Select Photo</button>
-          <p class="hint" style="margin-top:12px" data-t="photo_hint">Ensure good lighting. The background will automatically be made white.</p>
+          <p class="hint" style="margin-top:12px" data-t="photo_hint">Ensure good lighting. The background will automatically be made white. If AI fails, the original photo will be used.</p>
           <div class="photo-status" id="photoStatus"></div>
         </div>
       </div>
@@ -381,18 +369,120 @@ body {
       </div>
     </div>
 
+    <!-- PREVIEW AREA (BLURRED) -->
+    <div class="preview-container">
+      <div class="preview-overlay" id="previewOverlay">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-text">Preview Locked</div>
+        <div class="lock-sub">Complete payment in Step 5 to unlock and download PDF</div>
+      </div>
+      
+      <!-- ACTUAL PDF SHEET -->
+      <div id="formsheet">
+        <div class="refbar">संदर्भ प्रत (REFERENCE COPY) — प्रत्यक्ष सादरीकरण BLO ने दिलेल्या मूळ QR-कोड असलेल्या फॉर्मवरच करा. निळ्या रंगातील मजकूर मूळ फॉर्मवर जसाच्या तसा लिहा.</div>
+        <h2>भारत निवडणूक आयोग</h2>
+        <h3>गणना प्रपत्र</h3>
+        <div class="blo-header">Name and contact No of BLO: _____________________________</div>
+
+        <div class="top-block">
+          <div class="top-col" style="flex:2">
+            मतदाराचे नाव: <span class="v" data-o="p_name"></span><br>
+            मतदार ओळखपत्र क्रमांक: <span class="v" data-o="p_epic"></span><br>
+            पत्ता: <span class="v" data-o="p_addr"></span><br>
+            <span style="color:#dc2626; font-weight:700; font-size:10px;">(छापील माहिती — काही लिहू नये)</span>
+          </div>
+          <div class="top-col" style="flex:2">
+            अनुक्रमांक: <span class="v" data-o="p_serial"></span><br>
+            भाग क्रमांक आणि नाव: <span class="v" data-o="p_part"></span><br>
+            विधानसभा / लोकसभा मतदार संघाचे नाव: <span class="v" data-o="p_ac"></span><br>
+            राज्य: <span class="v" data-o="p_state"></span>
+          </div>
+          <div class="top-col" style="flex:1; display:flex; align-items:center; justify-content:center; color:#777; font-size:10px;">
+            [QR कोड छापील]
+          </div>
+          <div class="top-col" style="flex:1; display:flex; align-items:center; justify-content:center; padding:2px;">
+            <div id="pvwrap">
+              <span class="pvempty" id="pvempty">← येथे स्वतःचा<br>अलीकडील पासपोर्ट<br>फोटो चिकटवा</span>
+              <img class="pv" id="pvimg" style="display:none" alt="">
+            </div>
+          </div>
+        </div>
+
+        <table>
+          <tr><td class="ch" width="50%">मागील एसआयआरच्या मतदार यादीतील मतदाराचा तपशील</td>
+              <td class="ch" width="50%">वरील रकान्यात ज्याचे नाव नमूद आहे, त्याच्या नातेवाईकाचा मागील एसआयआर मधील तपशील</td></tr>
+          <tr><td>मतदाराचे नाव: <span class="v" data-o="l_name"></span><span class="blank" data-b="l_name">(रिक्त ठेवा — 2002 यादीत नाव नाही)</span></td>
+              <td>नाव: <span class="v" data-o="r_name"></span></td></tr>
+          <tr><td>मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास): <span class="v" data-o="l_epic"></span><span class="blank" data-b="l_epic">(रिक्त)</span></td>
+              <td>मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास): <span class="v" data-o="r_epic"></span><span class="blank" data-b="r_epic">— (2002 यादीत EPIC छापलेला नाही म्हणून रिक्त)</span></td></tr>
+          <tr><td>नातेवाईकाचे नाव: <span class="v" data-o="l_rel"></span><span class="blank" data-b="l_rel">(रिक्त)</span></td>
+              <td>नातेवाईकाचे नाव: <span class="v" data-o="r_rel"></span></td></tr>
+          <tr><td>नाते: <span class="v" data-o="l_reln"></span><span class="blank" data-b="l_reln">(रिक्त)</span></td>
+              <td>नाते: <span class="v" data-o="r_reln"></span></td></tr>
+          <tr><td>जिल्हा: <span class="v" data-o="l_dist"></span><span class="blank" data-b="l_dist">(रिक्त)</span></td>
+              <td>जिल्हा: <span class="v" data-o="r_dist"></span></td></tr>
+          <tr><td>राज्य: <span class="v" data-o="l_state"></span><span class="blank" data-b="l_state">(रिक्त)</span></td>
+              <td>राज्य: <span class="v" data-o="r_state"></span></td></tr>
+          <tr><td>मतदार संघाचे नाव: <span class="v" data-o="l_ac"></span><span class="blank" data-b="l_ac">(रिक्त)</span></td>
+              <td>मतदार संघाचे नाव: <span class="v" data-o="r_ac"></span></td></tr>
+        </table>
+        
+        <table style="margin-top:-9px">
+          <tr><td class="ch" width="16.6%">मतदार संघ क्रमांक</td><td class="ch" width="16.6%">यादी भाग क्रमांक</td><td class="ch" width="16.6%">अनुक्रमांक</td>
+              <td class="ch" width="16.6%">मतदार संघ क्रमांक</td><td class="ch" width="16.6%">यादी भाग क्रमांक</td><td class="ch" width="16.6%">अनुक्रमांक</td></tr>
+          <tr>
+            <td style="text-align:center"><span class="v" data-o="l_acno"></span><span class="blank" data-b="l_acno">रिक्त</span></td>
+            <td style="text-align:center"><span class="v" data-o="l_partno"></span><span class="blank" data-b="l_partno">रिक्त</span></td>
+            <td style="text-align:center"><span class="v" data-o="l_serial"></span><span class="blank" data-b="l_serial">रिक्त</span></td>
+            <td style="text-align:center"><span class="v" data-o="r_acno"></span></td>
+            <td style="text-align:center"><span class="v" data-o="r_partno"></span></td>
+            <td style="text-align:center"><span class="v" data-o="r_serial"></span></td>
+          </tr>
+        </table>
+
+        <table style="margin-top:8px">
+          <tr><td width="50%">जन्म तारीख (DD/MM/YYYY)</td><td id="dobCells"></td></tr>
+          <tr><td>आधार क्रमांक (ऐच्छिक)</td><td><span class="v" id="o_aadhaar" style="letter-spacing:2px"></span> <span class="blank">← स्वतःचा आधार क्रमांक लिहा</span></td></tr>
+          <tr><td>मोबाइल क्रमांक</td><td><span class="v" id="o_mobile" style="letter-spacing:2px"></span> <span class="blank">← स्वतःचा मोबाइल क्रमांक लिहा</span></td></tr>
+          <tr><td>वडिलांचे/पालकांचे नाव</td><td><span class="v" data-o="d_father"></span></td></tr>
+          <tr><td>वडिलांचा/पालकांचा मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" data-o="d_fepic"></span></td></tr>
+          <tr><td>आईचे नाव</td><td><span class="v" data-o="d_mother"></span></td></tr>
+          <tr><td>आईचा मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" data-o="d_mepic"></span></td></tr>
+          <tr><td>पती किंवा पत्नीचे नाव (लागू असल्यास)</td><td><span class="v" data-o="d_spouse"></span><span class="blank" data-b="d_spouse">रिक्त (अविवाहित असल्यास)</span></td></tr>
+          <tr><td>पती किंवा पत्नीचे मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" data-o="d_sepic"></span><span class="blank" data-b="d_sepic">रिक्त (अविवाहित असल्यास)</span></td></tr>
+        </table>
+
+        <div class="decl">
+          (i) वर उल्लेखित मतदार, म्हणजेच मी स्वतः/माझे कुटुंबीय, यांनी इतर कोणत्याही देशाचे नागरिकत्व प्राप्त केलेले नाही.<br>
+          (ii) मी मतदार यादीत समावेशासाठी अर्ज करत आहे, आणि वर नमूद केलेले नाव, म्हणजे मी स्वतः/माझ्या कुटुंबातील सदस्य, इतर कोणत्याही विधानसभा मतदारसंघात/लोकसभा मतदारसंघात समाविष्ट नाही.<br>
+          (iii) मला याची जाणीव आहे की, या अर्जाच्या संबंधात वरील विधान किंवा घोषणा करणे, जे खोटे आहे आणि जे मला खोटे आहे हे माहित आहे किंवा माझा विश्वास आहे किंवा ते खरे नाही असे मला वाटते, हे लोकप्रतिनिधित्व अधिनियम, १९५० च्या कलम ३१ अन्वये एक वर्षापर्यंतच्या कारावासाची किंवा दंडाची किंवा दोन्ही शिक्षांची तरतूद आहे.
+        </div>
+        
+        <div class="sig-line">
+          <span>मतदाराची किंवा कुटुंबातील कोणत्याही प्रौढ सदस्याची सही/डाव्या अंगठ्याचा ठसा (नातेसंबंध नमूद करा) तारखेसह: <b style="color:#1B3FA0">_________________</b> <span style="color:#1B3FA0; font-size:10px;">← येथे सही + दिनांक लिहा</span></span>
+        </div>
+        <div class="sig-line" style="margin-top:15px">
+          <span>मतदान केंद्रस्तरीय अधिकाऱ्याचे घोषणापत्र: <b style="color:#dc2626">(BLO भरतील — रिक्त ठेवा)</b></span>
+        </div>
+        <div class="sig-line" style="margin-top:10px">
+          <span>मतदान केंद्रस्तरीय अधिकाऱ्याची स्वाक्षरी: <b style="color:#dc2626">(BLO भरतील — रिक्त ठेवा)</b></span>
+        </div>
+      </div>
+      <!-- /ACTUAL PDF SHEET -->
+    </div>
+
   </div> <!-- End Form Container -->
 
   <!-- Right Side: Sidebar -->
   <div class="sidebar">
     <div class="banner">
-      <h3>🏛️ ECI Official Guidelines</h3>
-      <p>How to fill the Special Intensive Revision (SIR) Form:</p>
+      <h3>🏛️ Official ECI Guidelines</h3>
+      <p>How to fill the SIR (Special Intensive Revision) Form based on Govt rules:</p>
       <ul>
+        <li><strong>Original Form is Mandatory:</strong> This PDF is a <em>Reference Copy</em> to make your life easier. You MUST write these exact details onto the physical QR-coded form given by your BLO using a blue pen.</li>
         <li><strong>EPIC Mismatch:</strong> Copy the exact EPIC number printed on your BLO slip, even if it has a typo.</li>
         <li><strong>2002 Data:</strong> This is critical for verification. If your family migrated after 2002, provide the oldest registered member's details.</li>
-        <li><strong>Photo Rules:</strong> The photo must have a plain white background, facing forward, with no sunglasses or hats. Our AI handles the background for you!</li>
-        <li><strong>Original Form:</strong> This PDF is a <em>Reference Copy</em>. You MUST write these exact details using a blue ballpoint pen onto the physical QR-coded form given by your BLO.</li>
+        <li><strong>Photo Rules:</strong> The photo must have a plain white background, facing forward. Our AI handles the background removal for you!</li>
       </ul>
     </div>
     
@@ -403,83 +493,6 @@ body {
   </div>
 
 </div> <!-- End Layout -->
-
-
-<!-- HIDDEN PDF SHEET (ANTI-CHEAT) -->
-<div id="formsheet-wrapper">
-  <div id="formsheet">
-    <div class="refbar">REFERENCE COPY ONLY — Submit original BLO form.</div>
-    <h2>भारत निवडणूक आयोग</h2>
-    <h3>गणना प्रपत्र</h3>
-    <div class="blo">SIR गणना प्रपत्र — संदर्भ प्रत</div>
-
-    <div id="pvwrap" style="overflow:hidden">
-      <span class="pvempty" id="pvempty">Photo</span>
-      <img class="pv" id="pvimg" style="display:none" alt="">
-      <table style="width:calc(100% - 106px)">
-        <tr><td>
-          मतदाराचे नाव: <span class="v" data-o="p_name"></span><br>
-          मतदार ओळखपत्र क्रमांक: <span class="v" data-o="p_epic"></span><br>
-          पत्ता: <span class="v" data-o="p_addr"></span>
-        </td><td>
-          अनुक्रमांक: <span class="v" data-o="p_serial"></span><br>
-          भाग क्रमांक आणि नाव: <span class="v" data-o="p_part"></span><br>
-          मतदार संघ: <span class="v" data-o="p_ac"></span><br>
-          राज्य: <span class="v" data-o="p_state"></span>
-        </td></tr>
-      </table>
-    </div>
-
-    <table style="margin-top:8px">
-      <tr><td class="ch" width="50%">मागील एसआयआरच्या मतदार यादीतील मतदाराचा तपशील</td>
-          <td class="ch" width="50%">वरील रकान्यात ज्याचे नाव नमूद आहे, त्याच्या नातेवाईकाचा मागील एसआयआर मधील तपशील</td></tr>
-      <tr><td>मतदाराचे नाव: <span class="v" data-o="l_name"></span><span class="blank" data-b="l_name">(रिक्त ठेवा)</span></td>
-          <td>नाव: <span class="v" data-o="r_name"></span></td></tr>
-      <tr><td>मतदार ओळखपत्र क्रमांक: <span class="v" data-o="l_epic"></span><span class="blank" data-b="l_epic">(रिक्त)</span></td>
-          <td>मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास): <span class="v" data-o="r_epic"></span><span class="blank" data-b="r_epic">— (रिक्त)</span></td></tr>
-      <tr><td>नातेवाईकाचे नाव: <span class="v" data-o="l_rel"></span><span class="blank" data-b="l_rel">(रिक्त)</span></td>
-          <td>नातेवाईकाचे नाव: <span class="v" data-o="r_rel"></span></td></tr>
-      <tr><td>नाते: <span class="v" data-o="l_reln"></span><span class="blank" data-b="l_reln">(रिक्त)</span></td>
-          <td>नाते: <span class="v" data-o="r_reln"></span></td></tr>
-      <tr><td>जिल्हा: <span class="v" data-o="l_dist"></span><span class="blank" data-b="l_dist">(रिक्त)</span></td>
-          <td>जिल्हा: <span class="v" data-o="r_dist"></span></td></tr>
-      <tr><td>राज्य: <span class="v" data-o="l_state"></span><span class="blank" data-b="l_state">(रिक्त)</span></td>
-          <td>राज्य: <span class="v" data-o="r_state"></span></td></tr>
-      <tr><td>मतदार संघाचे नाव: <span class="v" data-o="l_ac"></span><span class="blank" data-b="l_ac">(रिक्त)</span></td>
-          <td>मतदार संघाचे नाव: <span class="v" data-o="r_ac"></span></td></tr>
-    </table>
-    <table style="margin-top:-1px">
-      <tr><td class="ch">मतदार संघ क्र.</td><td class="ch">यादी भाग क्र.</td><td class="ch">अनुक्रमांक</td>
-          <td class="ch">मतदार संघ क्र.</td><td class="ch">यादी भाग क्र.</td><td class="ch">अनुक्रमांक</td></tr>
-      <tr>
-        <td style="text-align:center"><span class="v" data-o="l_acno"></span><span class="blank" data-b="l_acno">रिक्त</span></td>
-        <td style="text-align:center"><span class="v" data-o="l_partno"></span><span class="blank" data-b="l_partno">रिक्त</span></td>
-        <td style="text-align:center"><span class="v" data-o="l_serial"></span><span class="blank" data-b="l_serial">रिक्त</span></td>
-        <td style="text-align:center"><span class="v" data-o="r_acno"></span></td>
-        <td style="text-align:center"><span class="v" data-o="r_partno"></span></td>
-        <td style="text-align:center"><span class="v" data-o="r_serial"></span></td>
-      </tr>
-    </table>
-
-    <table style="margin-top:8px">
-      <tr><td width="52%">जन्म तारीख (DD/MM/YYYY)</td><td id="dobCells"></td></tr>
-      <tr><td>आधार क्रमांक (ऐच्छिक)</td><td><span class="v" id="o_aadhaar"></span></td></tr>
-      <tr><td>मोबाइल क्रमांक</td><td><span class="v" id="o_mobile"></span></td></tr>
-      <tr><td>वडिलांचे/पालकांचे नाव</td><td><span class="v" data-o="d_father"></span></td></tr>
-      <tr><td>वडिलांचा मतदार ओळखपत्र क्रमांक</td><td><span class="v" data-o="d_fepic"></span></td></tr>
-      <tr><td>आईचे नाव</td><td><span class="v" data-o="d_mother"></span></td></tr>
-      <tr><td>आईचा मतदार ओळखपत्र क्रमांक</td><td><span class="v" data-o="d_mepic"></span></td></tr>
-      <tr><td>पती किंवा पत्नीचे नाव</td><td><span class="v" data-o="d_spouse"></span><span class="blank" data-b="d_spouse">रिक्त (अविवाहित)</span></td></tr>
-      <tr><td>पती/पत्नीचा मतदार ओळखपत्र क्रमांक</td><td><span class="v" data-o="d_sepic"></span><span class="blank" data-b="d_sepic">रिक्त</span></td></tr>
-    </table>
-
-    <div class="decl">
-      (i) I/We have not acquired citizenship of any other country.<br>
-      (ii) Making false declarations is punishable under section 31 of RPA 1950.
-    </div>
-    <div class="sig">Signature: <b style="color:#1B3FA0">____________________</b> &nbsp;&nbsp; <span class="blank">Leave BLO fields empty</span></div>
-  </div>
-</div>
 
 <script>
 /* ================= CONFIG ================= */
@@ -512,7 +525,7 @@ const dict = {
   "ac_no": {"en": "AC Number", "mr": "मतदार संघ क्रमांक", "ur": "حلقہ نمبر"},
   "step3": {"en": "Personal & Family Details", "mr": "वैयक्तिक व कुटुंब तपशील", "ur": "ذاتی اور خاندانی تفصیلات"},
   "dob": {"en": "Date of Birth", "mr": "जन्म तारीख", "ur": "تاریخ پیدائش"},
-  "aadhaar": {"en": "Aadhaar No. (Optional)", "mr": "आधार क्रमांक", "ur": "آدھار نمبر"},
+  "aadhaar": {"en": "Aadhaar No.", "mr": "आधार क्रमांक", "ur": "آدھار نمبر"},
   "mobile": {"en": "Mobile Number", "mr": "मोबाइल क्रमांक", "ur": "موبائل نمبر"},
   "father": {"en": "Father's Name", "mr": "वडिलांचे नाव", "ur": "والد کا نام"},
   "mother": {"en": "Mother's Name", "mr": "आईचे नाव", "ur": "والدہ کا نام"},
@@ -520,7 +533,7 @@ const dict = {
   "step4": {"en": "Photo (Auto White Background)", "mr": "फोटो (पांढरा बॅकग्राउंड)", "ur": "تصویر (سفید پس منظر)"},
   "preview_here": {"en": "Preview Here", "mr": "फोटो येथे दिसेल", "ur": "یہاں پیش نظارہ"},
   "photo_btn": {"en": "📷 Capture / Select Photo", "mr": "📷 फोटो काढा / निवडा", "ur": "📷 تصویر لیں / منتخب کریں"},
-  "photo_hint": {"en": "Ensure good lighting. The background will automatically be made white.", "mr": "समोरून, चांगल्या उजेडात फोटो काढा.", "ur": "اچھی روشنی کو یقینی بنائیں۔ پس منظر خود بخود سفید ہو جائے گا۔"},
+  "photo_hint": {"en": "Ensure good lighting. AI auto-removes background.", "mr": "समोरून, चांगल्या उजेडात फोटो काढा.", "ur": "اچھی روشنی کو یقینی بنائیں۔"},
   "step5": {"en": "Payment & Download", "mr": "पेमेंट आणि डाउनलोड", "ur": "ادائیگی اور ڈاؤن لوڈ"},
   "pay_ref": {"en": "Last 4 digits of UPI Ref/UTR", "mr": "UPI UTR शेवटचे 4 अंक", "ur": "یو پی آئی کے آخری 4 ہندسے"},
   "pay_conf": {"en": "I confirm I have paid ₹10", "mr": "मी ₹10 चे पेमेंट पूर्ण केले आहे", "ur": "میں نے 10 روپے کی ادائیگی کر دی ہے"},
@@ -536,26 +549,38 @@ $("lang").addEventListener("change", e => {
     }
   });
 });
-// Trigger initial translation
 $("lang").dispatchEvent(new Event("change"));
 
 
-/* ---------- live mirroring ---------- */
+/* ---------- Live Mirroring ---------- */
 function mirror(){
   document.querySelectorAll("[data-v]").forEach(inp=>{
     const key = inp.dataset.v, val = (inp.value||"").trim();
     document.querySelectorAll(`[data-o="${key}"]`).forEach(o=>o.textContent = val ? " "+val : "");
     document.querySelectorAll(`[data-b="${key}"]`).forEach(b=>b.style.display = val ? "none" : "");
   });
-  /* DOB */
+  /* DOB Logic for discrete boxes */
   const d = $("f_dob").value; 
   const cells = $("dobCells"); cells.innerHTML = "";
   const digits = d ? (d.slice(8,10)+d.slice(5,7)+d.slice(0,4)) : "";
   for(let i=0;i<8;i++){
-    const s=document.createElement("span"); s.className="dob"; s.textContent=digits[i]||""; cells.appendChild(s);
+    const s=document.createElement("span"); s.className="dob-box"; s.textContent=digits[i]||""; cells.appendChild(s);
   }
-  $("o_aadhaar").textContent = $("f_aadhaar").value.replace(/\D/g,"").replace(/(\d{4})(?=\d)/g,"$1 ");
-  $("o_mobile").textContent  = $("f_mobile").value.replace(/\D/g,"");
+  
+  // Format Aadhaar securely in preview
+  let aadh = $("f_aadhaar").value.replace(/\D/g,"");
+  if(aadh) {
+    if(aadh.length > 8) {
+      aadh = "xxxx xxxx " + aadh.slice(-4);
+    }
+  }
+  $("o_aadhaar").textContent = aadh;
+  
+  let mob = $("f_mobile").value.replace(/\D/g,"");
+  if(mob && mob.length > 6) {
+    mob = "xxxxxx" + mob.slice(-4);
+  }
+  $("o_mobile").textContent  = mob;
 }
 document.querySelectorAll("input,select").forEach(el=>el.addEventListener("input",mirror));
 $("selfIn2002").addEventListener("change",e=>{
@@ -564,23 +589,23 @@ $("selfIn2002").addEventListener("change",e=>{
 });
 
 
-/* ---------- Robust Photo Processing ---------- */
+/* ---------- Improved Robust Photo Processing ---------- */
 $("photoBtn").addEventListener("click",()=>$("photoInput").click());
 $("photoInput").addEventListener("change",async e=>{
   const file=e.target.files[0]; if(!file) return;
-  const st=$("photoStatus"); st.className="photo-status text-primary"; st.textContent="Processing photo... Please wait.";
+  const st=$("photoStatus"); st.className="photo-status text-primary"; st.textContent="Processing AI background removal... Please wait.";
   
   try{
     const img=await loadImage(file);
     let finalImg = img;
     
-    // Attempt AI background removal
+    // Increased timeout to 20 seconds, and using more robust fallback logic
     try {
-      finalImg = await removeBackgroundWithTimeout(img, 15000); // 15s timeout
-      st.className="photo-status text-success"; st.textContent="✔ Photo ready! Background removed.";
+      finalImg = await removeBackgroundWithTimeout(img, 20000); 
+      st.className="photo-status text-success"; st.textContent="✔ Photo ready! Background successfully removed.";
     } catch(err) {
-      console.warn("AI Model failed or timed out. Falling back to original image cropping.", err);
-      st.className="photo-status text-danger"; st.textContent="⚠ Network too slow for AI. Using original photo.";
+      console.warn("AI Model failed or timed out. Falling back to original image.", err);
+      st.className="photo-status text-danger"; st.textContent="⚠ Network slow/CORS error. Used original photo without background removal.";
       finalImg = cropTo34(img);
     }
     
@@ -588,7 +613,7 @@ $("photoInput").addEventListener("change",async e=>{
     $("photoPreview").innerHTML=`<img src="${url}" alt="Photo">`;
     $("pvimg").src=url; $("pvimg").style.display=""; $("pvempty").style.display="none";
   }catch(err){
-    st.className="photo-status text-danger"; st.textContent="Error reading photo. Try a different one.";
+    st.className="photo-status text-danger"; st.textContent="Error reading photo file.";
   }
   e.target.value="";
 });
@@ -601,11 +626,9 @@ function loadImage(file){return new Promise((res,rej)=>{
 function removeBackgroundWithTimeout(img, timeoutMs){
   return new Promise((resolve,reject)=>{
     const timer = setTimeout(()=>reject(new Error("Timeout")), timeoutMs);
-    
     try {
-      // Use unpkg as a backup CDN if jsdelivr is slow
-      const seg = new SelfieSegmentation({locateFile:f=>`https://unpkg.com/@mediapipe/selfie_segmentation/${f}`});
-      seg.setOptions({modelSelection:1});
+      const seg = new SelfieSegmentation({locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`});
+      seg.setOptions({modelSelection:0}); // Using 0 for general robust model
       
       seg.onResults(res=>{
         clearTimeout(timer);
@@ -613,9 +636,13 @@ function removeBackgroundWithTimeout(img, timeoutMs){
           const t=document.createElement("canvas");
           t.width=img.naturalWidth; t.height=img.naturalHeight;
           const tc=t.getContext("2d");
+          
+          // Draw mask
           tc.drawImage(res.segmentationMask,0,0,t.width,t.height);
+          // Composite Original Image
           tc.globalCompositeOperation="source-in";
           tc.drawImage(img,0,0,t.width,t.height);
+          
           resolve(cropTo34FromCanvas(t));
         }catch(e){ reject(e); }
       });
@@ -629,9 +656,10 @@ function removeBackgroundWithTimeout(img, timeoutMs){
 function cropTo34FromCanvas(src){
   const out=document.createElement("canvas"); out.width=413; out.height=531; 
   const oc=out.getContext("2d");
-  oc.fillStyle="#fff"; oc.fillRect(0,0,out.width,out.height);
+  oc.fillStyle="#fff"; oc.fillRect(0,0,out.width,out.height); // Fill White Background
   const ratio=Math.min(out.width/src.width, out.height/src.height)*1.0;
   const w=src.width*ratio, h=src.height*ratio;
+  // Center horizontally, anchor to bottom
   oc.drawImage(src,(out.width-w)/2, out.height-h, w, h);
   return out;
 }
@@ -654,22 +682,24 @@ function gate(){
     btn.style.background = "var(--success)";
     btn.innerHTML = "⬇️ Download PDF Now";
     $("genStatus").innerHTML = "";
+    $("previewOverlay").classList.add("hidden"); // Remove Blur when paid!
   } else {
     btn.style.background = "var(--primary)";
     btn.innerHTML = "🔒 Unlock & Generate PDF";
+    $("previewOverlay").classList.remove("hidden");
   }
 }
 $("payConfirm").addEventListener("change",gate);
 $("payRef").addEventListener("input",gate);
 
-/* ---------- PDF Generation (Hidden Sheet) ---------- */
+/* ---------- PDF Generation ---------- */
 $("genBtn").addEventListener("click",()=>{
   const st=$("genStatus"); st.className="photo-status text-primary"; st.textContent="Generating PDF... Please wait.";
   const name=($("f_name").value.trim()||"voter").replace(/\s+/g,"_");
   
-  // Make temporarily visible to html2pdf, but still offscreen
-  $("formsheet-wrapper").style.left = "0px";
-  $("formsheet-wrapper").style.zIndex = "-999";
+  // Real Aadhaar and Mobile numbers for PDF
+  $("o_aadhaar").textContent = $("f_aadhaar").value.replace(/\D/g,"").replace(/(\d{4})(?=\d)/g,"$1 ");
+  $("o_mobile").textContent  = $("f_mobile").value.replace(/\D/g,"");
   
   html2pdf().set({
     margin:5,
@@ -680,12 +710,15 @@ $("genBtn").addEventListener("click",()=>{
     pagebreak:{mode:["avoid-all","css"]}
   }).from($("formsheet")).save().then(()=>{
     st.className="photo-status text-success"; st.textContent="✔ PDF Downloaded Successfully!";
-    $("formsheet-wrapper").style.left = "-9999px"; // hide again
+    // Scramble again after generation
+    mirror(); 
   }).catch(()=>{
     st.className="photo-status text-danger"; st.textContent="Error generating PDF. Please try again.";
-    $("formsheet-wrapper").style.left = "-9999px"; // hide again
   });
 });
+
+// Init
+mirror();
 </script>
 </body>
 </html>
