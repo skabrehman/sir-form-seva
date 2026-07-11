@@ -14,7 +14,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-<!-- JSQR for instant, accurate QR scanning -->
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 
 <style>
@@ -673,39 +672,42 @@ $("ocrInput").addEventListener("change", async (e) => {
   try {
     const img = await loadImage(file);
     const cvs = document.createElement("canvas");
-    cvs.width = img.width; cvs.height = img.height;
+    
+    // Scale down image if it's huge (like a 4K screenshot) to help Tesseract & jsQR
+    const maxDim = 2000;
+    let w = img.width; let h = img.height;
+    if (w > maxDim || h > maxDim) {
+        const ratio = Math.min(maxDim/w, maxDim/h);
+        w = Math.floor(w * ratio);
+        h = Math.floor(h * ratio);
+    }
+    cvs.width = w; cvs.height = h;
     const ctx = cvs.getContext("2d");
-    ctx.drawImage(img, 0, 0);
-    const imgData = ctx.getImageData(0,0,cvs.width,cvs.height);
+    ctx.drawImage(img, 0, 0, w, h);
+    const imgData = ctx.getImageData(0,0,w,h);
     
     let foundEpic = null;
     let foundAadhaar = null;
     let foundMob = null;
     
-    // 1. Try QR Code First (Instant & Accurate)
-    const code = jsQR(imgData.data, imgData.width, imgData.height);
+    // 1. Try QR Code First
+    const code = jsQR(imgData.data, w, h, { inversionAttempts: "dontInvert" });
     if (code && code.data) {
       console.log("QR Found:", code.data);
       const epicMatch = code.data.match(/[A-Z]{3}[0-9]{7}/i);
       if (epicMatch) foundEpic = epicMatch[0];
     }
     
-    // 2. Fallback to Fuzzy OCR if QR failed or doesn't have EPIC
+    // 2. Fallback to Fuzzy OCR
     if (!foundEpic) {
       st.textContent = "No QR code detected. Running AI text recognition (may take 10s)...";
       
-      // Binarize for OCR
-      const d = imgData.data;
-      for(let i=0; i<d.length; i+=4){
-        const brightness = (d[i] + d[i+1] + d[i+2]) / 3;
-        const val = brightness > 120 ? 255 : 0;
-        d[i] = d[i+1] = d[i+2] = val;
-      }
-      ctx.putImageData(imgData, 0, 0);
-      const enhancedDataUrl = cvs.toDataURL("image/jpeg", 0.9);
-
-      const result = await Tesseract.recognize(enhancedDataUrl, 'eng');
+      // Let Tesseract use the raw scaled image directly. Tesseract has built-in adaptive thresholding.
+      const rawDataUrl = cvs.toDataURL("image/jpeg", 0.95);
+      const result = await Tesseract.recognize(rawDataUrl, 'eng');
       const text = result.data.text;
+      
+      console.log("OCR Extracted Text:", text);
       
       // Fuzzy Regex allowing common OCR number typos (S=5, Z=2, O=0, I=1, B=8)
       const epicFuzzyMatch = text.match(/[A-Z]{3}[0-9SZOIB]{7}/i);
@@ -733,6 +735,7 @@ $("ocrInput").addEventListener("change", async (e) => {
       st.textContent = "⚠ Could not detect valid EPIC. Please type manually.";
     }
   } catch(err) {
+    console.error(err);
     st.style.color = "var(--danger)";
     st.textContent = "⚠ Scanner error. Please enter data manually.";
   }
