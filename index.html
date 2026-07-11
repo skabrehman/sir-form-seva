@@ -748,7 +748,8 @@ $("btnCancelCrop").addEventListener("click", () => {
 
 $("btnConfirmCrop").addEventListener("click", async () => {
   if (!cropper) return;
-  const canvas = cropper.getCroppedCanvas({ width: 1000 }); // High res crop
+  // Get raw unscaled crop
+  const rawCanvas = cropper.getCroppedCanvas(); 
   $("cropperModal").style.display = "none";
   
   const st = $("ocrStatus");
@@ -757,12 +758,23 @@ $("btnConfirmCrop").addEventListener("click", async () => {
   $("ocrWarning").style.display = "none";
   
   try {
+    // 1. Pre-process for Tesseract (Scale up 2x + High Contrast)
+    const scale = 2;
+    const canvas = document.createElement("canvas");
+    canvas.width = rawCanvas.width * scale;
+    canvas.height = rawCanvas.height * scale;
+    const ctx = canvas.getContext("2d");
+    
+    // Boost contrast massively to make faded text pitch black
+    ctx.filter = 'grayscale(100%) contrast(300%) brightness(150%)';
+    ctx.drawImage(rawCanvas, 0, 0, canvas.width, canvas.height);
+    
     const rawDataUrl = canvas.toDataURL("image/jpeg", 0.95);
     
-    // Use Tesseract Single Line PSM for perfect crop reading
+    // 2. Run Tesseract (Sparse Text is safer if they crop loosely)
     const worker = await Tesseract.createWorker('eng');
     await worker.setParameters({
-      tessedit_pageseg_mode: Tesseract.PSM.SINGLE_LINE,
+      tessedit_pageseg_mode: Tesseract.PSM.SPARSE_TEXT,
     });
     const result = await worker.recognize(rawDataUrl);
     const text = result.data.text;
@@ -774,32 +786,55 @@ $("btnConfirmCrop").addEventListener("click", async () => {
     let foundAadhaar = null;
     let foundMob = null;
     
-    // Extremely Fuzzy Regex allowing OCR number & letter typos
-    const epicFuzzyMatch = text.match(/[A-Z0-9]{2,3}[0-9A-Z]{6,8}/i);
+    // 3. Extremely forgiving Regex for EPIC (Allows spaces/dashes, 10 chars total)
+    // Matches e.g. "ADE99 77364", "4DE9977364", "ADESS 77364"
+    const epicFuzzyMatch = text.match(/[A-Z0-9]{3}[\s\-]?[A-Z0-9]{7}/i);
     if (epicFuzzyMatch) {
-      // aggressively fix common OCR typos in the 10 character block
-      foundEpic = epicFuzzyMatch[0].toUpperCase()
-        .replace(/\s/g, "")
-        .replace(/^[0-9]/g, match => { // fix first letter if it's a number
-            if(match==='4') return 'A';
-            if(match==='0') return 'O';
-            if(match==='8') return 'B';
-            if(match==='5') return 'S';
-            if(match==='1') return 'I';
-            return match;
-        });
-      // Further sanitize: length should be exactly 10 usually, let user correct if 9 or 11
+      foundEpic = epicFuzzyMatch[0].toUpperCase().replace(/[\s\-]/g, "");
+      
+      // Aggressively fix common OCR typos in the 10-char block
+      let fixedEpic = "";
+      for (let i = 0; i < foundEpic.length; i++) {
+        let char = foundEpic[i];
+        if (i < 3) {
+           // First 3 should be letters
+           if(char === '4') char = 'A';
+           if(char === '0') char = 'O';
+           if(char === '8') char = 'B';
+           if(char === '5') char = 'S';
+           if(char === '1') char = 'I';
+           if(char === '2') char = 'Z';
+        } else {
+           // Last 7 should be numbers
+           if(char === 'O') char = '0';
+           if(char === 'S') char = '5';
+           if(char === 'I') char = '1';
+           if(char === 'l') char = '1';
+           if(char === 'Z') char = '2';
+           if(char === 'B') char = '8';
+           if(char === 'G') char = '6';
+           if(char === 'T') char = '7';
+        }
+        fixedEpic += char;
+      }
+      foundEpic = fixedEpic;
     }
+    
     const aadhaarMatch = text.match(/\d{4}\s?\d{4}\s?\d{4}/);
     if (aadhaarMatch) foundAadhaar = aadhaarMatch[0].replace(/\s/g, "");
     const mobMatch = text.match(/[6789]\d{9}/);
     if (mobMatch) foundMob = mobMatch[0];
     
-    // If exact regex missed, just dump the raw text into the field and let user fix it
-    if(foundEpic || foundAadhaar || foundMob || text.trim().length > 3) {
+    // If no regex matched perfectly, just take any 10 alphanumeric chars as fallback
+    if (!foundEpic && text.trim().length > 5) {
+       const fallbackMatch = text.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
+       if (fallbackMatch.length >= 10) {
+           foundEpic = fallbackMatch.slice(0, 10);
+       }
+    }
+    
+    if(foundEpic || foundAadhaar || foundMob) {
       if(foundEpic) $("f_epic").value = foundEpic;
-      else if (!foundAadhaar && !foundMob) $("f_epic").value = text.trim().replace(/[^a-zA-Z0-9]/g, "").slice(0, 10);
-      
       if(foundAadhaar) $("f_aadhaar").value = foundAadhaar;
       if(foundMob) $("f_mobile").value = foundMob;
       
