@@ -55,43 +55,28 @@ body {
 }
 .nav-brand { font-weight: 700; font-size: 22px; color: var(--primary); }
 .lang-selector select {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background: #fff;
-  font-family: inherit;
-  font-weight: 600;
-  cursor: pointer;
-  outline: none;
+  padding: 8px 12px; border-radius: 8px; border: 1px solid #ccc;
+  background: #fff; font-family: inherit; font-weight: 600; cursor: pointer; outline: none;
 }
 
 /* Layout Grid */
 .layout {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  gap: 30px;
-  max-width: 1200px;
-  margin: 30px auto;
-  padding: 0 20px;
+  display: grid; grid-template-columns: 3fr 1fr; gap: 30px;
+  max-width: 1200px; margin: 30px auto; padding: 0 20px;
 }
-@media (max-width: 900px) {
-  .layout { grid-template-columns: 1fr; }
-}
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
 
 .form-container { display: flex; flex-direction: column; gap: 25px; }
 
 /* Glass Cards */
 .glass-card {
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  padding: 25px;
+  background: var(--glass-bg); backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border); border-radius: 16px; padding: 25px;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
 }
 .card-header {
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e5e7eb;
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+  padding-bottom: 15px; border-bottom: 1px solid #e5e7eb;
 }
 .step-number {
   background: var(--primary); color: white; width: 30px; height: 30px;
@@ -146,7 +131,7 @@ body {
 .banner h3 { margin-bottom: 10px; font-size: 18px; }
 .banner ul { padding-left: 20px; font-size: 13px; line-height: 1.8; opacity: 0.95; }
 
-/* Anti-Cheat Preview */
+/* Anti-Cheat Preview - Removed heavy blur, added clear watermark */
 .preview-container {
   position: relative;
   overflow: hidden;
@@ -154,43 +139,37 @@ body {
   border-radius: 12px;
   background: #fff;
   margin-top: 25px;
-  max-height: 600px;
+  max-height: 700px;
   overflow-y: auto;
 }
-.preview-overlay {
+.watermark {
   position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(5px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  font-size: 70px;
+  color: rgba(239, 68, 68, 0.15); /* light red */
+  font-weight: 800;
+  white-space: nowrap;
+  pointer-events: none;
   z-index: 10;
-  text-align: center;
-  padding: 20px;
+  text-transform: uppercase;
 }
-.preview-overlay.hidden { display: none; }
-.lock-icon { font-size: 40px; margin-bottom: 10px; }
-.lock-text { font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 5px; }
-.lock-sub { font-size: 14px; color: #475569; font-weight: 600; background: #fff; padding: 5px 10px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.hidden { display: none !important; }
 
 /* The Actual PDF Sheet Styling */
 #formsheet {
-  width: 794px; /* A4 width in pixels at ~96dpi */
+  width: 794px; /* A4 width */
   margin: 0 auto;
   background: #fff; color: #000;
   font-family: "Noto Sans Devanagari", sans-serif; font-size: 11.5px; line-height: 1.4;
   padding: 25px;
   transform-origin: top left;
+  position: relative;
 }
 /* Responsive scale for preview */
-@media (max-width: 850px) {
-  #formsheet { transform: scale(0.8); }
-}
-@media (max-width: 600px) {
-  #formsheet { transform: scale(0.45); }
-}
+@media (max-width: 850px) { #formsheet { transform: scale(0.8); margin-bottom:-20%; } }
+@media (max-width: 600px) { #formsheet { transform: scale(0.45); margin-bottom:-50%; } }
 
 #formsheet .v { color: var(--ink); font-weight: 700; font-size: 12.5px; }
 #formsheet .blank { color: #dc2626; font-size: 10.5px; font-weight: 700; }
@@ -321,16 +300,21 @@ body {
     <div class="glass-card">
       <div class="card-header">
         <div class="step-number">4</div>
-        <div class="card-title" data-t="step4">Photo (Auto White Background)</div>
+        <div class="card-title" data-t="step4">Photo Processing</div>
       </div>
       <div class="photo-wrap">
         <div class="photo-preview" id="photoPreview">
           <span style="font-size:12px; color:#9ca3af;" data-t="preview_here">Preview</span>
         </div>
         <div style="flex:1;">
-          <input type="file" id="photoInput" accept="image/*" capture="user" style="display:none">
+          <label class="toggle" style="margin-bottom:12px;">
+            <input type="checkbox" id="useAI" checked>
+            <span style="font-weight:600" data-t="ai_toggle">Auto-remove background with AI</span>
+          </label>
+          <!-- Removed capture="user" to allow gallery upload on mobile -->
+          <input type="file" id="photoInput" accept="image/*" style="display:none">
           <button class="btn" id="photoBtn" type="button" data-t="photo_btn">📷 Capture / Select Photo</button>
-          <p class="hint" style="margin-top:12px" data-t="photo_hint">Ensure good lighting. The background will automatically be made white. If AI fails, the original photo will be used.</p>
+          <p class="hint" style="margin-top:12px" data-t="photo_hint">Uncheck the AI option if you already have a plain white background or if the AI is inaccurate.</p>
           <div class="photo-status" id="photoStatus"></div>
         </div>
       </div>
@@ -369,13 +353,9 @@ body {
       </div>
     </div>
 
-    <!-- PREVIEW AREA (BLURRED) -->
+    <!-- PREVIEW AREA (CLEAR, BUT WITH WATERMARK AND HIDDEN 4 DIGITS) -->
     <div class="preview-container">
-      <div class="preview-overlay" id="previewOverlay">
-        <div class="lock-icon">🔒</div>
-        <div class="lock-text">Preview Locked</div>
-        <div class="lock-sub">Complete payment in Step 5 to unlock and download PDF</div>
-      </div>
+      <div class="watermark" id="previewWatermark">PREVIEW ONLY</div>
       
       <!-- ACTUAL PDF SHEET -->
       <div id="formsheet">
@@ -387,7 +367,7 @@ body {
         <div class="top-block">
           <div class="top-col" style="flex:2">
             मतदाराचे नाव: <span class="v" data-o="p_name"></span><br>
-            मतदार ओळखपत्र क्रमांक: <span class="v" data-o="p_epic"></span><br>
+            मतदार ओळखपत्र क्रमांक: <span class="v" id="o_epic_mask"></span><br>
             पत्ता: <span class="v" data-o="p_addr"></span><br>
             <span style="color:#dc2626; font-weight:700; font-size:10px;">(छापील माहिती — काही लिहू नये)</span>
           </div>
@@ -413,8 +393,8 @@ body {
               <td class="ch" width="50%">वरील रकान्यात ज्याचे नाव नमूद आहे, त्याच्या नातेवाईकाचा मागील एसआयआर मधील तपशील</td></tr>
           <tr><td>मतदाराचे नाव: <span class="v" data-o="l_name"></span><span class="blank" data-b="l_name">(रिक्त ठेवा — 2002 यादीत नाव नाही)</span></td>
               <td>नाव: <span class="v" data-o="r_name"></span></td></tr>
-          <tr><td>मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास): <span class="v" data-o="l_epic"></span><span class="blank" data-b="l_epic">(रिक्त)</span></td>
-              <td>मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास): <span class="v" data-o="r_epic"></span><span class="blank" data-b="r_epic">— (2002 यादीत EPIC छापलेला नाही म्हणून रिक्त)</span></td></tr>
+          <tr><td>मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास): <span class="v" id="o_lepic_mask"></span><span class="blank" data-b="l_epic">(रिक्त)</span></td>
+              <td>मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास): <span class="v" id="o_repic_mask"></span><span class="blank" data-b="r_epic">— (2002 यादीत EPIC छापलेला नाही म्हणून रिक्त)</span></td></tr>
           <tr><td>नातेवाईकाचे नाव: <span class="v" data-o="l_rel"></span><span class="blank" data-b="l_rel">(रिक्त)</span></td>
               <td>नातेवाईकाचे नाव: <span class="v" data-o="r_rel"></span></td></tr>
           <tr><td>नाते: <span class="v" data-o="l_reln"></span><span class="blank" data-b="l_reln">(रिक्त)</span></td>
@@ -442,14 +422,14 @@ body {
 
         <table style="margin-top:8px">
           <tr><td width="50%">जन्म तारीख (DD/MM/YYYY)</td><td id="dobCells"></td></tr>
-          <tr><td>आधार क्रमांक (ऐच्छिक)</td><td><span class="v" id="o_aadhaar" style="letter-spacing:2px"></span> <span class="blank">← स्वतःचा आधार क्रमांक लिहा</span></td></tr>
-          <tr><td>मोबाइल क्रमांक</td><td><span class="v" id="o_mobile" style="letter-spacing:2px"></span> <span class="blank">← स्वतःचा मोबाइल क्रमांक लिहा</span></td></tr>
+          <tr><td>आधार क्रमांक (ऐच्छिक)</td><td><span class="v" id="o_aadhaar_mask" style="letter-spacing:2px"></span> <span class="blank">← स्वतःचा आधार क्रमांक लिहा</span></td></tr>
+          <tr><td>मोबाइल क्रमांक</td><td><span class="v" id="o_mobile_mask" style="letter-spacing:2px"></span> <span class="blank">← स्वतःचा मोबाइल क्रमांक लिहा</span></td></tr>
           <tr><td>वडिलांचे/पालकांचे नाव</td><td><span class="v" data-o="d_father"></span></td></tr>
-          <tr><td>वडिलांचा/पालकांचा मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" data-o="d_fepic"></span></td></tr>
+          <tr><td>वडिलांचा/पालकांचा मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" id="o_dfepic_mask"></span></td></tr>
           <tr><td>आईचे नाव</td><td><span class="v" data-o="d_mother"></span></td></tr>
-          <tr><td>आईचा मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" data-o="d_mepic"></span></td></tr>
+          <tr><td>आईचा मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" id="o_dmepic_mask"></span></td></tr>
           <tr><td>पती किंवा पत्नीचे नाव (लागू असल्यास)</td><td><span class="v" data-o="d_spouse"></span><span class="blank" data-b="d_spouse">रिक्त (अविवाहित असल्यास)</span></td></tr>
-          <tr><td>पती किंवा पत्नीचे मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" data-o="d_sepic"></span><span class="blank" data-b="d_sepic">रिक्त (अविवाहित असल्यास)</span></td></tr>
+          <tr><td>पती किंवा पत्नीचे मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" id="o_dsepic_mask"></span><span class="blank" data-b="d_sepic">रिक्त (अविवाहित असल्यास)</span></td></tr>
         </table>
 
         <div class="decl">
@@ -530,10 +510,11 @@ const dict = {
   "father": {"en": "Father's Name", "mr": "वडिलांचे नाव", "ur": "والد کا نام"},
   "mother": {"en": "Mother's Name", "mr": "आईचे नाव", "ur": "والدہ کا نام"},
   "spouse": {"en": "Spouse's Name", "mr": "पती/पत्नीचे नाव", "ur": "شریک حیات کا نام"},
-  "step4": {"en": "Photo (Auto White Background)", "mr": "फोटो (पांढरा बॅकग्राउंड)", "ur": "تصویر (سفید پس منظر)"},
+  "step4": {"en": "Photo Processing", "mr": "फोटो (पांढरा बॅकग्राउंड)", "ur": "تصویر (سفید پس منظر)"},
+  "ai_toggle": {"en": "Auto-remove background with AI (uncheck to skip)", "mr": "AI ने बॅकग्राउंड काढा (स्किप करण्यासाठी अनचेक करा)", "ur": "اے آئی کے ساتھ پس منظر ہٹائیں"},
   "preview_here": {"en": "Preview Here", "mr": "फोटो येथे दिसेल", "ur": "یہاں پیش نظارہ"},
   "photo_btn": {"en": "📷 Capture / Select Photo", "mr": "📷 फोटो काढा / निवडा", "ur": "📷 تصویر لیں / منتخب کریں"},
-  "photo_hint": {"en": "Ensure good lighting. AI auto-removes background.", "mr": "समोरून, चांगल्या उजेडात फोटो काढा.", "ur": "اچھی روشنی کو یقینی بنائیں۔"},
+  "photo_hint": {"en": "Ensure good lighting. Uncheck AI if it fails.", "mr": "समोरून, चांगल्या उजेडात फोटो काढा.", "ur": "اچھی روشنی کو یقینی بنائیں۔"},
   "step5": {"en": "Payment & Download", "mr": "पेमेंट आणि डाउनलोड", "ur": "ادائیگی اور ڈاؤن لوڈ"},
   "pay_ref": {"en": "Last 4 digits of UPI Ref/UTR", "mr": "UPI UTR शेवटचे 4 अंक", "ur": "یو پی آئی کے آخری 4 ہندسے"},
   "pay_conf": {"en": "I confirm I have paid ₹10", "mr": "मी ₹10 चे पेमेंट पूर्ण केले आहे", "ur": "میں نے 10 روپے کی ادائیگی کر دی ہے"},
@@ -542,7 +523,7 @@ const dict = {
 
 $("lang").addEventListener("change", e => {
   const l = e.target.value;
-  document.dir = (l === "ur") ? "rtl" : "ltr"; // RTL for Urdu
+  document.dir = (l === "ur") ? "rtl" : "ltr"; 
   document.querySelectorAll("[data-t]").forEach(el => {
     if(dict[el.dataset.t] && dict[el.dataset.t][l]) {
       el.textContent = dict[el.dataset.t][l];
@@ -551,15 +532,29 @@ $("lang").addEventListener("change", e => {
 });
 $("lang").dispatchEvent(new Event("change"));
 
+/* ---------- Helper to Mask Last 4 Characters ---------- */
+function maskLast4(str) {
+  if(!str) return "";
+  str = str.replace(/\s+/g, "");
+  if(str.length <= 4) return "X".repeat(str.length);
+  return str.slice(0, -4) + "XXXX";
+}
 
 /* ---------- Live Mirroring ---------- */
+let isUnlocked = false;
+
 function mirror(){
+  // Normal generic string mirroring
   document.querySelectorAll("[data-v]").forEach(inp=>{
     const key = inp.dataset.v, val = (inp.value||"").trim();
-    document.querySelectorAll(`[data-o="${key}"]`).forEach(o=>o.textContent = val ? " "+val : "");
-    document.querySelectorAll(`[data-b="${key}"]`).forEach(b=>b.style.display = val ? "none" : "");
+    // Exclude special fields that need masking
+    if(!key.includes("epic") && key !== "aadhaar" && key !== "mobile") {
+      document.querySelectorAll(`[data-o="${key}"]`).forEach(o=>o.textContent = val ? " "+val : "");
+      document.querySelectorAll(`[data-b="${key}"]`).forEach(b=>b.style.display = val ? "none" : "");
+    }
   });
-  /* DOB Logic for discrete boxes */
+  
+  /* DOB Logic */
   const d = $("f_dob").value; 
   const cells = $("dobCells"); cells.innerHTML = "";
   const digits = d ? (d.slice(8,10)+d.slice(5,7)+d.slice(0,4)) : "";
@@ -567,20 +562,30 @@ function mirror(){
     const s=document.createElement("span"); s.className="dob-box"; s.textContent=digits[i]||""; cells.appendChild(s);
   }
   
-  // Format Aadhaar securely in preview
-  let aadh = $("f_aadhaar").value.replace(/\D/g,"");
-  if(aadh) {
-    if(aadh.length > 8) {
-      aadh = "xxxx xxxx " + aadh.slice(-4);
-    }
-  }
-  $("o_aadhaar").textContent = aadh;
+  /* Masking sensitive data if locked */
+  const epicVal = $("f_epic").value.toUpperCase();
+  $("o_epic_mask").textContent = isUnlocked ? epicVal : maskLast4(epicVal);
   
-  let mob = $("f_mobile").value.replace(/\D/g,"");
-  if(mob && mob.length > 6) {
-    mob = "xxxxxx" + mob.slice(-4);
-  }
-  $("o_mobile").textContent  = mob;
+  const lepic = $("s_epic").value.toUpperCase();
+  $("o_lepic_mask").textContent = isUnlocked ? lepic : maskLast4(lepic);
+  
+  const repic = $("r_epic").value.toUpperCase();
+  $("o_repic_mask").textContent = isUnlocked ? repic : maskLast4(repic);
+  
+  const dfepic = $("f_fepic").value.toUpperCase();
+  $("o_dfepic_mask").textContent = isUnlocked ? dfepic : maskLast4(dfepic);
+  
+  const dmepic = $("f_mepic").value.toUpperCase();
+  $("o_dmepic_mask").textContent = isUnlocked ? dmepic : maskLast4(dmepic);
+  
+  const dsepic = $("f_sepic").value.toUpperCase();
+  $("o_dsepic_mask").textContent = isUnlocked ? dsepic : maskLast4(dsepic);
+  
+  const aadh = $("f_aadhaar").value.replace(/\D/g,"");
+  $("o_aadhaar_mask").textContent = isUnlocked ? aadh.replace(/(\d{4})(?=\d)/g,"$1 ") : (aadh.length > 4 ? aadh.slice(0,-4)+"XXXX" : maskLast4(aadh));
+  
+  const mob = $("f_mobile").value.replace(/\D/g,"");
+  $("o_mobile_mask").textContent = isUnlocked ? mob : maskLast4(mob);
 }
 document.querySelectorAll("input,select").forEach(el=>el.addEventListener("input",mirror));
 $("selfIn2002").addEventListener("change",e=>{
@@ -589,24 +594,33 @@ $("selfIn2002").addEventListener("change",e=>{
 });
 
 
-/* ---------- Improved Robust Photo Processing ---------- */
+/* ---------- Improved Photo Processing ---------- */
 $("photoBtn").addEventListener("click",()=>$("photoInput").click());
 $("photoInput").addEventListener("change",async e=>{
   const file=e.target.files[0]; if(!file) return;
-  const st=$("photoStatus"); st.className="photo-status text-primary"; st.textContent="Processing AI background removal... Please wait.";
+  const st=$("photoStatus");
+  const useAI = $("useAI").checked;
+  
+  st.className="photo-status text-primary"; 
+  st.textContent= useAI ? "Processing AI background removal..." : "Processing photo (No AI)...";
   
   try{
     const img=await loadImage(file);
     let finalImg = img;
     
-    // Increased timeout to 20 seconds, and using more robust fallback logic
-    try {
-      finalImg = await removeBackgroundWithTimeout(img, 20000); 
-      st.className="photo-status text-success"; st.textContent="✔ Photo ready! Background successfully removed.";
-    } catch(err) {
-      console.warn("AI Model failed or timed out. Falling back to original image.", err);
-      st.className="photo-status text-danger"; st.textContent="⚠ Network slow/CORS error. Used original photo without background removal.";
+    if (useAI) {
+      try {
+        finalImg = await removeBackgroundWithTimeout(img, 20000); 
+        st.className="photo-status text-success"; st.textContent="✔ Photo ready! Background successfully removed.";
+      } catch(err) {
+        console.warn("AI Model failed. Falling back to original image.", err);
+        st.className="photo-status text-danger"; st.textContent="⚠ Network slow/error. Used original photo.";
+        finalImg = cropTo34(img);
+      }
+    } else {
+      // Direct crop without AI
       finalImg = cropTo34(img);
+      st.className="photo-status text-success"; st.textContent="✔ Photo cropped successfully (AI skipped).";
     }
     
     const url = finalImg.toDataURL("image/jpeg", 0.92);
@@ -628,7 +642,7 @@ function removeBackgroundWithTimeout(img, timeoutMs){
     const timer = setTimeout(()=>reject(new Error("Timeout")), timeoutMs);
     try {
       const seg = new SelfieSegmentation({locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`});
-      seg.setOptions({modelSelection:0}); // Using 0 for general robust model
+      seg.setOptions({modelSelection:0}); 
       
       seg.onResults(res=>{
         clearTimeout(timer);
@@ -636,13 +650,9 @@ function removeBackgroundWithTimeout(img, timeoutMs){
           const t=document.createElement("canvas");
           t.width=img.naturalWidth; t.height=img.naturalHeight;
           const tc=t.getContext("2d");
-          
-          // Draw mask
           tc.drawImage(res.segmentationMask,0,0,t.width,t.height);
-          // Composite Original Image
           tc.globalCompositeOperation="source-in";
           tc.drawImage(img,0,0,t.width,t.height);
-          
           resolve(cropTo34FromCanvas(t));
         }catch(e){ reject(e); }
       });
@@ -656,10 +666,9 @@ function removeBackgroundWithTimeout(img, timeoutMs){
 function cropTo34FromCanvas(src){
   const out=document.createElement("canvas"); out.width=413; out.height=531; 
   const oc=out.getContext("2d");
-  oc.fillStyle="#fff"; oc.fillRect(0,0,out.width,out.height); // Fill White Background
+  oc.fillStyle="#fff"; oc.fillRect(0,0,out.width,out.height);
   const ratio=Math.min(out.width/src.width, out.height/src.height)*1.0;
   const w=src.width*ratio, h=src.height*ratio;
-  // Center horizontally, anchor to bottom
   oc.drawImage(src,(out.width-w)/2, out.height-h, w, h);
   return out;
 }
@@ -682,11 +691,15 @@ function gate(){
     btn.style.background = "var(--success)";
     btn.innerHTML = "⬇️ Download PDF Now";
     $("genStatus").innerHTML = "";
-    $("previewOverlay").classList.add("hidden"); // Remove Blur when paid!
+    $("previewWatermark").classList.add("hidden"); 
+    isUnlocked = true;
+    mirror(); // Restore real values
   } else {
     btn.style.background = "var(--primary)";
     btn.innerHTML = "🔒 Unlock & Generate PDF";
-    $("previewOverlay").classList.remove("hidden");
+    $("previewWatermark").classList.remove("hidden");
+    isUnlocked = false;
+    mirror(); // Scramble values
   }
 }
 $("payConfirm").addEventListener("change",gate);
@@ -697,10 +710,6 @@ $("genBtn").addEventListener("click",()=>{
   const st=$("genStatus"); st.className="photo-status text-primary"; st.textContent="Generating PDF... Please wait.";
   const name=($("f_name").value.trim()||"voter").replace(/\s+/g,"_");
   
-  // Real Aadhaar and Mobile numbers for PDF
-  $("o_aadhaar").textContent = $("f_aadhaar").value.replace(/\D/g,"").replace(/(\d{4})(?=\d)/g,"$1 ");
-  $("o_mobile").textContent  = $("f_mobile").value.replace(/\D/g,"");
-  
   html2pdf().set({
     margin:5,
     filename:`SIR_Form_${name}.pdf`,
@@ -710,8 +719,6 @@ $("genBtn").addEventListener("click",()=>{
     pagebreak:{mode:["avoid-all","css"]}
   }).from($("formsheet")).save().then(()=>{
     st.className="photo-status text-success"; st.textContent="✔ PDF Downloaded Successfully!";
-    // Scramble again after generation
-    mirror(); 
   }).catch(()=>{
     st.className="photo-status text-danger"; st.textContent="Error generating PDF. Please try again.";
   });
