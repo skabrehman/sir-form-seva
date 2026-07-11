@@ -14,6 +14,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<!-- JSQR for instant, accurate QR scanning -->
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 
 <style>
 :root {
@@ -284,8 +286,8 @@ body {
       
       <!-- OCR UPLOAD BOX -->
       <div class="card ocr-box">
-        <h3 style="color:var(--gov-green); margin-bottom:5px;" data-t="ocr_title">Auto-Fill Form Data (Scanner)</h3>
-        <p style="font-size:13px; margin-bottom:15px; color:#444;" data-t="ocr_sub">Upload a sharp photo of your physical BLO form. The system will attempt to extract your EPIC and ID details automatically.</p>
+        <h3 style="color:var(--gov-green); margin-bottom:5px;" data-t="ocr_title">Auto-Fill Form Data (Smart Scanner)</h3>
+        <p style="font-size:13px; margin-bottom:15px; color:#444;" data-t="ocr_sub">Upload a sharp photo of your physical BLO form. Our system will scan the QR Code & Text to extract your EPIC instantly.</p>
         <input type="file" id="ocrInput" accept="image/*" style="display:none">
         <button class="btn" style="background:var(--gov-green);" onclick="document.getElementById('ocrInput').click()" data-t="ocr_btn">Upload Form Photo</button>
         <div id="ocrStatus" style="margin-top:10px; font-size:13px; font-weight:600;"></div>
@@ -387,7 +389,7 @@ body {
             </label>
             <input type="file" id="photoInput" accept="image/*" style="display:none">
             <button class="btn" id="photoBtn" type="button" data-t="photo_btn">Upload / Capture Photo</button>
-            <p class="hint" data-t="photo_hint">Ensure good lighting. Uncheck the AI option if you already have a plain white background.</p>
+            <p class="hint" data-t="photo_hint">Ensure good lighting. Uncheck AI if photo already has white background.</p>
             <div class="photo-status" id="photoStatus"></div>
           </div>
         </div>
@@ -523,6 +525,32 @@ body {
 
     <!-- Right Side: Sidebar -->
     <div class="sidebar">
+      
+      <!-- NEW: Public Links & News Card -->
+      <div class="card" style="padding:15px; border-top: 3px solid var(--gov-green);">
+        <h3 style="color:var(--gov-blue); font-size:15px; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+          📢 Latest Updates & Links
+        </h3>
+        <ul style="padding-left:0; list-style:none; font-size:13px; line-height:1.8;">
+          <li style="border-bottom: 1px solid #eee; padding-bottom:6px; margin-bottom:6px;">
+            <a href="https://voters.eci.gov.in/" target="_blank" style="color:var(--gov-blue); text-decoration:none; font-weight:600;">➔ Voter Portal (NVSP)</a><br>
+            <span style="color:#666; font-size:12px;">Register, track application, or update details.</span>
+          </li>
+          <li style="border-bottom: 1px solid #eee; padding-bottom:6px; margin-bottom:6px;">
+            <a href="https://electoralsearch.eci.gov.in/" target="_blank" style="color:var(--gov-blue); text-decoration:none; font-weight:600;">➔ Search Name in Electoral Roll</a><br>
+            <span style="color:#666; font-size:12px;">Find your Part & Serial Number instantly.</span>
+          </li>
+          <li style="border-bottom: 1px solid #eee; padding-bottom:6px; margin-bottom:6px;">
+            <a href="https://voters.eci.gov.in/download-eroll" target="_blank" style="color:var(--gov-blue); text-decoration:none; font-weight:600;">➔ Download Electoral Roll PDF</a><br>
+            <span style="color:#666; font-size:12px;">Get the 2002 or latest voter list for your AC.</span>
+          </li>
+          <li>
+            <a href="https://eci.gov.in/" target="_blank" style="color:var(--gov-blue); text-decoration:none; font-weight:600;">➔ Know Your BLO</a><br>
+            <span style="color:#666; font-size:12px;">Find the contact details of your local Booth Level Officer.</span>
+          </li>
+        </ul>
+      </div>
+
       <div class="card" style="padding:15px;">
         <h3 style="color:var(--gov-blue); font-size:15px; margin-bottom:8px;">🏛️ Official Guidelines</h3>
         <ul style="padding-left:18px; font-size:13px; color:#444; line-height:1.6;">
@@ -532,7 +560,7 @@ body {
         </ul>
       </div>
       
-      <div class="card" style="padding:15px; font-size:13px; text-align:center; color:#555;">
+      <div class="card" style="padding:15px; font-size:13px; text-align:center; color:#555; background:#f9f9f9;">
         🔒 <b>Data Privacy Notice</b><br>
         This portal runs entirely in your browser. No personal data (Aadhaar, EPIC, Photo) is transmitted to or stored on any server.
       </div>
@@ -560,8 +588,8 @@ const dict = {
   "gate_no": {"en": "No, I don't", "mr": "नाही, माझ्याकडे नाही", "ur": "نہیں، میرے پاس نہیں ہے"},
   "gate_err": {"en": "Please contact your local BLO and collect the QR-coded form first.", "mr": "कृपया तुमच्या BLO शी संपर्क साधा आणि आधी फॉर्म मिळवा.", "ur": "براہ کرم اپنے بی ایل او سے رابطہ کریں اور پہلے فارم حاصل کریں۔"},
   
-  "ocr_title": {"en": "Auto-Fill Form Data (Scanner)", "mr": "ऑटो-फील फॉर्म डेटा (स्कॅनर)", "ur": "آٹو فل فارم ڈیٹا (سکینر)"},
-  "ocr_sub": {"en": "Upload a sharp photo of your BLO form. The system will attempt to extract your EPIC and details.", "mr": "तुमच्या BLO फॉर्मचा स्पष्ट फोटो अपलोड करा. सिस्टीम तुमचा EPIC क्रमांक शोधेल.", "ur": "اپنے بی ایل او فارم کی واضح تصویر اپ لوڈ کریں۔ سسٹم آپ کی تفصیلات نکالے گا۔"},
+  "ocr_title": {"en": "Auto-Fill Form Data (Smart Scanner)", "mr": "ऑटो-फील फॉर्म डेटा (स्मार्ट स्कॅनर)", "ur": "آٹو فل فارم ڈیٹا (سمارٹ سکینر)"},
+  "ocr_sub": {"en": "Upload a sharp photo of your physical BLO form. Our system will scan the QR Code & Text to extract your EPIC.", "mr": "तुमच्या BLO फॉर्मचा स्पष्ट फोटो अपलोड करा. सिस्टीम QR कोड आणि मजकूर स्कॅन करून EPIC शोधेल.", "ur": "اپنے بی ایل او فارم کی واضح تصویر اپ لوڈ کریں۔ سسٹم کیو آر کوڈ اور متن سکین کرے گا۔"},
   "ocr_btn": {"en": "Upload Form Photo", "mr": "फॉर्मचा फोटो अपलोड करा", "ur": "فارم کی تصویر اپ لوڈ کریں"},
   "ocr_warning": {"en": "⚠️ Please manually verify the auto-filled details below. The scanner may make mistakes reading handwriting or printed text.", "mr": "⚠️ कृपया खालील माहिती तपासा. स्कॅनरकडून अक्षरे वाचण्यात चुका होऊ शकतात.", "ur": "⚠️ براہ کرم نیچے دی گئی تفصیلات کی تصدیق کریں۔ سکینر غلطیاں کر سکتا ہے۔"},
   
@@ -633,72 +661,80 @@ $("btnNoForm").addEventListener("click", () => {
   $("noFormMsg").style.display = "block";
 });
 
-/* ---------- Improved OCR Auto Fill with Pre-processing ---------- */
+/* ---------- Superior Scanner: QR + OCR Fallback ---------- */
 $("ocrInput").addEventListener("change", async (e) => {
   const file = e.target.files[0];
   if (!file) return;
   const st = $("ocrStatus");
   st.style.color = "var(--gov-blue)";
-  st.textContent = "Scanning document... Enhancing image for OCR (Please wait ~15s).";
+  st.textContent = "Scanning document for QR Code & Text... Please wait.";
+  $("ocrWarning").style.display = "none";
   
   try {
-    // 1. Load image and enhance for OCR (Grayscale + Threshold)
     const img = await loadImage(file);
     const cvs = document.createElement("canvas");
     cvs.width = img.width; cvs.height = img.height;
     const ctx = cvs.getContext("2d");
     ctx.drawImage(img, 0, 0);
-    
-    // Simple binarization to make text pop
     const imgData = ctx.getImageData(0,0,cvs.width,cvs.height);
-    const d = imgData.data;
-    for(let i=0; i<d.length; i+=4){
-      const brightness = (d[i] + d[i+1] + d[i+2]) / 3;
-      const val = brightness > 120 ? 255 : 0; // threshold
-      d[i] = d[i+1] = d[i+2] = val;
+    
+    let foundEpic = null;
+    let foundAadhaar = null;
+    let foundMob = null;
+    
+    // 1. Try QR Code First (Instant & Accurate)
+    const code = jsQR(imgData.data, imgData.width, imgData.height);
+    if (code && code.data) {
+      console.log("QR Found:", code.data);
+      const epicMatch = code.data.match(/[A-Z]{3}[0-9]{7}/i);
+      if (epicMatch) foundEpic = epicMatch[0];
     }
-    ctx.putImageData(imgData, 0, 0);
-    const enhancedDataUrl = cvs.toDataURL("image/jpeg", 0.9);
+    
+    // 2. Fallback to Fuzzy OCR if QR failed or doesn't have EPIC
+    if (!foundEpic) {
+      st.textContent = "No QR code detected. Running AI text recognition (may take 10s)...";
+      
+      // Binarize for OCR
+      const d = imgData.data;
+      for(let i=0; i<d.length; i+=4){
+        const brightness = (d[i] + d[i+1] + d[i+2]) / 3;
+        const val = brightness > 120 ? 255 : 0;
+        d[i] = d[i+1] = d[i+2] = val;
+      }
+      ctx.putImageData(imgData, 0, 0);
+      const enhancedDataUrl = cvs.toDataURL("image/jpeg", 0.9);
 
-    // 2. Run Tesseract on enhanced image
-    Tesseract.recognize(enhancedDataUrl, 'eng').then(({ data: { text } }) => {
-      // RegEx hunting for typical Govt form patterns
-      const epicMatch = text.match(/[A-Z]{3}[0-9]{7}/i);
+      const result = await Tesseract.recognize(enhancedDataUrl, 'eng');
+      const text = result.data.text;
+      
+      // Fuzzy Regex allowing common OCR number typos (S=5, Z=2, O=0, I=1, B=8)
+      const epicFuzzyMatch = text.match(/[A-Z]{3}[0-9SZOIB]{7}/i);
+      if (epicFuzzyMatch) {
+        foundEpic = epicFuzzyMatch[0].toUpperCase()
+          .replace(/S/g, '5').replace(/Z/g, '2').replace(/O/g, '0').replace(/I/g, '1').replace(/B/g, '8');
+      }
       const aadhaarMatch = text.match(/\d{4}\s?\d{4}\s?\d{4}/);
+      if (aadhaarMatch) foundAadhaar = aadhaarMatch[0].replace(/\s/g, "");
       const mobMatch = text.match(/[6789]\d{9}/);
-      const numMatch = text.match(/\d+/g); // to find serials
+      if (mobMatch) foundMob = mobMatch[0];
+    }
+    
+    if(foundEpic || foundAadhaar || foundMob) {
+      if(foundEpic) $("f_epic").value = foundEpic;
+      if(foundAadhaar) $("f_aadhaar").value = foundAadhaar;
+      if(foundMob) $("f_mobile").value = foundMob;
       
-      let foundSomething = false;
-
-      if(epicMatch) {
-        $("f_epic").value = epicMatch[0].toUpperCase();
-        foundSomething = true;
-      }
-      if(aadhaarMatch) {
-        $("f_aadhaar").value = aadhaarMatch[0].replace(/\s/g, "");
-        foundSomething = true;
-      }
-      if(mobMatch) {
-        $("f_mobile").value = mobMatch[0];
-        foundSomething = true;
-      }
-      
-      if(foundSomething) {
-        st.style.color = "var(--success)";
-        st.textContent = "✔ Scan complete. Data extracted.";
-        $("ocrWarning").style.display = "block"; // SHOW WARNING TO VERIFY
-        mirror();
-      } else {
-        st.style.color = "var(--danger)";
-        st.textContent = "⚠ Could not detect valid EPIC/Aadhaar clearly. Please type manually.";
-      }
-    }).catch(err => {
+      st.style.color = "var(--success)";
+      st.textContent = "✔ Scan complete. Data extracted.";
+      $("ocrWarning").style.display = "block";
+      mirror();
+    } else {
       st.style.color = "var(--danger)";
-      st.textContent = "⚠ OCR Engine Failed. Please enter data manually.";
-    });
+      st.textContent = "⚠ Could not detect valid EPIC. Please type manually.";
+    }
   } catch(err) {
     st.style.color = "var(--danger)";
-    st.textContent = "⚠ Error processing image.";
+    st.textContent = "⚠ Scanner error. Please enter data manually.";
   }
 });
 
