@@ -15,6 +15,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+<!-- Cropper.js for Manual OCR Cropping -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
 <style>
 :root {
@@ -162,6 +165,24 @@ body {
   margin-top: 10px; display: none; text-align: left;
 }
 
+/* Modal for Cropping */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8); z-index: 9999;
+  display: none; align-items: center; justify-content: center;
+}
+.modal-content {
+  background: #fff; padding: 20px; border-radius: 8px;
+  width: 90%; max-width: 600px; max-height: 90vh;
+  display: flex; flex-direction: column;
+}
+.crop-container {
+  width: 100%; height: 400px; background: #eee; margin-bottom: 15px;
+}
+.modal-actions {
+  display: flex; justify-content: flex-end; gap: 10px;
+}
+
 /* Photo */
 .photo-wrap { display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap; }
 .photo-preview {
@@ -193,9 +214,11 @@ body {
 
 /* PDF Sheet Styling (Strict A4 Layout) */
 #formsheet {
-  width: 794px; margin: 0 auto; background: #fff; color: #000;
+  position: relative;
+  width: 794px; min-height: 1123px; margin: 0 auto; background: #fff; color: #000;
   font-family: "Noto Sans Devanagari", sans-serif; font-size: 11.5px; line-height: 1.4;
   padding: 25px;
+  background-size: cover; background-position: center;
 }
 #formsheet .v { color: var(--ink); font-weight: 700; font-size: 12.5px; }
 #formsheet .blank { color: #d32f2f; font-size: 10.5px; font-weight: 700; }
@@ -272,8 +295,8 @@ body {
       
       <!-- OCR UPLOAD BOX -->
       <div class="card ocr-box">
-        <h3 style="color:var(--success); margin-bottom:5px;" data-t="ocr_title">Auto-Fill Form Data (Smart Scanner)</h3>
-        <p style="font-size:13px; margin-bottom:15px; color:#444;" data-t="ocr_sub">Upload a sharp photo of your physical BLO form. Our system will scan the QR Code & Text to extract your EPIC instantly.</p>
+        <h3 style="color:var(--success); margin-bottom:5px;" data-t="ocr_title">Auto-Fill Form Data (Manual Crop Scanner)</h3>
+        <p style="font-size:13px; margin-bottom:15px; color:#444;" data-t="ocr_sub">Upload a photo of your physical BLO form, then crop precisely around your EPIC number for 100% accurate scanning.</p>
         <input type="file" id="ocrInput" accept="image/*" style="display:none">
         <button class="btn" style="background:var(--success);" onclick="document.getElementById('ocrInput').click()" data-t="ocr_btn">Upload Form Photo</button>
         <div id="ocrStatus" style="margin-top:10px; font-size:13px; font-weight:600;"></div>
@@ -396,6 +419,15 @@ body {
               <label data-t="pay_ref">Last 4 digits of UPI Ref/UTR</label>
               <input id="payRef" inputmode="numeric" maxlength="4" placeholder="e.g. 4821">
             </div>
+            
+            <div class="field" style="margin-bottom:20px; background:#F8FAFC; padding:10px; border:1px solid #E2E8F0; border-radius:4px;">
+              <label style="color:var(--primary-blue)">Use Empty Blank Form Photo as PDF Background? (Optional)</label>
+              <p class="hint" style="margin-bottom:8px;">If you want the PDF to perfectly match your physical form, upload a photo of your completely BLANK form here.</p>
+              <input type="file" id="bgInput" accept="image/*" style="display:none">
+              <button class="btn gate-btn-secondary" style="width:fit-content; font-size:12px; padding:6px 12px;" onclick="document.getElementById('bgInput').click()">Upload Blank Form Image</button>
+              <span id="bgStatus" style="font-size:12px; font-weight:bold; color:var(--success); margin-left:10px;"></span>
+            </div>
+
             <label class="toggle" style="margin-bottom:20px;">
               <input type="checkbox" id="payConfirm">
               <span data-t="pay_conf" style="font-weight:600;">I confirm I have paid ₹10</span>
@@ -415,25 +447,27 @@ body {
         <div class="scale-wrapper" id="scaleWrapper">
           <!-- ACTUAL PDF SHEET -->
           <div id="formsheet">
-            <div class="refbar">संदर्भ प्रत (REFERENCE COPY) — प्रत्यक्ष सादरीकरण BLO ने दिलेल्या मूळ QR-कोड असलेल्या फॉर्मवरच करा. निळ्या रंगातील मजकूर मूळ फॉर्मवर जसाच्या तसा लिहा.</div>
-            <h2>भारत निवडणूक आयोग</h2>
-            <h3>गणना प्रपत्र</h3>
-            <div class="blo-header">Name and contact No of BLO: _____________________________</div>
+            <div id="defaultHtmlLayout">
+                <div class="refbar">संदर्भ प्रत (REFERENCE COPY) — प्रत्यक्ष सादरीकरण BLO ने दिलेल्या मूळ QR-कोड असलेल्या फॉर्मवरच करा. निळ्या रंगातील मजकूर मूळ फॉर्मवर जसाच्या तसा लिहा.</div>
+                <h2>भारत निवडणूक आयोग</h2>
+                <h3>गणना प्रपत्र</h3>
+                <div class="blo-header">Name and contact No of BLO: _____________________________</div>
+            </div>
 
             <div class="top-block">
               <div class="top-col" style="flex:2">
-                मतदाराचे नाव: <span class="v" data-o="p_name"></span><br>
-                मतदार ओळखपत्र क्रमांक: <span class="v" id="o_epic_mask"></span><br>
-                पत्ता: <span class="v" data-o="p_addr"></span><br>
-                <span style="color:#dc2626; font-weight:700; font-size:10px;">(छापील माहिती — काही लिहू नये)</span>
+                <span class="txt-label">मतदाराचे नाव:</span> <span class="v" data-o="p_name"></span><br>
+                <span class="txt-label">मतदार ओळखपत्र क्रमांक:</span> <span class="v" id="o_epic_mask"></span><br>
+                <span class="txt-label">पत्ता:</span> <span class="v" data-o="p_addr"></span><br>
+                <span class="txt-label" style="color:#dc2626; font-weight:700; font-size:10px;">(छापील माहिती — काही लिहू नये)</span>
               </div>
               <div class="top-col" style="flex:2">
-                अनुक्रमांक: <span class="v" data-o="p_serial"></span><br>
-                भाग क्रमांक आणि नाव: <span class="v" data-o="p_part"></span><br>
-                विधानसभा / लोकसभा मतदार संघाचे नाव: <span class="v" data-o="p_ac"></span><br>
-                राज्य: <span class="v" data-o="p_state"></span>
+                <span class="txt-label">अनुक्रमांक:</span> <span class="v" data-o="p_serial"></span><br>
+                <span class="txt-label">भाग क्रमांक आणि नाव:</span> <span class="v" data-o="p_part"></span><br>
+                <span class="txt-label">विधानसभा / लोकसभा मतदार संघाचे नाव:</span> <span class="v" data-o="p_ac"></span><br>
+                <span class="txt-label">राज्य:</span> <span class="v" data-o="p_state"></span>
               </div>
-              <div class="top-col" style="flex:1; display:flex; align-items:center; justify-content:center; color:#777; font-size:10px;">
+              <div class="top-col qr-placeholder" style="flex:1; display:flex; align-items:center; justify-content:center; color:#777; font-size:10px;">
                 [QR कोड छापील]
               </div>
               <div class="top-col" style="flex:1; display:flex; align-items:center; justify-content:center; padding:2px;">
@@ -444,26 +478,26 @@ body {
               </div>
             </div>
 
-            <table>
+            <table id="tbl1">
               <tr><td class="ch" width="50%">मागील एसआयआरच्या मतदार यादीतील मतदाराचा तपशील</td>
                   <td class="ch" width="50%">वरील रकान्यात ज्याचे नाव नमूद आहे, त्याच्या नातेवाईकाचा मागील एसआयआर मधील तपशील</td></tr>
-              <tr><td>मतदाराचे नाव: <span class="v" data-o="l_name"></span><span class="blank" data-b="l_name">(रिक्त ठेवा — 2002 यादीत नाव नाही)</span></td>
-                  <td>नाव: <span class="v" data-o="r_name"></span></td></tr>
-              <tr><td>मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास): <span class="v" id="o_lepic_mask"></span><span class="blank" data-b="l_epic">(रिक्त)</span></td>
-                  <td>मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास): <span class="v" id="o_repic_mask"></span><span class="blank" data-b="r_epic">— (2002 यादीत EPIC छापलेला नाही म्हणून रिक्त)</span></td></tr>
-              <tr><td>नातेवाईकाचे नाव: <span class="v" data-o="l_rel"></span><span class="blank" data-b="l_rel">(रिक्त)</span></td>
-                  <td>नातेवाईकाचे नाव: <span class="v" data-o="r_rel"></span></td></tr>
-              <tr><td>नाते: <span class="v" data-o="l_reln"></span><span class="blank" data-b="l_reln">(रिक्त)</span></td>
-                  <td>नाते: <span class="v" data-o="r_reln"></span></td></tr>
-              <tr><td>जिल्हा: <span class="v" data-o="l_dist"></span><span class="blank" data-b="l_dist">(रिक्त)</span></td>
-                  <td>जिल्हा: <span class="v" data-o="r_dist"></span></td></tr>
-              <tr><td>राज्य: <span class="v" data-o="l_state"></span><span class="blank" data-b="l_state">(रिक्त)</span></td>
-                  <td>राज्य: <span class="v" data-o="r_state"></span></td></tr>
-              <tr><td>मतदार संघाचे नाव: <span class="v" data-o="l_ac"></span><span class="blank" data-b="l_ac">(रिक्त)</span></td>
-                  <td>मतदार संघाचे नाव: <span class="v" data-o="r_ac"></span></td></tr>
+              <tr><td><span class="txt-label">मतदाराचे नाव:</span> <span class="v" data-o="l_name"></span><span class="blank" data-b="l_name">(रिक्त ठेवा — 2002 यादीत नाव नाही)</span></td>
+                  <td><span class="txt-label">नाव:</span> <span class="v" data-o="r_name"></span></td></tr>
+              <tr><td><span class="txt-label">मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास):</span> <span class="v" id="o_lepic_mask"></span><span class="blank" data-b="l_epic">(रिक्त)</span></td>
+                  <td><span class="txt-label">मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास):</span> <span class="v" id="o_repic_mask"></span><span class="blank" data-b="r_epic">— (2002 यादीत EPIC छापलेला नाही म्हणून रिक्त)</span></td></tr>
+              <tr><td><span class="txt-label">नातेवाईकाचे नाव:</span> <span class="v" data-o="l_rel"></span><span class="blank" data-b="l_rel">(रिक्त)</span></td>
+                  <td><span class="txt-label">नातेवाईकाचे नाव:</span> <span class="v" data-o="r_rel"></span></td></tr>
+              <tr><td><span class="txt-label">नाते:</span> <span class="v" data-o="l_reln"></span><span class="blank" data-b="l_reln">(रिक्त)</span></td>
+                  <td><span class="txt-label">नाते:</span> <span class="v" data-o="r_reln"></span></td></tr>
+              <tr><td><span class="txt-label">जिल्हा:</span> <span class="v" data-o="l_dist"></span><span class="blank" data-b="l_dist">(रिक्त)</span></td>
+                  <td><span class="txt-label">जिल्हा:</span> <span class="v" data-o="r_dist"></span></td></tr>
+              <tr><td><span class="txt-label">राज्य:</span> <span class="v" data-o="l_state"></span><span class="blank" data-b="l_state">(रिक्त)</span></td>
+                  <td><span class="txt-label">राज्य:</span> <span class="v" data-o="r_state"></span></td></tr>
+              <tr><td><span class="txt-label">मतदार संघाचे नाव:</span> <span class="v" data-o="l_ac"></span><span class="blank" data-b="l_ac">(रिक्त)</span></td>
+                  <td><span class="txt-label">मतदार संघाचे नाव:</span> <span class="v" data-o="r_ac"></span></td></tr>
             </table>
             
-            <table style="margin-top:-9px">
+            <table id="tbl2" style="margin-top:-9px">
               <tr><td class="ch" width="16.6%">मतदार संघ क्रमांक</td><td class="ch" width="16.6%">यादी भाग क्रमांक</td><td class="ch" width="16.6%">अनुक्रमांक</td>
                   <td class="ch" width="16.6%">मतदार संघ क्रमांक</td><td class="ch" width="16.6%">यादी भाग क्रमांक</td><td class="ch" width="16.6%">अनुक्रमांक</td></tr>
               <tr>
@@ -476,31 +510,31 @@ body {
               </tr>
             </table>
 
-            <table style="margin-top:8px">
-              <tr><td width="50%">जन्म तारीख (DD/MM/YYYY)</td><td id="dobCells"></td></tr>
-              <tr><td>आधार क्रमांक (ऐच्छिक)</td><td><span class="v" id="o_aadhaar_mask" style="letter-spacing:2px"></span> <span class="blank">← स्वतःचा आधार क्रमांक लिहा</span></td></tr>
-              <tr><td>मोबाइल क्रमांक</td><td><span class="v" id="o_mobile_mask" style="letter-spacing:2px"></span> <span class="blank">← स्वतःचा मोबाइल क्रमांक लिहा</span></td></tr>
-              <tr><td>वडिलांचे/पालकांचे नाव</td><td><span class="v" data-o="d_father"></span></td></tr>
-              <tr><td>वडिलांचा/पालकांचा मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" id="o_dfepic_mask"></span></td></tr>
-              <tr><td>आईचे नाव</td><td><span class="v" data-o="d_mother"></span></td></tr>
-              <tr><td>आईचा मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" id="o_dmepic_mask"></span></td></tr>
-              <tr><td>पती किंवा पत्नीचे नाव (लागू असल्यास)</td><td><span class="v" data-o="d_spouse"></span><span class="blank" data-b="d_spouse">रिक्त (अविवाहित असल्यास)</span></td></tr>
-              <tr><td>पती किंवा पत्नीचे मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" id="o_dsepic_mask"></span><span class="blank" data-b="d_sepic">रिक्त (अविवाहित असल्यास)</span></td></tr>
+            <table id="tbl3" style="margin-top:8px">
+              <tr><td width="50%" class="txt-label">जन्म तारीख (DD/MM/YYYY)</td><td id="dobCells"></td></tr>
+              <tr><td class="txt-label">आधार क्रमांक (ऐच्छिक)</td><td><span class="v" id="o_aadhaar_mask" style="letter-spacing:2px"></span> <span class="blank">← स्वतःचा आधार क्रमांक लिहा</span></td></tr>
+              <tr><td class="txt-label">मोबाइल क्रमांक</td><td><span class="v" id="o_mobile_mask" style="letter-spacing:2px"></span> <span class="blank">← स्वतःचा मोबाइल क्रमांक लिहा</span></td></tr>
+              <tr><td class="txt-label">वडिलांचे/पालकांचे नाव</td><td><span class="v" data-o="d_father"></span></td></tr>
+              <tr><td class="txt-label">वडिलांचा/पालकांचा मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" id="o_dfepic_mask"></span></td></tr>
+              <tr><td class="txt-label">आईचे नाव</td><td><span class="v" data-o="d_mother"></span></td></tr>
+              <tr><td class="txt-label">आईचा मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" id="o_dmepic_mask"></span></td></tr>
+              <tr><td class="txt-label">पती किंवा पत्नीचे नाव (लागू असल्यास)</td><td><span class="v" data-o="d_spouse"></span><span class="blank" data-b="d_spouse">रिक्त (अविवाहित असल्यास)</span></td></tr>
+              <tr><td class="txt-label">पती किंवा पत्नीचे मतदार ओळखपत्र क्रमांक (उपलब्ध असल्यास)</td><td><span class="v" id="o_dsepic_mask"></span><span class="blank" data-b="d_sepic">रिक्त (अविवाहित असल्यास)</span></td></tr>
             </table>
 
-            <div class="decl">
+            <div class="decl txt-label">
               (i) वर उल्लेखित मतदार, म्हणजेच मी स्वतः/माझे कुटुंबीय, यांनी इतर कोणत्याही देशाचे नागरिकत्व प्राप्त केलेले नाही.<br>
               (ii) मी मतदार यादीत समावेशासाठी अर्ज करत साव, आणि वर नमूद केलेले नाव, म्हणजे मी स्वतः/माझ्या कुटुंबातील सदस्य, इतर कोणत्याही विधानसभा मतदारसंघात/लोकसभा मतदारसंघात समाविष्ट नाही.<br>
               (iii) मला याची जाणीव आहे की, या अर्जाच्या संबंधात वरील विधान किंवा घोषणा करणे, जे खोटे आहे आणि जे मला खोटे आहे हे माहित आहे किंवा माझा विश्वास आहे किंवा ते खरे नाही असे मला वाटते, हे लोकप्रतिनिधित्व अधिनियम, १९५० च्या कलम ३१ अन्वये एक वर्षापर्यंतच्या कारावासाची किंवा दंडाची किंवा दोन्ही शिक्षांची तरतूद आहे.
             </div>
             
             <div class="sig-line">
-              <span>मतदाराची किंवा कुटुंबातील कोणत्याही प्रौढ सदस्याची सही/डाव्या अंगठ्याचा ठसा (नातेसंबंध नमूद करा) तारखेसह: <b style="color:#1B3FA0">_________________</b> <span style="color:#1B3FA0; font-size:10px;">← येथे सही + दिनांक लिहा</span></span>
+              <span class="txt-label">मतदाराची किंवा कुटुंबातील कोणत्याही प्रौढ सदस्याची सही/डाव्या अंगठ्याचा ठसा (नातेसंबंध नमूद करा) तारखेसह: <b style="color:#1B3FA0">_________________</b> <span style="color:#1B3FA0; font-size:10px;">← येथे सही + दिनांक लिहा</span></span>
             </div>
-            <div class="sig-line" style="margin-top:15px">
+            <div class="sig-line txt-label" style="margin-top:15px">
               <span>मतदान केंद्रस्तरीय अधिकाऱ्याचे घोषणापत्र: <b style="color:#dc2626">(BLO भरतील — रिक्त ठेवा)</b></span>
             </div>
-            <div class="sig-line" style="margin-top:10px">
+            <div class="sig-line txt-label" style="margin-top:10px">
               <span>मतदान केंद्रस्तरीय अधिकाऱ्याची स्वाक्षरी: <b style="color:#dc2626">(BLO भरतील — रिक्त ठेवा)</b></span>
             </div>
           </div>
@@ -558,6 +592,21 @@ body {
   </div> <!-- End Layout -->
 </div>
 
+<!-- Cropper Modal -->
+<div class="modal-overlay" id="cropperModal">
+  <div class="modal-content">
+    <h3 style="margin-bottom:10px; color:var(--primary-blue)">Crop Your EPIC Number</h3>
+    <p style="font-size:13px; color:#555; margin-bottom:15px;">For 100% accurate scanning, please crop the image tightly around your 10-digit EPIC number (e.g. ABC1234567).</p>
+    <div class="crop-container">
+      <img id="cropImage" src="" style="max-width:100%;">
+    </div>
+    <div class="modal-actions">
+      <button class="btn gate-btn-secondary" id="btnCancelCrop">Cancel</button>
+      <button class="btn" id="btnConfirmCrop" style="background:var(--success)">Scan Cropped Area</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ================= CONFIG ================= */
 const CONFIG = {
@@ -613,7 +662,7 @@ const dict = {
   "photo_hint": {"en": "Ensure good lighting. Uncheck AI if photo already has white background.", "mr": "समोरून, चांगल्या उजेडात फोटो काढा.", "ur": "اچھی روشنی کو یقینی بنائیں۔"},
   "step5": {"en": "5. Payment & Download", "mr": "५. पेमेंट आणि डाउनलोड", "ur": "5. ادائیگی اور ڈاؤن لوڈ"},
   "pay_ref": {"en": "Last 4 digits of UPI Ref/UTR", "mr": "UPI UTR शेवटचे 4 अंक", "ur": "یو پی آئی کے آخری 4 ہندسے"},
-  "pay_conf": {"en": "I confirm I have paid ₹10", "mr": "मी ₹10 चे पेमेंट पूर्ण केलेাকেও", "ur": "میں نے 10 روپے کی ادائیگی کر دی ہے"},
+  "pay_conf": {"en": "I confirm I have paid ₹10", "mr": "मी ₹10 चे पेमेंट पूर्ण केले आहे", "ur": "میں نے 10 روپے کی ادائیگی کر دی ہے"},
   "gen_btn": {"en": "🔒 Unlock & Generate PDF", "mr": "🔒 PDF अनलॉक आणि तयार करा", "ur": "🔒 پی ڈی ایف غیر مقفل کریں"}
 };
 
@@ -632,10 +681,9 @@ $("langGate").addEventListener("change", (e) => { applyLanguage(e.target.value);
 // Apply immediately on load based on default Gate value
 applyLanguage($("langGate").value);
 
-// Sync from Navbar (if they change it after opening app)
 $("lang").addEventListener("change", (e) => {
   applyLanguage(e.target.value);
-  $("langGate").value = e.target.value; // keep them in sync
+  $("langGate").value = e.target.value; 
 });
 
 /* ---------- Gate Logic ---------- */
@@ -643,7 +691,6 @@ $("btnHaveForm").addEventListener("click", () => {
   $("gateScreen").style.display = "none";
   $("mainApp").style.display = "block";
   $("navLangContainer").style.display = "block";
-  // Ensure we copy the selected lang from Gate to Navbar
   $("lang").value = $("langGate").value;
   applyLanguage($("lang").value);
 });
@@ -651,76 +698,108 @@ $("btnNoForm").addEventListener("click", () => {
   $("noFormMsg").style.display = "block";
 });
 
-/* ---------- Superior Scanner: QR + Multi-Scale OCR ---------- */
-$("ocrInput").addEventListener("change", async (e) => {
+/* ---------- Background Image Upload Logic ---------- */
+$("bgInput").addEventListener("change", async (e) => {
   const file = e.target.files[0];
   if (!file) return;
+  const imgUrl = URL.createObjectURL(file);
+  const sheet = $("formsheet");
+  
+  // Apply image as background
+  sheet.style.backgroundImage = `url(${imgUrl})`;
+  
+  // Hide borders and static text so they don't clash with the uploaded photo
+  $("defaultHtmlLayout").style.opacity = "0";
+  document.querySelectorAll(".txt-label, .ch, .blank, .refbar, .blo-header, .qr-placeholder").forEach(el => {
+    el.style.opacity = "0"; 
+  });
+  document.querySelectorAll("table, td, .top-block, .top-col").forEach(el => {
+    el.style.border = "none";
+  });
+  
+  $("bgStatus").textContent = "✔ Background applied!";
+});
+
+
+/* ---------- Manual Crop OCR Scanner ---------- */
+let cropper = null;
+
+$("ocrInput").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  const url = URL.createObjectURL(file);
+  $("cropImage").src = url;
+  $("cropperModal").style.display = "flex";
+  
+  if (cropper) cropper.destroy();
+  cropper = new Cropper($("cropImage"), {
+    viewMode: 1,
+    autoCropArea: 0.3,
+    background: false
+  });
+  e.target.value = "";
+});
+
+$("btnCancelCrop").addEventListener("click", () => {
+  $("cropperModal").style.display = "none";
+  if (cropper) cropper.destroy();
+});
+
+$("btnConfirmCrop").addEventListener("click", async () => {
+  if (!cropper) return;
+  const canvas = cropper.getCroppedCanvas({ width: 1000 }); // High res crop
+  $("cropperModal").style.display = "none";
+  
   const st = $("ocrStatus");
   st.style.color = "var(--primary-blue)";
-  st.textContent = "Scanning document... Please wait.";
+  st.textContent = "Scanning cropped area... Please wait.";
   $("ocrWarning").style.display = "none";
   
   try {
-    const img = await loadImage(file);
+    const rawDataUrl = canvas.toDataURL("image/jpeg", 0.95);
+    
+    // Use Tesseract Single Line PSM for perfect crop reading
+    const worker = await Tesseract.createWorker('eng');
+    await worker.setParameters({
+      tessedit_pageseg_mode: Tesseract.PSM.SINGLE_LINE,
+    });
+    const result = await worker.recognize(rawDataUrl);
+    const text = result.data.text;
+    await worker.terminate();
+    
+    console.log("OCR Extracted Text:", text);
+    
     let foundEpic = null;
     let foundAadhaar = null;
     let foundMob = null;
     
-    // 1. Try QR Code at multiple scales (helps jsQR find it in huge screenshots)
-    const scales = [1, 0.75, 0.5, 0.25];
-    for (let s of scales) {
-      if (foundEpic) break;
-      const cvs = document.createElement("canvas");
-      cvs.width = Math.floor(img.width * s);
-      cvs.height = Math.floor(img.height * s);
-      const ctx = cvs.getContext("2d");
-      ctx.drawImage(img, 0, 0, cvs.width, cvs.height);
-      const imgData = ctx.getImageData(0,0,cvs.width,cvs.height);
-      const code = jsQR(imgData.data, cvs.width, cvs.height, { inversionAttempts: "dontInvert" });
-      if (code && code.data) {
-        console.log("QR Found at scale", s, ":", code.data);
-        const epicMatch = code.data.match(/[A-Z]{3}[0-9]{7}/i);
-        if (epicMatch) foundEpic = epicMatch[0];
-      }
+    // Extremely Fuzzy Regex allowing OCR number & letter typos
+    const epicFuzzyMatch = text.match(/[A-Z0-9]{2,3}[0-9A-Z]{6,8}/i);
+    if (epicFuzzyMatch) {
+      // aggressively fix common OCR typos in the 10 character block
+      foundEpic = epicFuzzyMatch[0].toUpperCase()
+        .replace(/\s/g, "")
+        .replace(/^[0-9]/g, match => { // fix first letter if it's a number
+            if(match==='4') return 'A';
+            if(match==='0') return 'O';
+            if(match==='8') return 'B';
+            if(match==='5') return 'S';
+            if(match==='1') return 'I';
+            return match;
+        });
+      // Further sanitize: length should be exactly 10 usually, let user correct if 9 or 11
     }
+    const aadhaarMatch = text.match(/\d{4}\s?\d{4}\s?\d{4}/);
+    if (aadhaarMatch) foundAadhaar = aadhaarMatch[0].replace(/\s/g, "");
+    const mobMatch = text.match(/[6789]\d{9}/);
+    if (mobMatch) foundMob = mobMatch[0];
     
-    // 2. Fallback to Tesseract AI using PSM 11 (Sparse Text) for better scattered text reading
-    if (!foundEpic) {
-      st.textContent = "Running AI text recognition (may take 10-20s)...";
-      
-      const cvs = document.createElement("canvas");
-      cvs.width = img.width; cvs.height = img.height;
-      const ctx = cvs.getContext("2d");
-      ctx.drawImage(img, 0, 0);
-      const rawDataUrl = cvs.toDataURL("image/jpeg", 0.95);
-      
-      // Use Tesseract Worker for PSM 11
-      const worker = await Tesseract.createWorker('eng');
-      await worker.setParameters({
-        tessedit_pageseg_mode: Tesseract.PSM.SPARSE_TEXT,
-      });
-      const result = await worker.recognize(rawDataUrl);
-      const text = result.data.text;
-      await worker.terminate();
-      
-      console.log("OCR Extracted Text:", text);
-      
-      // Extremely Fuzzy Regex allowing OCR number & letter typos
-      const epicFuzzyMatch = text.match(/[A-Z]{3}[0-9SZOIBTLG]{7}/i);
-      if (epicFuzzyMatch) {
-        foundEpic = epicFuzzyMatch[0].toUpperCase()
-          .replace(/[S]/g, '5').replace(/[Z]/g, '2').replace(/[O]/g, '0')
-          .replace(/[I]/g, '1').replace(/[B]/g, '8').replace(/[T]/g, '7')
-          .replace(/[L]/g, '1').replace(/[G]/g, '6');
-      }
-      const aadhaarMatch = text.match(/\d{4}\s?\d{4}\s?\d{4}/);
-      if (aadhaarMatch) foundAadhaar = aadhaarMatch[0].replace(/\s/g, "");
-      const mobMatch = text.match(/[6789]\d{9}/);
-      if (mobMatch) foundMob = mobMatch[0];
-    }
-    
-    if(foundEpic || foundAadhaar || foundMob) {
+    // If exact regex missed, just dump the raw text into the field and let user fix it
+    if(foundEpic || foundAadhaar || foundMob || text.trim().length > 3) {
       if(foundEpic) $("f_epic").value = foundEpic;
+      else if (!foundAadhaar && !foundMob) $("f_epic").value = text.trim().replace(/[^a-zA-Z0-9]/g, "").slice(0, 10);
+      
       if(foundAadhaar) $("f_aadhaar").value = foundAadhaar;
       if(foundMob) $("f_mobile").value = foundMob;
       
@@ -730,7 +809,7 @@ $("ocrInput").addEventListener("change", async (e) => {
       mirror();
     } else {
       st.style.color = "var(--danger)";
-      st.textContent = "⚠ Could not detect valid EPIC. Please type manually.";
+      st.textContent = "⚠ Could not read text clearly. Please type manually.";
     }
   } catch(err) {
     console.error(err);
