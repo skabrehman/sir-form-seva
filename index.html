@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Election Commission of India - SIR Form</title>
-<meta name="description" content="Official SIR Form Online — Auto Fill, Photo Editor, PDF Generator">
+<title>Voter Reference Portal - SIR Form Assistant</title>
+<meta name="description" content="Educational SIR Form Assistant — Auto Fill, Photo Editor, PDF Generator">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,15 +18,15 @@
 
 <style>
 :root {
-  --gov-blue: #0A3D91;
-  --gov-orange: #FF9933;
-  --gov-green: #138808;
-  --text-dark: #333333;
-  --text-muted: #666666;
-  --bg-color: #F4F5F7;
-  --card-border: #D1D5DB;
-  --danger: #D32F2F;
-  --success: #388E3C;
+  --primary-blue: #1A56DB;
+  --secondary-blue: #E1EFFE;
+  --accent-color: #FACA15;
+  --text-dark: #1F2937;
+  --text-muted: #6B7280;
+  --bg-color: #F3F4F6;
+  --card-border: #E5E7EB;
+  --danger: #E02424;
+  --success: #046C4E;
   --ink: #1B3FA0;
 }
 
@@ -39,54 +39,48 @@ body {
   line-height: 1.5;
 }
 
-/* ---------------- GOVT HEADER ---------------- */
-.gov-header {
+/* ---------------- HEADER ---------------- */
+.header {
   background: #ffffff;
-  border-bottom: 4px solid var(--gov-orange);
+  border-bottom: 4px solid var(--primary-blue);
   padding: 15px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-.gov-title-wrapper {
+.title-wrapper {
   display: flex;
   align-items: center;
   gap: 15px;
 }
-.emblem-placeholder {
-  width: 50px;
-  height: 50px;
-  background: url('https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg') no-repeat center center;
-  background-size: contain;
-}
-.gov-titles h1 {
+.titles h1 {
   font-size: 18px;
   font-weight: 700;
-  color: var(--gov-blue);
+  color: var(--primary-blue);
   margin-bottom: 2px;
 }
-.gov-titles h2 {
+.titles h2 {
   font-size: 14px;
   font-weight: 400;
   color: var(--text-muted);
 }
 .lang-selector select {
   padding: 6px 10px;
-  border: 1px solid var(--gov-blue);
+  border: 1px solid var(--primary-blue);
   background: #fff;
-  color: var(--gov-blue);
+  color: var(--primary-blue);
   font-weight: 600;
   border-radius: 4px;
   cursor: pointer;
 }
 
-/* ---------------- GOVT CARDS ---------------- */
+/* ---------------- CARDS ---------------- */
 .card {
   background: #ffffff;
   border: 1px solid var(--card-border);
-  border-top: 3px solid var(--gov-blue);
-  border-radius: 4px;
+  border-top: 3px solid var(--primary-blue);
+  border-radius: 6px;
   padding: 20px;
   margin-bottom: 20px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
@@ -99,7 +93,7 @@ body {
 .card-title {
   font-size: 16px;
   font-weight: 700;
-  color: var(--gov-blue);
+  color: var(--primary-blue);
 }
 
 /* ---------------- INITIAL GATE SCREEN ---------------- */
@@ -111,18 +105,18 @@ body {
 .big-lang-selector select {
   padding: 12px 20px;
   font-size: 16px;
-  border: 2px solid var(--gov-blue);
+  border: 2px solid var(--primary-blue);
   border-radius: 4px;
   width: 80%;
   margin: 20px 0 30px 0;
   font-weight: bold;
 }
 .gate-btn {
-  background: var(--gov-blue); color: #fff; border: none; padding: 12px 25px;
+  background: var(--primary-blue); color: #fff; border: none; padding: 12px 25px;
   border-radius: 4px; font-weight: 700; font-size: 16px; cursor: pointer;
   width: 80%; margin-bottom: 12px;
 }
-.gate-btn:hover { background: #083075; }
+.gate-btn:hover { background: #1E40AF; }
 .gate-btn-secondary { background: #e0e0e0; color: #333; }
 .gate-btn-secondary:hover { background: #cccccc; }
 
@@ -144,26 +138,26 @@ body {
   border: 1px solid #ccc; border-radius: 4px;
 }
 .field input:focus, .field select:focus {
-  outline: none; border-color: var(--gov-blue);
+  outline: none; border-color: var(--primary-blue);
 }
 .hint { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 .toggle { display: flex; gap: 8px; align-items: center; font-size: 14px; cursor: pointer; }
 .toggle input { width: 16px; height: 16px; }
 
 .btn {
-  background: var(--gov-blue); color: #fff; border: none; padding: 10px 20px;
+  background: var(--primary-blue); color: #fff; border: none; padding: 10px 20px;
   border-radius: 4px; font-weight: 600; font-size: 14px; cursor: pointer;
 }
-.btn:hover:not(:disabled) { background: #083075; }
+.btn:hover:not(:disabled) { background: #1E40AF; }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* OCR Upload Box */
 .ocr-box {
-  background: #f9fdfa; border: 1px dashed var(--gov-green); padding: 15px;
+  background: #F0FDF4; border: 1px dashed var(--success); padding: 15px;
   border-radius: 4px; text-align: center; margin-bottom: 20px;
 }
 .alert-warning {
-  background: #fff3cd; color: #856404; border: 1px solid #ffeeba;
+  background: #FFFBEB; color: #92400E; border: 1px solid #FEF3C7;
   padding: 10px; border-radius: 4px; font-size: 13px; font-weight: 600;
   margin-top: 10px; display: none; text-align: left;
 }
@@ -181,12 +175,6 @@ body {
 
 /* Sidebar */
 .sidebar { display: flex; flex-direction: column; gap: 15px; }
-.banner {
-  background: #fff; border: 1px solid #ccc; border-top: 3px solid var(--gov-orange);
-  padding: 15px; border-radius: 4px;
-}
-.banner h3 { margin-bottom: 8px; font-size: 15px; color: var(--text-dark); }
-.banner ul { padding-left: 18px; font-size: 13px; line-height: 1.6; color: #444; }
 
 /* Preview Area */
 .preview-container {
@@ -198,7 +186,7 @@ body {
 @media (max-width: 600px) { .scale-wrapper { transform: scale(0.45); margin-bottom:-50%; } }
 .watermark {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg);
-  font-size: 60px; color: rgba(211, 47, 47, 0.15); font-weight: 700; white-space: nowrap;
+  font-size: 60px; color: rgba(224, 36, 36, 0.15); font-weight: 700; white-space: nowrap;
   pointer-events: none; z-index: 10;
 }
 .hidden { display: none !important; }
@@ -237,13 +225,12 @@ body {
 </head>
 <body>
 
-<!-- GOVT HEADER -->
-<header class="gov-header">
-  <div class="gov-title-wrapper">
-    <div class="emblem-placeholder"></div>
-    <div class="gov-titles">
-      <h1 data-t="gov_title_main">Election Commission of India</h1>
-      <h2 data-t="gov_title_sub">Special Intensive Revision (SIR) Form Portal</h2>
+<!-- HEADER -->
+<header class="header">
+  <div class="title-wrapper">
+    <div class="titles">
+      <h1 data-t="gov_title_main">Voter Information Reference Portal</h1>
+      <h2 data-t="gov_title_sub">Educational & Assistance Tool (Not an Official Govt Website)</h2>
     </div>
   </div>
   <div class="lang-selector" style="display:none;" id="navLangContainer">
@@ -257,7 +244,7 @@ body {
 
 <!-- GATE SCREEN -->
 <div id="gateScreen" class="card">
-  <h2 style="color:var(--gov-blue); margin-bottom: 10px;">भाषा निवडा / Select Language</h2>
+  <h2 style="color:var(--primary-blue); margin-bottom: 10px;">भाषा निवडा / Select Language</h2>
   <div class="big-lang-selector">
     <select id="langGate">
       <option value="mr" selected>मराठी (Marathi)</option>
@@ -285,10 +272,10 @@ body {
       
       <!-- OCR UPLOAD BOX -->
       <div class="card ocr-box">
-        <h3 style="color:var(--gov-green); margin-bottom:5px;" data-t="ocr_title">Auto-Fill Form Data (Smart Scanner)</h3>
+        <h3 style="color:var(--success); margin-bottom:5px;" data-t="ocr_title">Auto-Fill Form Data (Smart Scanner)</h3>
         <p style="font-size:13px; margin-bottom:15px; color:#444;" data-t="ocr_sub">Upload a sharp photo of your physical BLO form. Our system will scan the QR Code & Text to extract your EPIC instantly.</p>
         <input type="file" id="ocrInput" accept="image/*" style="display:none">
-        <button class="btn" style="background:var(--gov-green);" onclick="document.getElementById('ocrInput').click()" data-t="ocr_btn">Upload Form Photo</button>
+        <button class="btn" style="background:var(--success);" onclick="document.getElementById('ocrInput').click()" data-t="ocr_btn">Upload Form Photo</button>
         <div id="ocrStatus" style="margin-top:10px; font-size:13px; font-weight:600;"></div>
         <div id="ocrWarning" class="alert-warning" data-t="ocr_warning">⚠️ Please manually verify the auto-filled details below. The scanner may make mistakes reading handwriting or printed text.</div>
       </div>
@@ -320,7 +307,7 @@ body {
         </label>
 
         <div id="selfBlock" style="display:none; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed #ccc;">
-          <p class="hint" style="margin-bottom:15px; color:var(--gov-blue); font-weight:600;" data-t="self_2002_hint">Your 2002 Details:</p>
+          <p class="hint" style="margin-bottom:15px; color:var(--primary-blue); font-weight:600;" data-t="self_2002_hint">Your 2002 Details:</p>
           <div class="grid">
             <div class="field"><label data-t="voter_name">Name</label><input id="s_name" data-v="l_name"></div>
             <div class="field"><label data-t="epic">EPIC</label><input id="s_epic" data-v="l_epic" style="text-transform:uppercase"></div>
@@ -404,7 +391,7 @@ body {
             <div id="qrbox"></div>
           </div>
           <div style="flex:1;">
-            <p style="margin-bottom:15px; font-weight:600;">Scan QR or <a href="#" id="upiLink" style="color:var(--gov-blue)">Click Here to Pay ₹10</a>.</p>
+            <p style="margin-bottom:15px; font-weight:600;">Scan QR or <a href="#" id="upiLink" style="color:var(--primary-blue)">Click Here to Pay ₹10</a>.</p>
             <div class="field" style="margin-bottom:15px;">
               <label data-t="pay_ref">Last 4 digits of UPI Ref/UTR</label>
               <input id="payRef" inputmode="numeric" maxlength="4" placeholder="e.g. 4821">
@@ -503,7 +490,7 @@ body {
 
             <div class="decl">
               (i) वर उल्लेखित मतदार, म्हणजेच मी स्वतः/माझे कुटुंबीय, यांनी इतर कोणत्याही देशाचे नागरिकत्व प्राप्त केलेले नाही.<br>
-              (ii) मी मतदार यादीत समावेशासाठी अर्ज करत आहे, आणि वर नमूद केलेले नाव, म्हणजे मी स्वतः/माझ्या कुटुंबातील सदस्य, इतर कोणत्याही विधानसभा मतदारसंघात/लोकसभा मतदारसंघात समाविष्ट नाही.<br>
+              (ii) मी मतदार यादीत समावेशासाठी अर्ज करत साव, आणि वर नमूद केलेले नाव, म्हणजे मी स्वतः/माझ्या कुटुंबातील सदस्य, इतर कोणत्याही विधानसभा मतदारसंघात/लोकसभा मतदारसंघात समाविष्ट नाही.<br>
               (iii) मला याची जाणीव आहे की, या अर्जाच्या संबंधात वरील विधान किंवा घोषणा करणे, जे खोटे आहे आणि जे मला खोटे आहे हे माहित आहे किंवा माझा विश्वास आहे किंवा ते खरे नाही असे मला वाटते, हे लोकप्रतिनिधित्व अधिनियम, १९५० च्या कलम ३१ अन्वये एक वर्षापर्यंतच्या कारावासाची किंवा दंडाची किंवा दोन्ही शिक्षांची तरतूद आहे.
             </div>
             
@@ -525,43 +512,47 @@ body {
     <!-- Right Side: Sidebar -->
     <div class="sidebar">
       
-      <!-- NEW: Public Links & News Card -->
-      <div class="card" style="padding:15px; border-top: 3px solid var(--gov-green);">
-        <h3 style="color:var(--gov-blue); font-size:15px; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-          📢 Latest Updates & Links
+      <!-- Public Links & News Card -->
+      <div class="card" style="padding:15px; border-top: 3px solid var(--accent-color);">
+        <h3 style="color:var(--text-dark); font-size:15px; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+          📰 Educational Resources & News
         </h3>
         <ul style="padding-left:0; list-style:none; font-size:13px; line-height:1.8;">
           <li style="border-bottom: 1px solid #eee; padding-bottom:6px; margin-bottom:6px;">
-            <a href="https://voters.eci.gov.in/" target="_blank" style="color:var(--gov-blue); text-decoration:none; font-weight:600;">➔ Voter Portal (NVSP)</a><br>
+            <a href="https://voters.eci.gov.in/" target="_blank" style="color:var(--primary-blue); text-decoration:none; font-weight:600;">➔ Voter Portal (NVSP)</a><br>
             <span style="color:#666; font-size:12px;">Register, track application, or update details.</span>
           </li>
           <li style="border-bottom: 1px solid #eee; padding-bottom:6px; margin-bottom:6px;">
-            <a href="https://electoralsearch.eci.gov.in/" target="_blank" style="color:var(--gov-blue); text-decoration:none; font-weight:600;">➔ Search Name in Electoral Roll</a><br>
+            <a href="https://electoralsearch.eci.gov.in/" target="_blank" style="color:var(--primary-blue); text-decoration:none; font-weight:600;">➔ Search Name in Electoral Roll</a><br>
             <span style="color:#666; font-size:12px;">Find your Part & Serial Number instantly.</span>
           </li>
           <li style="border-bottom: 1px solid #eee; padding-bottom:6px; margin-bottom:6px;">
-            <a href="https://voters.eci.gov.in/download-eroll" target="_blank" style="color:var(--gov-blue); text-decoration:none; font-weight:600;">➔ Download Electoral Roll PDF</a><br>
+            <a href="https://voters.eci.gov.in/download-eroll" target="_blank" style="color:var(--primary-blue); text-decoration:none; font-weight:600;">➔ Download Electoral Roll PDF</a><br>
             <span style="color:#666; font-size:12px;">Get the 2002 or latest voter list for your AC.</span>
           </li>
-          <li>
-            <a href="https://eci.gov.in/" target="_blank" style="color:var(--gov-blue); text-decoration:none; font-weight:600;">➔ Know Your BLO</a><br>
+          <li style="border-bottom: 1px solid #eee; padding-bottom:6px; margin-bottom:6px;">
+            <a href="https://eci.gov.in/" target="_blank" style="color:var(--primary-blue); text-decoration:none; font-weight:600;">➔ Know Your BLO</a><br>
             <span style="color:#666; font-size:12px;">Find the contact details of your local Booth Level Officer.</span>
+          </li>
+          <li>
+            <a href="https://www.india.gov.in/my-government/indian-parliament/lok-sabha" target="_blank" style="color:var(--primary-blue); text-decoration:none; font-weight:600;">➔ India.gov.in Civic Info</a><br>
+            <span style="color:#666; font-size:12px;">Learn about civic duties and rights.</span>
           </li>
         </ul>
       </div>
 
-      <div class="card" style="padding:15px;">
-        <h3 style="color:var(--gov-blue); font-size:15px; margin-bottom:8px;">🏛️ Official Guidelines</h3>
+      <div class="card" style="padding:15px; background:#F8FAFC;">
+        <h3 style="color:var(--text-dark); font-size:15px; margin-bottom:8px;">💡 Assistant Guide</h3>
         <ul style="padding-left:18px; font-size:13px; color:#444; line-height:1.6;">
-          <li><strong>Original Form is Mandatory:</strong> This is a Reference Copy. You must write these details on the original QR-coded BLO form.</li>
-          <li><strong>EPIC Mismatch:</strong> Copy the exact EPIC number printed on your BLO slip, even if it has a typo.</li>
-          <li><strong>Photo Rules:</strong> Passport size photo with plain white background required.</li>
+          <li>This tool helps you cleanly format your SIR form data for printing.</li>
+          <li><strong>Note:</strong> You must still submit the physical form to your BLO.</li>
+          <li>Ensure your uploaded photo is well-lit for accurate scanning.</li>
         </ul>
       </div>
       
-      <div class="card" style="padding:15px; font-size:13px; text-align:center; color:#555; background:#f9f9f9;">
-        🔒 <b>Data Privacy Notice</b><br>
-        This portal runs entirely in your browser. No personal data (Aadhaar, EPIC, Photo) is transmitted to or stored on any server.
+      <div class="card" style="padding:15px; font-size:13px; text-align:center; color:#555; background:#FEF2F2; border: 1px solid #FCA5A5;">
+        ⚠️ <b>Disclaimer</b><br>
+        This portal is an independent educational tool to assist citizens. It is <strong>NOT</strong> affiliated with or endorsed by the Election Commission of India. No user data is saved on our servers.
       </div>
     </div>
   </div> <!-- End Layout -->
@@ -579,8 +570,8 @@ const $ = id => document.getElementById(id);
 
 /* ---------- Multi-language Dictionary ---------- */
 const dict = {
-  "gov_title_main": {"en": "Election Commission of India", "mr": "भारत निवडणूक आयोग", "ur": "الیکشن کمیشن آف انڈیا"},
-  "gov_title_sub": {"en": "Special Intensive Revision (SIR) Form", "mr": "विशेष संक्षिप्त पुनरीक्षण (SIR) गणना प्रपत्र", "ur": "خصوصی انتہائی نظرثانی (SIR) فارم"},
+  "gov_title_main": {"en": "Voter Information Reference Portal", "mr": "मतदार माहिती संदर्भ पोर्टल", "ur": "ووٹر انفارمیشن ریفرنس پورٹل"},
+  "gov_title_sub": {"en": "Educational & Assistance Tool (Not Official)", "mr": "शैक्षणिक आणि सहाय्य साधन (अधिकृत नाही)", "ur": "تعلیمی اور امدادی ٹول (غیر سرکاری)"},
   "gate_q": {"en": "Do you have the original BLO form with you?", "mr": "तुमच्याकडे BLO ने दिलेला मूळ फॉर्म आहे का?", "ur": "کیا آپ کے پاس اصل بی ایل او فارم ہے؟"},
   "gate_sub": {"en": "You must have the physical QR-coded form given by your BLO.", "mr": "BLO कडून मिळालेला QR-कोड असलेला फॉर्म असणे आवश्यक आहे.", "ur": "آپ کے پاس بی ایل او کی طرف سے دیا گیا کیو آر کوڈ والا فارم ہونا ضروری ہے۔"},
   "gate_yes": {"en": "Yes, I have it", "mr": "होय, माझ्याकडे आहे", "ur": "جی ہاں، میرے پاس ہے"},
@@ -622,7 +613,7 @@ const dict = {
   "photo_hint": {"en": "Ensure good lighting. Uncheck AI if photo already has white background.", "mr": "समोरून, चांगल्या उजेडात फोटो काढा.", "ur": "اچھی روشنی کو یقینی بنائیں۔"},
   "step5": {"en": "5. Payment & Download", "mr": "५. पेमेंट आणि डाउनलोड", "ur": "5. ادائیگی اور ڈاؤن لوڈ"},
   "pay_ref": {"en": "Last 4 digits of UPI Ref/UTR", "mr": "UPI UTR शेवटचे 4 अंक", "ur": "یو پی آئی کے آخری 4 ہندسے"},
-  "pay_conf": {"en": "I confirm I have paid ₹10", "mr": "मी ₹10 चे पेमेंट पूर्ण केले आहे", "ur": "میں نے 10 روپے کی ادائیگی کر دی ہے"},
+  "pay_conf": {"en": "I confirm I have paid ₹10", "mr": "मी ₹10 चे पेमेंट पूर्ण केलेাকেও", "ur": "میں نے 10 روپے کی ادائیگی کر دی ہے"},
   "gen_btn": {"en": "🔒 Unlock & Generate PDF", "mr": "🔒 PDF अनलॉक आणि तयार करा", "ur": "🔒 پی ڈی ایف غیر مقفل کریں"}
 };
 
@@ -660,60 +651,67 @@ $("btnNoForm").addEventListener("click", () => {
   $("noFormMsg").style.display = "block";
 });
 
-/* ---------- Superior Scanner: QR + OCR Fallback ---------- */
+/* ---------- Superior Scanner: QR + Multi-Scale OCR ---------- */
 $("ocrInput").addEventListener("change", async (e) => {
   const file = e.target.files[0];
   if (!file) return;
   const st = $("ocrStatus");
-  st.style.color = "var(--gov-blue)";
-  st.textContent = "Scanning document for QR Code & Text... Please wait.";
+  st.style.color = "var(--primary-blue)";
+  st.textContent = "Scanning document... Please wait.";
   $("ocrWarning").style.display = "none";
   
   try {
     const img = await loadImage(file);
-    const cvs = document.createElement("canvas");
-    
-    // Scale down image if it's huge (like a 4K screenshot) to help Tesseract & jsQR
-    const maxDim = 2000;
-    let w = img.width; let h = img.height;
-    if (w > maxDim || h > maxDim) {
-        const ratio = Math.min(maxDim/w, maxDim/h);
-        w = Math.floor(w * ratio);
-        h = Math.floor(h * ratio);
-    }
-    cvs.width = w; cvs.height = h;
-    const ctx = cvs.getContext("2d");
-    ctx.drawImage(img, 0, 0, w, h);
-    const imgData = ctx.getImageData(0,0,w,h);
-    
     let foundEpic = null;
     let foundAadhaar = null;
     let foundMob = null;
     
-    // 1. Try QR Code First
-    const code = jsQR(imgData.data, w, h, { inversionAttempts: "dontInvert" });
-    if (code && code.data) {
-      console.log("QR Found:", code.data);
-      const epicMatch = code.data.match(/[A-Z]{3}[0-9]{7}/i);
-      if (epicMatch) foundEpic = epicMatch[0];
+    // 1. Try QR Code at multiple scales (helps jsQR find it in huge screenshots)
+    const scales = [1, 0.75, 0.5, 0.25];
+    for (let s of scales) {
+      if (foundEpic) break;
+      const cvs = document.createElement("canvas");
+      cvs.width = Math.floor(img.width * s);
+      cvs.height = Math.floor(img.height * s);
+      const ctx = cvs.getContext("2d");
+      ctx.drawImage(img, 0, 0, cvs.width, cvs.height);
+      const imgData = ctx.getImageData(0,0,cvs.width,cvs.height);
+      const code = jsQR(imgData.data, cvs.width, cvs.height, { inversionAttempts: "dontInvert" });
+      if (code && code.data) {
+        console.log("QR Found at scale", s, ":", code.data);
+        const epicMatch = code.data.match(/[A-Z]{3}[0-9]{7}/i);
+        if (epicMatch) foundEpic = epicMatch[0];
+      }
     }
     
-    // 2. Fallback to Fuzzy OCR
+    // 2. Fallback to Tesseract AI using PSM 11 (Sparse Text) for better scattered text reading
     if (!foundEpic) {
-      st.textContent = "No QR code detected. Running AI text recognition (may take 10s)...";
+      st.textContent = "Running AI text recognition (may take 10-20s)...";
       
-      // Let Tesseract use the raw scaled image directly. Tesseract has built-in adaptive thresholding.
+      const cvs = document.createElement("canvas");
+      cvs.width = img.width; cvs.height = img.height;
+      const ctx = cvs.getContext("2d");
+      ctx.drawImage(img, 0, 0);
       const rawDataUrl = cvs.toDataURL("image/jpeg", 0.95);
-      const result = await Tesseract.recognize(rawDataUrl, 'eng');
+      
+      // Use Tesseract Worker for PSM 11
+      const worker = await Tesseract.createWorker('eng');
+      await worker.setParameters({
+        tessedit_pageseg_mode: Tesseract.PSM.SPARSE_TEXT,
+      });
+      const result = await worker.recognize(rawDataUrl);
       const text = result.data.text;
+      await worker.terminate();
       
       console.log("OCR Extracted Text:", text);
       
-      // Fuzzy Regex allowing common OCR number typos (S=5, Z=2, O=0, I=1, B=8)
-      const epicFuzzyMatch = text.match(/[A-Z]{3}[0-9SZOIB]{7}/i);
+      // Extremely Fuzzy Regex allowing OCR number & letter typos
+      const epicFuzzyMatch = text.match(/[A-Z]{3}[0-9SZOIBTLG]{7}/i);
       if (epicFuzzyMatch) {
         foundEpic = epicFuzzyMatch[0].toUpperCase()
-          .replace(/S/g, '5').replace(/Z/g, '2').replace(/O/g, '0').replace(/I/g, '1').replace(/B/g, '8');
+          .replace(/[S]/g, '5').replace(/[Z]/g, '2').replace(/[O]/g, '0')
+          .replace(/[I]/g, '1').replace(/[B]/g, '8').replace(/[T]/g, '7')
+          .replace(/[L]/g, '1').replace(/[G]/g, '6');
       }
       const aadhaarMatch = text.match(/\d{4}\s?\d{4}\s?\d{4}/);
       if (aadhaarMatch) foundAadhaar = aadhaarMatch[0].replace(/\s/g, "");
@@ -805,7 +803,7 @@ $("photoInput").addEventListener("change",async e=>{
   const file=e.target.files[0]; if(!file) return;
   const st=$("photoStatus");
   const useAI = $("useAI").checked;
-  st.className="photo-status text-gov-blue"; 
+  st.className="photo-status text-primary-blue"; 
   st.textContent= useAI ? "Processing AI background removal..." : "Processing photo...";
   
   try{
@@ -897,7 +895,7 @@ function gate(){
     isUnlocked = true;
     mirror(); 
   } else {
-    btn.style.background = "var(--gov-blue)";
+    btn.style.background = "var(--primary-blue)";
     btn.innerHTML = "🔒 Unlock & Generate PDF";
     $("previewWatermark").classList.remove("hidden");
     isUnlocked = false;
@@ -909,7 +907,7 @@ $("payRef").addEventListener("input",gate);
 
 /* ---------- FIXED PDF Generation ---------- */
 $("genBtn").addEventListener("click",()=>{
-  const st=$("genStatus"); st.className="photo-status text-gov-blue"; st.textContent="Generating PDF... Please wait.";
+  const st=$("genStatus"); st.className="photo-status text-primary-blue"; st.textContent="Generating PDF... Please wait.";
   const name=($("f_name").value.trim()||"voter").replace(/\s+/g,"_");
   
   const sheet = $("formsheet");
